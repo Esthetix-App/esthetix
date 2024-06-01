@@ -11,22 +11,24 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PhoneInput } from "@/components/ui/phone-input";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   StepperPreviousButton,
   useStepperContext,
 } from "@/components/ui/stepper";
 
+import { cpfMaskOptions, dateMaskOptions, rgMaskOptions } from "@/lib/masks";
 import type { SignUpFormData } from "../hooks/use-sign-up-form";
-import { PhoneInput } from "@/components/ui/phone-input";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { cpfMaskOptions, dateMaskOptions } from "@/lib/masks";
 
 export const SignUpPersonalDataStep = () => {
   const bithdateInputRef = useMaskito({ options: dateMaskOptions });
   const cpfInputRef = useMaskito({ options: cpfMaskOptions });
+  const rgInputRef = useMaskito({ options: rgMaskOptions });
+
+  const { nextStep, changeStepProgress } = useStepperContext();
   const { control, trigger, watch, setValue } =
     useFormContext<SignUpFormData>();
-  const { nextStep, changeStepProgress } = useStepperContext();
 
   const stepFields = watch("account");
 
@@ -84,9 +86,9 @@ export const SignUpPersonalDataStep = () => {
                 <Input
                   {...field}
                   placeholder="00.000.000-0"
-                  ref={bithdateInputRef}
+                  ref={rgInputRef}
                   onInput={(evt) => {
-                    setValue("personalData.bithdate", evt.currentTarget.value);
+                    setValue("personalData.rg", evt.currentTarget.value);
                   }}
                 />
               </FormControl>
@@ -106,7 +108,7 @@ export const SignUpPersonalDataStep = () => {
               <Input
                 {...field}
                 placeholder="DD/MM/AAAA"
-                ref={maskedInputRef}
+                ref={bithdateInputRef}
                 onInput={(evt) => {
                   setValue("personalData.bithdate", evt.currentTarget.value);
                 }}

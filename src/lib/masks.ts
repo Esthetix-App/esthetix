@@ -26,4 +26,8 @@ const cpfMaskOptions: MaskitoOptions = {
   ],
 };
 
-export { cpfMaskOptions, dateMaskOptions };
+const rgMaskOptions: MaskitoOptions = {
+  mask: [/\d/, /\d/, ".", /\d/, /\d/, /\d/, ".", /\d/, /\d/, /\d/, "-", /\d/],
+};
+
+export { cpfMaskOptions, dateMaskOptions, rgMaskOptions };

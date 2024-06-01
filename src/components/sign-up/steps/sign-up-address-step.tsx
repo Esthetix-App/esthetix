@@ -1,14 +1,19 @@
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
-  StepperNextButton,
-  StepperPreviousButton,
   useStepperContext,
+  StepperPreviousButton,
 } from "@/components/ui/stepper";
 import { useFormContext } from "react-hook-form";
-import { SignUpFormData } from "../hooks/use-sign-up-form";
+import { type SignUpFormData } from "../hooks/use-sign-up-form";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Combobox } from "@/components/ui/combobox";
 
 export const SignUpAddressStep = () => {
   const { control, trigger, watch, setValue } =
@@ -20,7 +25,7 @@ export const SignUpAddressStep = () => {
 
     if (isValid) {
       nextStep();
-    }  
+    }
   };
   return (
     <div className="grid gap-4">
@@ -45,9 +50,7 @@ export const SignUpAddressStep = () => {
             <FormItem className="col-span-2">
               <FormLabel>Estado</FormLabel>
               <FormControl>
-                <select {...field} className="form-select mt-1 block w-full rounded-md border-gray-300">
-                  <option value="" className="text-gray-500">Selecione um estado</option>
-                </select>
+                <Combobox />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -128,7 +131,7 @@ export const SignUpAddressStep = () => {
       />
 
       <div className="mt-3 flex items-center justify-end gap-3  ">
-      <StepperPreviousButton />
+        <StepperPreviousButton />
         <Button onClick={handleNextStep}>Avançar</Button>
       </div>
     </div>
