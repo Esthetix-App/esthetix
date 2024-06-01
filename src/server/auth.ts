@@ -30,6 +30,11 @@ declare module "next-auth" {
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(db) as Adapter,
+  pages: {
+    error: "/sign-in",
+    signIn: "/sign-in",
+    newUser: "/sign-up",
+  },
   providers: [
     Credentials({
       credentials: {

@@ -3,27 +3,17 @@ import bcrypt from "bcrypt";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { signUpSchema } from "@/validation/auth";
+import { customerSignUpSchema } from "@/validation/customer";
 
 const SALT_ROUNDS = 10;
 
-export const authRouter = createTRPCRouter({
-  userExists: publicProcedure
-    .input(z.object({ email: z.string() }))
-    .query(async ({ input, ctx }) => {
-      const userExists = await ctx.db.user.findFirst({
-        where: { email: input.email },
-      });
-
-      return {
-        userExists: !!userExists?.id,
-      };
-    }),
-
+export const customerRouter = createTRPCRouter({
   signUp: publicProcedure
-    .input(signUpSchema)
+    .input(customerSignUpSchema)
     .mutation(async ({ ctx, input }) => {
-      const { email, password, name, image } = input;
+      const { account } = input;
+
+      const { email, password, name } = account;
 
       const userExists = await ctx.db.user.findFirst({
         where: { email },
@@ -40,7 +30,7 @@ export const authRouter = createTRPCRouter({
       const hashPassword = bcrypt.hashSync(password, saltPassword);
 
       const user = await ctx.db.user.create({
-        data: { email, name, image, password: hashPassword },
+        data: { email, name, password: hashPassword },
       });
 
       return {

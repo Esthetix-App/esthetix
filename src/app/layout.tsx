@@ -1,8 +1,16 @@
 import "@/styles/globals.css";
 
-import { GeistSans } from "geist/font/sans";
-
+import { Inter as FontSans } from "next/font/google";
 import { TRPCReactProvider } from "@/trpc/react";
+
+import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 export const metadata = {
   title: "Esthetix",
@@ -16,9 +24,32 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR" className={`${GeistSans.variable}`}>
+    <html
+      lang="pt-BR"
+      className={cn(
+        "min-h-screen bg-background font-sans antialiased",
+        fontSans.variable,
+      )}
+    >
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          <TooltipProvider>{children}</TooltipProvider>
+        </TRPCReactProvider>
+        <Toaster
+          richColors
+          closeButton
+          theme="light"
+          duration={2000}
+          visibleToasts={3}
+          pauseWhenPageIsHidden={false}
+          toastOptions={{
+            classNames: {
+              toast: "font-sans",
+              title: "font-semibold",
+              description: "font-normal",
+            },
+          }}
+        />
       </body>
     </html>
   );

@@ -1,15 +1,19 @@
 import z from "zod";
 
 export const signInSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
+  email: z
+    .string({ required_error: "O campo é obrigatório" })
+    .email({ message: "E-mail inválido" }),
+  password: z
+    .string({ required_error: "O campo é obrigatório" })
+    .min(1, { message: "O campo é obrigatório" }),
 });
 
 export const signUpSchema = signInSchema
   .extend({
-    name: z.string().min(1),
     image: z.string().optional(),
-    confirmPassword: z.string().min(8),
+    name: z.string().min(1, { message: "O campo é obrigatório" }),
+    confirmPassword: z.string().min(8, { message: "O campo é obrigatório" }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],
