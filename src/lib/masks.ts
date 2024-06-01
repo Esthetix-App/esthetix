@@ -26,4 +26,7 @@ const cpfMaskOptions: MaskitoOptions = {
   ],
 };
 
-export { cpfMaskOptions, dateMaskOptions };
+const zipcodeMaskOptions: MaskitoOptions = {
+  mask: [/\d/, /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/],
+};
+export { cpfMaskOptions, dateMaskOptions, zipcodeMaskOptions };

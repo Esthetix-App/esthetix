@@ -1,4 +1,10 @@
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
   StepperNextButton,
@@ -6,21 +12,39 @@ import {
   useStepperContext,
 } from "@/components/ui/stepper";
 import { useFormContext } from "react-hook-form";
-import { SignUpFormData } from "../hooks/use-sign-up-form";
+import { type SignUpFormData } from "../hooks/use-sign-up-form";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useMaskito } from "@maskito/react";
+import { zipcodeMaskOptions } from "@/lib/masks";
+import { useEffect } from "react";
 
 export const SignUpAddressStep = () => {
   const { control, trigger, watch, setValue } =
     useFormContext<SignUpFormData>();
   const { nextStep, changeStepProgress } = useStepperContext();
+  const zipcodeInputRef = useMaskito({ options: zipcodeMaskOptions });
+
+  const stepFields = watch("address");
+
+  const calculateProgress = () => {
+    const totalFields = Object.entries(stepFields).length - 1;
+    const filledFields = Object.values(stepFields).filter(Boolean).length;
+    return (filledFields / totalFields) * 100;
+  };
+
+  const progress = calculateProgress();
+
+  useEffect(() => {
+    changeStepProgress(progress);
+  }, [changeStepProgress, progress]);
 
   const handleNextStep = async () => {
     const isValid = await trigger("address", { shouldFocus: true });
 
     if (isValid) {
       nextStep();
-    }  
+    }
   };
   return (
     <div className="grid gap-4">
@@ -32,7 +56,14 @@ export const SignUpAddressStep = () => {
             <FormItem>
               <FormLabel>CEP</FormLabel>
               <FormControl>
-                <Input placeholder="00000-000" {...field} />
+                <Input
+                  placeholder="00000-000"
+                  {...field}
+                  ref={zipcodeInputRef}
+                  onInput={(evt) => {
+                    setValue("address.zipcode", evt.currentTarget.value);
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -42,11 +73,16 @@ export const SignUpAddressStep = () => {
           control={control}
           name="address.state"
           render={({ field }) => (
-            <FormItem className="col-span-2">
+            <FormItem className="md:col-span-2">
               <FormLabel>Estado</FormLabel>
               <FormControl>
-                <select {...field} className="form-select mt-1 block w-full rounded-md border-gray-300">
-                  <option value="" className="text-gray-500">Selecione um estado</option>
+                <select
+                  {...field}
+                  className="form-select mt-1 block w-full rounded-md border-gray-300"
+                >
+                  <option value="" className="text-gray-500">
+                    Selecione um estado
+                  </option>
                 </select>
               </FormControl>
               <FormMessage />
@@ -89,7 +125,7 @@ export const SignUpAddressStep = () => {
           control={control}
           name="address.street"
           render={({ field }) => (
-            <FormItem className="col-span-2">
+            <FormItem className="md:col-span-2">
               <FormLabel>Rua</FormLabel>
               <FormControl>
                 <Input placeholder="Nome da Rua" {...field} />
@@ -103,9 +139,9 @@ export const SignUpAddressStep = () => {
           name="address.number"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Numero</FormLabel>
+              <FormLabel>Número</FormLabel>
               <FormControl>
-                <Input placeholder="000" className="text-end" {...field} />
+                <Input placeholder="000" className="md:text-end" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -128,7 +164,7 @@ export const SignUpAddressStep = () => {
       />
 
       <div className="mt-3 flex items-center justify-end gap-3  ">
-      <StepperPreviousButton />
+        <StepperPreviousButton />
         <Button onClick={handleNextStep}>Avançar</Button>
       </div>
     </div>
