@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const customerAddressSchema = z.object({
-  city: z.string().min(8, { message: "O campo é obrigatório" }),
+  city: z.string().min(1, { message: "O campo é obrigatório" }),
   state: z.string().min(1, { message: "O campo é obrigatório" }),
   street: z.string().min(1, { message: "O campo é obrigatório" }),
   number: z.string().min(1, { message: "O campo é obrigatório" }),

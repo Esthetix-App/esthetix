@@ -14,11 +14,30 @@ import { useFormContext } from "react-hook-form";
 import { type SignUpFormData } from "../hooks/use-sign-up-form";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
+import Link from "next/link";
+import { useMaskito } from "@maskito/react";
+import { zipcodeMaskOptions } from "@/lib/masks";
+import { useEffect } from "react";
 
 export const SignUpAddressStep = () => {
   const { control, trigger, watch, setValue } =
     useFormContext<SignUpFormData>();
   const { nextStep, changeStepProgress } = useStepperContext();
+  const zipcodeInputRef = useMaskito({ options: zipcodeMaskOptions });
+
+  const stepFields = watch("address");
+
+  const calculateProgress = () => {
+    const totalFields = Object.entries(stepFields).length - 1;
+    const filledFields = Object.values(stepFields).filter(Boolean).length;
+    return (filledFields / totalFields) * 100;
+  };
+
+  const progress = calculateProgress();
+
+  useEffect(() => {
+    changeStepProgress(progress);
+  }, [changeStepProgress, progress]);
 
   const handleNextStep = async () => {
     const isValid = await trigger("address", { shouldFocus: true });
@@ -37,7 +56,14 @@ export const SignUpAddressStep = () => {
             <FormItem>
               <FormLabel>CEP</FormLabel>
               <FormControl>
-                <Input placeholder="00000-000" {...field} />
+                <Input
+                  placeholder="00000-000"
+                  {...field}
+                  ref={zipcodeInputRef}
+                  onInput={(evt) => {
+                    setValue("address.zipcode", evt.currentTarget.value);
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -47,7 +73,7 @@ export const SignUpAddressStep = () => {
           control={control}
           name="address.state"
           render={({ field }) => (
-            <FormItem className="col-span-2">
+            <FormItem className="md:col-span-2">
               <FormLabel>Estado</FormLabel>
               <FormControl>
                 <Combobox />
@@ -92,7 +118,7 @@ export const SignUpAddressStep = () => {
           control={control}
           name="address.street"
           render={({ field }) => (
-            <FormItem className="col-span-2">
+            <FormItem className="md:col-span-2">
               <FormLabel>Rua</FormLabel>
               <FormControl>
                 <Input placeholder="Nome da Rua" {...field} />
@@ -106,9 +132,9 @@ export const SignUpAddressStep = () => {
           name="address.number"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Numero</FormLabel>
+              <FormLabel>Número</FormLabel>
               <FormControl>
-                <Input placeholder="000" className="text-end" {...field} />
+                <Input placeholder="000" className="md:text-end" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

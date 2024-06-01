@@ -30,4 +30,8 @@ const rgMaskOptions: MaskitoOptions = {
   mask: [/\d/, /\d/, ".", /\d/, /\d/, /\d/, ".", /\d/, /\d/, /\d/, "-", /\d/],
 };
 
-export { cpfMaskOptions, dateMaskOptions, rgMaskOptions };
+const zipcodeMaskOptions: MaskitoOptions = {
+  mask: [/\d/, /\d/, /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/],
+};
+
+export { cpfMaskOptions, dateMaskOptions, rgMaskOptions, zipcodeMaskOptions };
