@@ -1,33 +1,6 @@
 import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import type { MaskitoOptions } from "@maskito/core";
 import { useMaskito } from "@maskito/react";
-import { maskitoDateOptionsGenerator } from "@maskito/kit";
-
-const options: MaskitoOptions = maskitoDateOptionsGenerator({
-  mode: "dd/mm/yyyy",
-  separator: "/",
-  min: new Date(1900, 0, 1),
-}) as MaskitoOptions;
-
-const cpfOptions: MaskitoOptions = {
-  mask: [
-    /\d/,
-    /\d/,
-    /\d/,
-    ".",
-    /\d/,
-    /\d/,
-    /\d/,
-    ".",
-    /\d/,
-    /\d/,
-    /\d/,
-    "-",
-    /\d/,
-    /\d/,
-  ],
-};
 
 import {
   FormControl,
@@ -46,10 +19,11 @@ import {
 import type { SignUpFormData } from "../hooks/use-sign-up-form";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { cpfMaskOptions, dateMaskOptions } from "@/lib/masks";
 
 export const SignUpPersonalDataStep = () => {
-  const maskedInputRef = useMaskito({ options });
-  const cpfmaskedInputRef = useMaskito({ options: cpfOptions });
+  const bithdateInputRef = useMaskito({ options: dateMaskOptions });
+  const cpfInputRef = useMaskito({ options: cpfMaskOptions });
   const { control, trigger, watch, setValue } =
     useFormContext<SignUpFormData>();
   const { nextStep, changeStepProgress } = useStepperContext();
@@ -89,7 +63,7 @@ export const SignUpPersonalDataStep = () => {
                 <Input
                   {...field}
                   placeholder="000.000.000-00"
-                  ref={cpfmaskedInputRef}
+                  ref={cpfInputRef}
                   onInput={(evt) => {
                     setValue("personalData.cpf", evt.currentTarget.value);
                   }}
@@ -110,9 +84,9 @@ export const SignUpPersonalDataStep = () => {
                 <Input
                   {...field}
                   placeholder="00.000.000-0"
-                  ref={maskedInputRef}
+                  ref={bithdateInputRef}
                   onInput={(evt) => {
-                    setValue("personalData.rg", evt.currentTarget.value);
+                    setValue("personalData.bithdate", evt.currentTarget.value);
                   }}
                 />
               </FormControl>
