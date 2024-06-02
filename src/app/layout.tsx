@@ -31,7 +31,7 @@ export default function RootLayout({
         fontSans.variable,
       )}
     >
-      <body>
+      <body suppressHydrationWarning={true}>
         <TRPCReactProvider>
           <TooltipProvider>{children}</TooltipProvider>
         </TRPCReactProvider>

@@ -18,8 +18,9 @@ import {
   useStepperContext,
 } from "@/components/ui/stepper";
 
-import { cpfMaskOptions, dateMaskOptions, rgMaskOptions } from "@/lib/masks";
 import type { SignUpFormData } from "../hooks/use-sign-up-form";
+import { useCalculateStepProgress } from "../hooks/use-calculate-step-progress";
+import { cpfMaskOptions, dateMaskOptions, rgMaskOptions } from "@/lib/masks";
 
 export const SignUpPersonalDataStep = () => {
   const bithdateInputRef = useMaskito({ options: dateMaskOptions });
@@ -27,25 +28,18 @@ export const SignUpPersonalDataStep = () => {
   const rgInputRef = useMaskito({ options: rgMaskOptions });
 
   const { nextStep, changeStepProgress } = useStepperContext();
-  const { control, trigger, watch, setValue } =
-    useFormContext<SignUpFormData>();
+  const { control, trigger } = useFormContext<SignUpFormData>();
 
-  const stepFields = watch("account");
-
-  const calculateProgress = () => {
-    const totalFields = Object.entries(stepFields).length;
-    const filledFields = Object.values(stepFields).filter(Boolean).length;
-    return (filledFields / totalFields) * 100;
-  };
-
-  const progress = calculateProgress();
+  const progress = useCalculateStepProgress({
+    step: "personalData",
+  });
 
   useEffect(() => {
     changeStepProgress(progress);
   }, [changeStepProgress, progress]);
 
   const handleNextStep = async () => {
-    const isValid = await trigger("account", { shouldFocus: true });
+    const isValid = await trigger("personalData", { shouldFocus: true });
 
     if (isValid) {
       nextStep();
@@ -64,11 +58,9 @@ export const SignUpPersonalDataStep = () => {
               <FormControl>
                 <Input
                   {...field}
-                  placeholder="000.000.000-00"
                   ref={cpfInputRef}
-                  onInput={(evt) => {
-                    setValue("personalData.cpf", evt.currentTarget.value);
-                  }}
+                  onInput={field.onChange}
+                  placeholder="000.000.000-00"
                 />
               </FormControl>
               <FormMessage />
@@ -78,18 +70,16 @@ export const SignUpPersonalDataStep = () => {
 
         <FormField
           control={control}
-          name="personalData.bithdate"
+          name="personalData.rg"
           render={({ field }) => (
             <FormItem>
               <FormLabel>RG</FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  placeholder="00.000.000-0"
                   ref={rgInputRef}
-                  onInput={(evt) => {
-                    setValue("personalData.rg", evt.currentTarget.value);
-                  }}
+                  onInput={field.onChange}
+                  placeholder="00.000.000-0"
                 />
               </FormControl>
               <FormMessage />
@@ -107,11 +97,9 @@ export const SignUpPersonalDataStep = () => {
             <FormControl>
               <Input
                 {...field}
-                placeholder="DD/MM/AAAA"
                 ref={bithdateInputRef}
-                onInput={(evt) => {
-                  setValue("personalData.bithdate", evt.currentTarget.value);
-                }}
+                onInput={field.onChange}
+                placeholder="DD/MM/AAAA"
               />
             </FormControl>
             <FormMessage />
@@ -174,7 +162,9 @@ export const SignUpPersonalDataStep = () => {
 
       <div className="mt-3 flex items-center justify-end gap-3  ">
         <StepperPreviousButton />
-        <Button onClick={handleNextStep}>Avançar</Button>
+        <Button type="button" onClick={handleNextStep}>
+          Avançar
+        </Button>
       </div>
     </div>
   );

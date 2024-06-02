@@ -1,6 +1,5 @@
 import { TRPCError } from "@trpc/server";
 import bcrypt from "bcrypt";
-import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { customerSignUpSchema } from "@/validation/customer";
@@ -11,7 +10,7 @@ export const customerRouter = createTRPCRouter({
   signUp: publicProcedure
     .input(customerSignUpSchema)
     .mutation(async ({ ctx, input }) => {
-      const { account } = input;
+      const { account, address, personalData } = input;
 
       const { email, password, name } = account;
 
@@ -31,6 +30,23 @@ export const customerRouter = createTRPCRouter({
 
       const user = await ctx.db.user.create({
         data: { email, name, password: hashPassword },
+      });
+
+      const customerAddress = await ctx.db.address.create({
+        data: address,
+      });
+
+      await ctx.db.customer.create({
+        data: {
+          userId: user.id,
+          name: account.name,
+          rg: personalData.rg,
+          cpf: personalData.cpf,
+          howMet: personalData.howMet,
+          addressId: customerAddress.id,
+          birthdate: personalData.bithdate,
+          cellphone: personalData.cellphone,
+        },
       });
 
       return {

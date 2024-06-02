@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronDown, LoaderCircle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -11,81 +11,95 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { ScrollArea } from "./scroll-area";
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-];
+interface IComboboxOption {
+  value: string;
+  label: string;
+}
 
-interface IComboboxProps {}
+interface IComboboxProps {
+  value?: string;
+  placeholder?: string;
+  emptyLabel?: string;
+  searchPlaceholder?: string;
+  isLoading?: boolean;
+  options: IComboboxOption[];
+  onSelect?: (currentValue: string) => void;
+}
 
-export function Combobox() {
+export function Combobox({
+  value,
+  options,
+  isLoading,
+  placeholder,
+  onSelect,
+  searchPlaceholder = "Pesquisar...",
+  emptyLabel = "Nenhum item encontrado.",
+}: IComboboxProps) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
           role="combobox"
+          variant="outline"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="w-full justify-between font-normal"
         >
-          {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : "Select framework..."}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          {value ? (
+            options?.find((framework) => framework.value === value)?.label
+          ) : (
+            <span className="text-muted-foreground/70">{placeholder}</span>
+          )}
+          {isLoading ? (
+            <LoaderCircle className="ml-2 h-4 w-4 shrink-0 animate-spin opacity-50" />
+          ) : (
+            <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0">
+      <PopoverContent className="w-[300px] p-0">
         <Command>
-          <CommandInput placeholder="Search framework..." />
-          <CommandEmpty>No framework found.</CommandEmpty>
-          <CommandGroup>
-            {frameworks.map((framework) => (
-              <CommandItem
-                key={framework.value}
-                value={framework.value}
-                onSelect={(currentValue) => {
-                  setValue(currentValue === value ? "" : currentValue);
-                  setOpen(false);
-                }}
-              >
-                <Check
-                  className={cn(
-                    "mr-2 h-4 w-4",
-                    value === framework.value ? "opacity-100" : "opacity-0",
-                  )}
-                />
-                {framework.label}
-              </CommandItem>
-            ))}
-          </CommandGroup>
+          <CommandList>
+            <ScrollArea className="h-72">
+              <CommandInput placeholder={searchPlaceholder} />
+              <CommandEmpty>
+                {isLoading ? "Carregando..." : emptyLabel}
+              </CommandEmpty>
+              <CommandGroup>
+                {options
+                  ?.filter((x) => x.value)
+                  .map((option) => (
+                    <CommandItem
+                      className="gap-2"
+                      key={option.value}
+                      value={option.value}
+                      onSelect={(currentValue) => {
+                        onSelect?.(currentValue === value ? "" : currentValue);
+                        setOpen(false);
+                      }}
+                    >
+                      <span className="flex-1 text-sm">{option.label}</span>
+                      <Check
+                        className={cn(
+                          "ml-auto h-4 w-4",
+                          option.value === value ? "opacity-100" : "opacity-0",
+                        )}
+                      />
+                    </CommandItem>
+                  ))}
+              </CommandGroup>
+            </ScrollArea>
+          </CommandList>
         </Command>
       </PopoverContent>
     </Popover>

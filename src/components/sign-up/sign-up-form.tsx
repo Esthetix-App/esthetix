@@ -23,12 +23,12 @@ export const SignUpForm = () => {
               content: <SignUpAccountStep />,
             },
             {
-              id: "address",
-              content: <SignUpAddressStep />,
-            },
-            {
               id: "personal-data",
               content: <SignUpPersonalDataStep />,
+            },
+            {
+              id: "address",
+              content: <SignUpAddressStep />,
             },
           ]}
         >

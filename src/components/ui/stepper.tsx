@@ -83,14 +83,18 @@ const StepperActiveStep = () => {
 const StepperNextButton = () => {
   const { nextStep } = useStepperContext();
 
-  return <Button onClick={nextStep}>Avançar</Button>;
+  return (
+    <Button type="button" onClick={nextStep}>
+      Avançar
+    </Button>
+  );
 };
 
 const StepperPreviousButton = () => {
   const { previousStep } = useStepperContext();
 
   return (
-    <Button variant="ghost" onClick={previousStep}>
+    <Button type="button" variant="ghost" onClick={previousStep}>
       Voltar
     </Button>
   );

@@ -1,3 +1,11 @@
+"use client";
+
+import { useEffect } from "react";
+import { useFormContext } from "react-hook-form";
+
+import { states } from "@/constants/states";
+import { type SignUpFormData } from "../hooks/use-sign-up-form";
+
 import {
   FormControl,
   FormField,
@@ -5,70 +13,34 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   useStepperContext,
   StepperPreviousButton,
 } from "@/components/ui/stepper";
-import { useFormContext } from "react-hook-form";
-import { type SignUpFormData } from "../hooks/use-sign-up-form";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
-import Link from "next/link";
-import { useMaskito } from "@maskito/react";
-import { zipcodeMaskOptions } from "@/lib/masks";
-import { useEffect } from "react";
+import { SignUpAddressZipcode } from "../sign-up-address-zipcode";
+import { useCalculateStepProgress } from "../hooks/use-calculate-step-progress";
 
 export const SignUpAddressStep = () => {
-  const { control, trigger, watch, setValue } =
-    useFormContext<SignUpFormData>();
-  const { nextStep, changeStepProgress } = useStepperContext();
-  const zipcodeInputRef = useMaskito({ options: zipcodeMaskOptions });
+  const { changeStepProgress } = useStepperContext();
+  const { control, setValue } = useFormContext<SignUpFormData>();
 
-  const stepFields = watch("address");
-
-  const calculateProgress = () => {
-    const totalFields = Object.entries(stepFields).length - 1;
-    const filledFields = Object.values(stepFields).filter(Boolean).length;
-    return (filledFields / totalFields) * 100;
-  };
-
-  const progress = calculateProgress();
+  const progress = useCalculateStepProgress({
+    step: "address",
+    totalFields: 6,
+  });
 
   useEffect(() => {
     changeStepProgress(progress);
   }, [changeStepProgress, progress]);
 
-  const handleNextStep = async () => {
-    const isValid = await trigger("address", { shouldFocus: true });
-
-    if (isValid) {
-      nextStep();
-    }
-  };
   return (
     <div className="grid gap-4">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <FormField
-          control={control}
-          name="address.zipcode"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>CEP</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="00000-000"
-                  {...field}
-                  ref={zipcodeInputRef}
-                  onInput={(evt) => {
-                    setValue("address.zipcode", evt.currentTarget.value);
-                  }}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <SignUpAddressZipcode />
+
         <FormField
           control={control}
           name="address.state"
@@ -76,7 +48,14 @@ export const SignUpAddressStep = () => {
             <FormItem className="md:col-span-2">
               <FormLabel>Estado</FormLabel>
               <FormControl>
-                <Combobox />
+                <Combobox
+                  options={states}
+                  value={field.value}
+                  placeholder="Nome da Estado"
+                  onSelect={(currentValue) => {
+                    setValue("address.state", currentValue);
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -158,7 +137,7 @@ export const SignUpAddressStep = () => {
 
       <div className="mt-3 flex items-center justify-end gap-3  ">
         <StepperPreviousButton />
-        <Button onClick={handleNextStep}>Avançar</Button>
+        <Button type="submit">Finalizar</Button>
       </div>
     </div>
   );

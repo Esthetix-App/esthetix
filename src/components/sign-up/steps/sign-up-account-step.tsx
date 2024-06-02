@@ -15,20 +15,15 @@ import { PasswordInput } from "@/components/ui/password-input";
 import { useStepperContext } from "@/components/ui/stepper";
 
 import type { SignUpFormData } from "../hooks/use-sign-up-form";
+import { useCalculateStepProgress } from "../hooks/use-calculate-step-progress";
 
 export const SignUpAccountStep = () => {
-  const { control, trigger, watch } = useFormContext<SignUpFormData>();
+  const { control, trigger } = useFormContext<SignUpFormData>();
   const { nextStep, changeStepProgress } = useStepperContext();
 
-  const stepFields = watch("account");
-
-  const calculateProgress = () => {
-    const totalFields = Object.entries(stepFields).length;
-    const filledFields = Object.values(stepFields).filter(Boolean).length;
-    return (filledFields / totalFields) * 100;
-  };
-
-  const progress = calculateProgress();
+  const progress = useCalculateStepProgress({
+    step: "account",
+  });
 
   useEffect(() => {
     changeStepProgress(progress);
@@ -101,10 +96,12 @@ export const SignUpAccountStep = () => {
       </div>
 
       <div className="mt-3 flex items-center justify-end gap-3  ">
-        <Button asChild variant="ghost">
+        <Button type="button" asChild variant="ghost">
           <Link href="/sign-in">Cancelar</Link>
         </Button>
-        <Button onClick={handleNextStep}>Avançar</Button>
+        <Button type="button" onClick={handleNextStep}>
+          Avançar
+        </Button>
       </div>
     </div>
   );

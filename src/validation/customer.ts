@@ -11,11 +11,11 @@ export const customerAddressSchema = z.object({
 });
 
 export const personalDataSchema = z.object({
-  rg: z.string().min(1),
-  cpf: z.string().min(1),
-  howMet: z.string().min(1),
-  bithdate: z.string().min(1),
-  cellphone: z.string().min(1),
+  rg: z.string().min(1, { message: "O campo é obrigatório" }),
+  cpf: z.string().min(1, { message: "O campo é obrigatório" }),
+  howMet: z.string().min(1, { message: "O campo é obrigatório" }),
+  bithdate: z.string().min(1, { message: "O campo é obrigatório" }),
+  cellphone: z.string().min(1, { message: "O campo é obrigatório" }),
   image: z.string().optional(),
 });
 

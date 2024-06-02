@@ -16,6 +16,7 @@ export const useSignUpForm = () => {
 
   const form = useForm<SignUpFormData>({
     mode: "onChange",
+    reValidateMode: "onChange",
     resolver: zodResolver(customerSignUpSchema),
     defaultValues: {
       account: {
@@ -49,7 +50,9 @@ export const useSignUpForm = () => {
       toast.error("Houve um erro ao tentar criar sua conta!");
     },
     onSuccess() {
-      toast.success("Conta criada com sucesso!");
+      toast.success("Conta criada com sucesso!", {
+        position: "top-center",
+      });
       router.push("/sign-in");
     },
   });
