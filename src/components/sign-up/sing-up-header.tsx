@@ -20,7 +20,7 @@ export const SingUpHeader = () => {
         <StepperProgress />
       </div>
 
-      <p className="mt-2 text-balance text-muted-foreground">
+      <p className="mt-2 text-balance text-center text-muted-foreground">
         Crie uma conta para acesssar os recursos da platafroma.
       </p>
     </div>
