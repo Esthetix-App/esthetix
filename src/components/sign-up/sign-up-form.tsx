@@ -15,7 +15,10 @@ export const SignUpForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="mx-3 grid gap-4 md:mx-0"
+      >
         <Stepper
           steps={[
             {
