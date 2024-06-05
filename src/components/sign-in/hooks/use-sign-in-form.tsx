@@ -4,10 +4,11 @@ import type { z } from "zod";
 import { toast } from "sonner";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { signInSchema } from "@/validation/auth";
-import { useRouter } from "next/navigation";
+import { DEFAULT_LOGIN_REDIRECT } from "@/config/routes";
 
 export const useSignInForm = () => {
   const router = useRouter();
@@ -36,7 +37,7 @@ export const useSignInForm = () => {
       return;
     }
 
-    router.push("/dashboard");
+    router.push(DEFAULT_LOGIN_REDIRECT);
   }
 
   return { form, onSubmit };

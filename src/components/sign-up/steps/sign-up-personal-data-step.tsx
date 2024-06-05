@@ -136,7 +136,7 @@ export const SignUpPersonalDataStep = () => {
                 variant="outline"
                 defaultValue={field.value}
                 onValueChange={field.onChange}
-                className="mt-2 justify-start gap-2"
+                className="mt-2 flex-wrap justify-start gap-2"
               >
                 <ToggleGroupItem value="Instagram" aria-label="Instagram">
                   Instagram

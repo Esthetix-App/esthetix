@@ -1,104 +1,39 @@
-import NextAuth, { type DefaultSession } from "next-auth";
-import Credentials from "next-auth/providers/credentials";
+import NextAuth from "next-auth";
+
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type Adapter } from "next-auth/adapters";
-import bcrypt from "bcrypt";
 
 import { db } from "@/server/db";
-import { signInSchema } from "@/validation/auth";
 
-/**
- * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
- * object and keep type safety.
- *
- * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
- */
-declare module "next-auth" {
-  interface Session extends DefaultSession {
-    user: {
-      id: string;
-      // ...other properties
-      // role: UserRole;
-    } & DefaultSession["user"];
-  }
-
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
-}
+import authConfig from "@/config/auth.config";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(db) as Adapter,
-  pages: {
-    error: "/sign-in",
-    signIn: "/sign-in",
-    newUser: "/sign-up",
+  session: {
+    strategy: "jwt",
   },
-  providers: [
-    Credentials({
-      credentials: {
-        email: {},
-        password: {},
-      },
-      authorize: async (credentials) => {
-        const { email, password } = await signInSchema.parseAsync(credentials);
-
-        const user = await db.user.findFirst({
-          where: { email },
-        });
-
-        if (!user?.password) {
-          return null;
-        }
-
-        const isValidPassword = bcrypt.compareSync(password, user.password);
-
-        if (!isValidPassword) {
-          return null;
-        }
-
-        return {
-          id: user.id,
-          email: user.email,
-          image: user.image,
-          name: user.name,
-        };
-      },
-    }),
-  ],
   callbacks: {
-    session: ({ session, user }) => ({
+    jwt: async ({ token }) => {
+      if (!token.sub) return token;
+
+      const user = await db.user.findUnique({
+        where: { id: token.sub },
+      });
+
+      if (!user) return token;
+
+      token.role = user.role;
+
+      return token;
+    },
+    session: ({ session, token }) => ({
       ...session,
       user: {
         ...session.user,
-        id: user.id,
+        id: token.sub,
+        role: token.role,
       },
     }),
   },
+  ...authConfig,
 });
-
-/**
- * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
- *
- * @see https://next-auth.js.org/configuration/options
- */
-// export const authOptions: NextAuthOptions = {
-//   callbacks: {
-//     session: ({ session, user }) => ({
-//       ...session,
-//       user: {
-//         ...session.user,
-//         id: user.id,
-//       },
-//     }),
-//   },
-//   adapter: PrismaAdapter(db) as Adapter,
-// };
-
-// /**
-//  * Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.
-//  *
-//  * @see https://next-auth.js.org/configuration/nextjs
-//  */
-// export const getServerAuthSession = () => getServerSession(authOptions);

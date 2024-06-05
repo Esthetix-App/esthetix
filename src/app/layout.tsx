@@ -6,6 +6,8 @@ import { TRPCReactProvider } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { auth } from "@/server/auth";
+import { SessionProvider } from "next-auth/react";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -15,42 +17,46 @@ const fontSans = FontSans({
 export const metadata = {
   title: "Esthetix",
   description: "Esthetix App",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/logo.svg" }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
+
   return (
-    <html
-      lang="pt-BR"
-      className={cn(
-        "min-h-screen bg-background font-sans antialiased",
-        fontSans.variable,
-      )}
-    >
-      <body suppressHydrationWarning={true}>
-        <TRPCReactProvider>
-          <TooltipProvider>{children}</TooltipProvider>
-        </TRPCReactProvider>
-        <Toaster
-          richColors
-          closeButton
-          theme="light"
-          duration={2000}
-          visibleToasts={3}
-          pauseWhenPageIsHidden={false}
-          toastOptions={{
-            classNames: {
-              toast: "font-sans",
-              title: "font-semibold",
-              description: "font-normal",
-            },
-          }}
-        />
-      </body>
-    </html>
+    <SessionProvider session={session}>
+      <html
+        lang="pt-BR"
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable,
+        )}
+      >
+        <body suppressHydrationWarning={true}>
+          <TRPCReactProvider>
+            <TooltipProvider>{children}</TooltipProvider>
+          </TRPCReactProvider>
+          <Toaster
+            richColors
+            closeButton
+            theme="light"
+            duration={2000}
+            visibleToasts={3}
+            pauseWhenPageIsHidden={false}
+            toastOptions={{
+              classNames: {
+                toast: "font-sans",
+                title: "font-semibold",
+                description: "font-normal",
+              },
+            }}
+          />
+        </body>
+      </html>
+    </SessionProvider>
   );
 }

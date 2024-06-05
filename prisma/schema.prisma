@@ -95,6 +95,7 @@ model Address {
     state        String
     street       String
     zipcode      String
+    number       String
     complement   String?
     neighborhood String
 
