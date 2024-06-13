@@ -1,7 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronDown, LoaderCircle } from "lucide-react";
+import {
+  Check,
+  ChevronDown,
+  LoaderCircle,
+  type LucideIcon,
+} from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -23,6 +28,7 @@ import { ScrollArea } from "./scroll-area";
 interface IComboboxOption {
   value: string;
   label: string;
+  icon?: LucideIcon;
 }
 
 interface IComboboxProps {
@@ -46,6 +52,9 @@ export function Combobox({
 }: IComboboxProps) {
   const [open, setOpen] = React.useState(false);
 
+  const selectedValue = options?.find((framework) => framework.value === value);
+  const SelectedIcon = selectedValue?.icon ?? null;
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -56,7 +65,10 @@ export function Combobox({
           className="w-full justify-between font-normal"
         >
           {value ? (
-            options?.find((framework) => framework.value === value)?.label
+            <div className="flex items-center gap-2">
+              {SelectedIcon && <SelectedIcon className="h-4 w-4" />}
+              {selectedValue?.label}
+            </div>
           ) : (
             <span className="text-muted-foreground/70">{placeholder}</span>
           )}
@@ -78,7 +90,7 @@ export function Combobox({
               <CommandGroup>
                 {options
                   ?.filter((x) => x.value)
-                  .map((option) => (
+                  .map(({ icon: Icon, ...option }) => (
                     <CommandItem
                       className="gap-2"
                       key={option.value}
@@ -88,6 +100,7 @@ export function Combobox({
                         setOpen(false);
                       }}
                     >
+                      {Icon && <Icon className="h-4 w-4" />}
                       <span className="flex-1 text-sm">{option.label}</span>
                       <Check
                         className={cn(

@@ -154,6 +154,7 @@ model FormField {
     typeOptions         Json?      @map("type_options")
     formGroupId         String     @map("form_group_id")
     isProfessionalField Boolean?   @map("is_professional_field")
+    isRequired          Boolean?   @map("is_required")
 
     formGroup    FormGroup      @relation(fields: [formGroupId], references: [id], onDelete: Cascade)
     fieldOptions FieldOptions[]

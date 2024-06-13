@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import dayjs from "dayjs";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 
 dayjs.extend(customParseFormat);

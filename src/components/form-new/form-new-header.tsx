@@ -1,10 +1,18 @@
 import Link from "next/link";
-import { ChevronLeft, Eye } from "lucide-react";
+import { useFormContext } from "react-hook-form";
+import { ChevronLeft } from "lucide-react";
+
+import type { NewFormData } from "./hooks/use-new-form";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { FormPreview } from "../form-preview";
 
 export const FormNewHeader = () => {
+  const { watch } = useFormContext<NewFormData>();
+
+  const isEnabled = watch("enable");
+
   return (
     <div className="flex items-center gap-4">
       <Button asChild variant="outline" size="icon" className="h-7 w-7">
@@ -16,18 +24,21 @@ export const FormNewHeader = () => {
       <h1 className="flex-1 shrink-0 whitespace-nowrap text-lg font-semibold tracking-tight sm:grow-0 md:text-2xl">
         Novo Formulário
       </h1>
-      <Badge variant="default" className="ml-auto sm:ml-0">
-        Ativo
+      <Badge
+        variant={isEnabled ? "default" : "outline"}
+        className="ml-auto sm:ml-0"
+      >
+        {isEnabled ? "Ativo" : "Inativo"}
       </Badge>
+
       <div className="hidden items-center gap-2 md:ml-auto md:flex">
-        <Button variant="outline" size="sm">
-          <Eye className="mr-2 size-5 stroke-[1.5] text-primary" />
-          Preview
-        </Button>
-        <Button variant="outline" size="sm">
+        <FormPreview />
+        <Button type="button" variant="outline" size="sm">
           Descartar
         </Button>
-        <Button size="sm">Salvar Formulário</Button>
+        <Button size="sm" type="submit">
+          Salvar Formulário
+        </Button>
       </div>
     </div>
   );

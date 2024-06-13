@@ -17,7 +17,7 @@ const fontSans = FontSans({
 export const metadata = {
   title: "Esthetix",
   description: "Esthetix App",
-  icons: [{ rel: "icon", url: "/logo.svg" }],
+  icons: [{ rel: "icon", url: "/images/logo.svg" }],
 };
 
 export default async function RootLayout({

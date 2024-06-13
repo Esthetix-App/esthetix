@@ -12,7 +12,7 @@ export default function SignIn() {
           quality={100}
           priority
           alt="Logo"
-          src="/logo.svg"
+          src="/images/logo.svg"
           className="object-cover dark:brightness-[0.2] dark:grayscale"
         />
         <div className="mx-auto grid w-[350px] gap-6">
@@ -27,7 +27,7 @@ export default function SignIn() {
         <Image
           fill
           alt="Image"
-          src="https://images.unsplash.com/photo-1531123414780-f74242c2b052?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          src="/images/background.png"
           className="object-cover object-top dark:brightness-[0.2] dark:grayscale"
         />
       </div>

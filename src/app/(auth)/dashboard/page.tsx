@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui/button";
-
 export default function DashboardPage() {
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
@@ -17,7 +15,6 @@ export default function DashboardPage() {
           <p className="text-sm text-muted-foreground">
             Você pode começar a visualizar assim que adicionar um dashboard.
           </p>
-          <Button className="mt-4">Adicionar dashboard</Button>
         </div>
       </div>
     </main>

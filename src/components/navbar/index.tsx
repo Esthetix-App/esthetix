@@ -24,7 +24,7 @@ export const NavBar = () => {
               quality={100}
               priority
               alt="Logo"
-              src="/logo.svg"
+              src="/images/logo.svg"
               className="object-cover dark:brightness-[0.2] dark:grayscale"
             />
             <span className="">Esthetix</span>

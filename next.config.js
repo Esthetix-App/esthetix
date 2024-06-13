@@ -12,6 +12,10 @@ const config = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
+      {
+        protocol: "https",
+        hostname: "pub-7f18e0886a684f5b8e3bbb106742be36.r2.dev",
+      },
     ],
   },
 };
