@@ -44,20 +44,21 @@ export const useNewForm = () => {
     },
   });
 
-  const { mutate } = api.customer.signUp.useMutation({
+  const { mutate } = api.form.create.useMutation({
     onError() {
-      toast.error("Houve um erro ao tentar criar sua conta!");
+      toast.error("Houve um erro ao tentar criar o formulário!");
     },
     onSuccess() {
-      toast.success("Conta criada com sucesso!", {
+      toast.success("Formulário criado com sucesso!", {
         position: "top-center",
       });
-      router.push("/sign-in");
+
+      router.push("/forms");
     },
   });
 
   async function onSubmit(values: NewFormData) {
-    console.log(values);
+    mutate(values);
   }
 
   return { form, onSubmit };

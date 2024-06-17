@@ -65,6 +65,7 @@ export const FormNewLogoUpload = () => {
 
     deleteUploadedFile.mutate({ fileKey });
     setFileKey(null);
+    setValue("logoUrl", "");
   };
 
   return (

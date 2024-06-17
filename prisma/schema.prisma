@@ -149,6 +149,7 @@ enum FieldTypes {
 
 model FormField {
     id                  String     @id @default(cuid())
+    name                String?
     position            Int
     type                FieldTypes
     typeOptions         Json?      @map("type_options")
