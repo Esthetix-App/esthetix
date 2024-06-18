@@ -5,12 +5,33 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 
 dayjs.extend(customParseFormat);
 
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  publicProcedure,
+  professionalProcedure,
+} from "@/server/api/trpc";
 import { customerSignUpSchema } from "@/validation/customer";
 
 const SALT_ROUNDS = 10;
 
 export const customerRouter = createTRPCRouter({
+  getAll: professionalProcedure.query(async ({ ctx }) => {
+    const [customers, count] = await ctx.db.$transaction([
+      ctx.db.customer.findMany(),
+      ctx.db.customer.count({}),
+    ]);
+
+    return {
+      status: 200,
+      customers: customers.map((customer) => ({
+        ...customer,
+        birthdate: dayjs(customer.birthdate).format("DD/MM/YYYY"),
+        createdAt: dayjs(customer.createdAt).format("DD/MM/YYYY"),
+        updatedAt: dayjs(customer.updatedAt).format("DD/MM/YYYY"),
+      })),
+      count,
+    };
+  }),
   signUp: publicProcedure
     .input(customerSignUpSchema)
     .mutation(async ({ ctx, input }) => {
