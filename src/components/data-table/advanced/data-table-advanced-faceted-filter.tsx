@@ -40,7 +40,7 @@ export function DataTableAdvancedFacetedFilter<TData, TValue>({
         />
       </div>
       <CommandList>
-        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandEmpty>Nenhum resultado encontrado.</CommandEmpty>
         <CommandGroup className="px-0">
           {options.map((option) => {
             const isSelected = selectedValues.has(option.value);
@@ -117,7 +117,7 @@ export function DataTableAdvancedFacetedFilter<TData, TValue>({
                 }}
                 className="justify-center text-center"
               >
-                Clear filters
+                Limpar filtros
               </CommandItem>
             </CommandGroup>
           </>

@@ -10,9 +10,9 @@ import {
 import { formatPhoneNumber } from "react-phone-number-input";
 
 import type { RouterOutputs } from "@/trpc/react";
-import { type ColumnDef } from "@tanstack/react-table";
-
+import type { ColumnDef } from "@tanstack/react-table";
 import { getInitials } from "@/lib/utils";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,7 +24,6 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
-import { CustomersDeleteDialog } from "./customers-delete-dialog";
 
 export type CustomerGetAllOutput =
   RouterOutputs["customer"]["getAll"]["customers"][number];
@@ -116,19 +115,10 @@ export function getColumns(): ColumnDef<CustomerGetAllOutput>[] {
     {
       id: "actions",
       cell: function Cell({ row }) {
-        const [showDeleteTaskDialog, setShowDeleteTaskDialog] =
-          React.useState(false);
         const router = useRouter();
 
         return (
           <>
-            <CustomersDeleteDialog
-              open={showDeleteTaskDialog}
-              onOpenChange={setShowDeleteTaskDialog}
-              items={[row.original]}
-              showTrigger={false}
-              onSuccess={() => row.toggleSelected(false)}
-            />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -149,7 +139,7 @@ export function getColumns(): ColumnDef<CustomerGetAllOutput>[] {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  onSelect={() => setShowDeleteTaskDialog(true)}
+                  // onSelect={() => setShowDeleteTaskDialog(true)}
                   className="font-medium text-destructive"
                 >
                   <TrashIcon className="mr-2 size-4" aria-hidden="true" />

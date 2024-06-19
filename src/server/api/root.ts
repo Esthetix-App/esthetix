@@ -2,7 +2,7 @@ import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 
 import { authRouter } from "@/server/api/routers/auth";
 import { customerRouter } from "@/server/api/routers/customer";
-import { formUploadRouter } from "@/server/api/routers/formUpload";
+import { formUploadRouter } from "@/server/api/routers/form-upload";
 import { formRouter } from "@/server/api/routers/form";
 
 /**

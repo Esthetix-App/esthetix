@@ -74,10 +74,7 @@ export function DataTableAdvancedToolbar<TData>({
 
   return (
     <div
-      className={cn(
-        "flex w-full flex-col space-y-2.5 overflow-auto p-1",
-        className,
-      )}
+      className={cn("flex w-full flex-col space-y-2.5 p-1", className)}
       {...props}
     >
       <div className="ml-auto flex items-center gap-2">
@@ -93,7 +90,7 @@ export function DataTableAdvancedToolbar<TData>({
               className="mr-2 size-4 shrink-0"
               aria-hidden="true"
             />
-            Filter
+            Filtrar
           </Button>
         ) : (
           <DataTableFilterCombobox
@@ -152,7 +149,7 @@ export function DataTableAdvancedToolbar<TData>({
               onClick={() => setOpenCombobox(true)}
             >
               <PlusIcon className="mr-2 size-4 opacity-50" aria-hidden="true" />
-              Add filter
+              Adicionar filtro
             </Button>
           </DataTableFilterCombobox>
         ) : null}

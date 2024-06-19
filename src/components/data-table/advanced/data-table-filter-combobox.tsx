@@ -62,15 +62,15 @@ export function DataTableFilterCombobox<TData>({
               className="mr-2 size-4 shrink-0"
               aria-hidden="true"
             />
-            Filter
+            Filtrar
           </Button>
         )}
       </PopoverTrigger>
       <PopoverContent className="w-[12.5rem] p-0" align="end">
         <Command>
-          <CommandInput placeholder="Filter by..." />
+          <CommandInput placeholder="Filtrar por..." />
           <CommandList>
-            <CommandEmpty>No item found.</CommandEmpty>
+            <CommandEmpty>Nenhum item encontrado.</CommandEmpty>
             <CommandGroup>
               {options
                 .filter(
@@ -125,7 +125,7 @@ export function DataTableFilterCombobox<TData>({
                 }}
               >
                 <PlusIcon className="mr-2 size-4" aria-hidden="true" />
-                Advanced filter
+                Filtro avançado
               </CommandItem>
             </CommandGroup>
           </CommandList>

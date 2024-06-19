@@ -1,93 +1,77 @@
 "use client";
 
 import * as React from "react";
+import { useSearchParams } from "next/navigation";
 import type { DataTableFilterField } from "@/types/data-table";
-import type { Customer } from "@prisma/client";
-import { api } from "@/trpc/react";
 
+import { api } from "@/trpc/react";
 import { useDataTable } from "@/hooks/use-data-table";
+import { searchParamsSchema } from "@/validation/get-customers";
+
 import { DataTable } from "@/components/data-table/data-table";
 import { DataTableToolbar } from "@/components/data-table/data-table-toolbar";
+import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton";
 import { DataTableAdvancedToolbar } from "@/components/data-table/advanced/data-table-advanced-toolbar";
-
-// import { getPriorityIcon, getStatusIcon } from "../_lib/utils";
-import { getColumns } from "./customers-table-columns";
-import { TasksTableFloatingBar } from "./tasks-table-floating-bar";
-import { TasksTableToolbarActions } from "./tasks-table-toolbar-actions";
-
-// interface TasksTableProps {
-//   tasksPromise: ReturnType<typeof getTasks>;
-// }
+import {
+  getColumns,
+  type CustomerGetAllOutput,
+} from "./customers-table-columns";
+import { CustomersTableFloatingBar } from "./customers-table-floating-bar";
+import { CustomersTableToolbarActions } from "./customers-table-toolbar-actions";
 
 const ENABLE_ADVANCED_FILTER = false;
 
 export function CustomersDataTable() {
-  const { data } = api.customer.getAll.useQuery();
+  const searchParams = useSearchParams();
+  const searchObject = Object.fromEntries(searchParams.entries());
+  const search = searchParamsSchema.parse(searchObject);
 
-  // Memoize the columns so they don't re-render on every render
+  const { data, isPending } = api.customer.getAll.useQuery(search);
+
+  const customers = data?.customers ?? [];
   const columns = React.useMemo(() => getColumns(), []);
 
-  /**
-   * This component can render either a faceted filter or a search filter based on the `options` prop.
-   *
-   * @prop options - An array of objects, each representing a filter option. If provided, a faceted filter is rendered. If not, a search filter is rendered.
-   *
-   * Each `option` object has the following properties:
-   * @prop {string} label - The label for the filter option.
-   * @prop {string} value - The value for the filter option.
-   * @prop {React.ReactNode} [icon] - An optional icon to display next to the label.
-   * @prop {boolean} [withCount] - An optional boolean to display the count of the filter option.
-   */
-  const filterFields: DataTableFilterField<Customer>[] = [
+  const filterFields: DataTableFilterField<CustomerGetAllOutput>[] = [
     {
       label: "Nome",
       value: "name",
-      placeholder: "Filter names...",
+      placeholder: "Pesquisar...",
     },
-    // {
-    //   label: "Status",
-    //   value: "",
-    //   options: tasks.status.enumValues.map((status) => ({
-    //     label: status[0]?.toUpperCase() + status.slice(1),
-    //     value: status,
-    //     icon: getStatusIcon(status),
-    //     withCount: true,
-    //   })),
-    // },
-    // {
-    //   label: "Priority",
-    //   value: "priority",
-    //   options: tasks.priority.enumValues.map((priority) => ({
-    //     label: priority[0]?.toUpperCase() + priority.slice(1),
-    //     value: priority,
-    //     icon: getPriorityIcon(priority),
-    //     withCount: true,
-    //   })),
-    // },
   ];
 
   const { table } = useDataTable({
+    data: customers ?? [],
     columns,
-    // filterFields,
-    data: data?.customers ?? [],
-    pageCount: data?.count ?? 0,
-    enableAdvancedFilter: ENABLE_ADVANCED_FILTER,
+    filterFields,
     defaultPerPage: 10,
-    // defaultSort: "createdAt.desc",
+    pageCount: data?.pageCount ?? 0,
+    enableAdvancedFilter: ENABLE_ADVANCED_FILTER,
   });
+
+  if (isPending) {
+    return (
+      <DataTableSkeleton
+        columnCount={5}
+        searchableColumnCount={1}
+        filterableColumnCount={2}
+        cellWidths={["10rem", "40rem", "12rem", "12rem", "8rem"]}
+        shrinkZero
+      />
+    );
+  }
 
   return (
     <DataTable
       table={table}
-      floatingBar={<TasksTableFloatingBar table={table} />}
+      floatingBar={<CustomersTableFloatingBar table={table} />}
     >
       {ENABLE_ADVANCED_FILTER ? (
         <DataTableAdvancedToolbar table={table} filterFields={filterFields}>
-          <TasksTableToolbarActions table={table} />
+          <CustomersTableToolbarActions table={table} />
         </DataTableAdvancedToolbar>
       ) : (
         <DataTableToolbar table={table} filterFields={filterFields}>
-          <TasksTableToolbarActions table={table} />
+          <CustomersTableToolbarActions table={table} />
         </DataTableToolbar>
       )}
     </DataTable>

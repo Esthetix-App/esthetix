@@ -177,7 +177,7 @@ export function DataTableFilterItem<TData>({
             </Select>
           </div>
           <Button
-            aria-label="Remove filter"
+            aria-label="Remover filtro"
             variant="ghost"
             size="icon"
             className="size-7 text-muted-foreground"
@@ -208,7 +208,7 @@ export function DataTableFilterItem<TData>({
           )
         ) : (
           <Input
-            placeholder="Type here..."
+            placeholder="Digite aqui..."
             className="h-8"
             value={value}
             onChange={(event) => setValue(event.target.value)}

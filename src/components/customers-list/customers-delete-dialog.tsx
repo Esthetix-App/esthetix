@@ -19,13 +19,13 @@ import {
 
 interface DeleteTasksDialogProps
   extends React.ComponentPropsWithoutRef<typeof Dialog> {
-  tasks: Row<unknown>["original"][];
+  items: Row<unknown>["original"][];
   showTrigger?: boolean;
   onSuccess?: () => void;
 }
 
-export function DeleteTasksDialog({
-  tasks,
+export function CustomersDeleteDialog({
+  items,
   showTrigger = true,
   onSuccess,
   ...props
@@ -38,25 +38,25 @@ export function DeleteTasksDialog({
         <DialogTrigger asChild>
           <Button variant="outline" size="sm">
             <TrashIcon className="mr-2 size-4" aria-hidden="true" />
-            Delete ({tasks.length})
+            Excluir ({items.length})
           </Button>
         </DialogTrigger>
       ) : null}
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
+        <DialogHeader className="space-y-3">
+          <DialogTitle>Você tem certeza absoluta?</DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently delete your{" "}
-            <span className="font-medium">{tasks.length}</span>
-            {tasks.length === 1 ? " task" : " tasks"} from our servers.
+            Essa ação não pode ser desfeita. Isso excluirá permanentemente{" "}
+            <span className="font-medium">{items.length}</span>
+            {items.length === 1 ? " item" : " itens"} da nosssa base.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="gap-2 sm:space-x-0">
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline">Cancelar</Button>
           </DialogClose>
           <Button
-            aria-label="Delete selected rows"
+            aria-label="Excluir linhas selecionadas"
             variant="destructive"
             onClick={() => {
               startDeleteTransition(async () => {
@@ -70,7 +70,7 @@ export function DeleteTasksDialog({
                 // }
 
                 props.onOpenChange?.(false);
-                toast.success("Tasks deleted");
+                toast.success("Itens excluídos");
                 onSuccess?.();
               });
             }}
@@ -82,7 +82,7 @@ export function DeleteTasksDialog({
                 aria-hidden="true"
               />
             )}
-            Delete
+            Excluir
           </Button>
         </DialogFooter>
       </DialogContent>

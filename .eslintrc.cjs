@@ -12,6 +12,7 @@ const config = {
   ],
   rules: {
     "@typescript-eslint/array-type": "off",
+    "@typescript-eslint/consistent-indexed-object-style": "off",
     "@typescript-eslint/no-unsafe-call": "off",
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/consistent-type-definitions": "off",

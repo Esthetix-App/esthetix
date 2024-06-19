@@ -4,47 +4,48 @@ export type DataTableConfig = typeof dataTableConfig;
 
 export const dataTableConfig = {
   comparisonOperators: [
-    { label: "Contains", value: "ilike" as const },
-    { label: "Does not contain", value: "notIlike" as const },
-    { label: "Is", value: "eq" as const },
-    { label: "Is not", value: "notEq" as const },
-    { label: "Starts with", value: "startsWith" as const },
-    { label: "Ends with", value: "endsWith" as const },
-    { label: "Is empty", value: "isNull" as const },
-    { label: "Is not empty", value: "isNotNull" as const },
+    { label: "Contém", value: "ilike" as const },
+    { label: "Não contém", value: "notIlike" as const },
+    { label: "É", value: "eq" as const },
+    { label: "Não é", value: "notEq" as const },
+    { label: "Começa com", value: "startsWith" as const },
+    { label: "Termina com", value: "endsWith" as const },
+    { label: "Está vazio", value: "isNull" as const },
+    { label: "Não está vazio", value: "isNotNull" as const },
   ],
   selectableOperators: [
-    { label: "Is", value: "eq" as const },
-    { label: "Is not", value: "notEq" as const },
-    { label: "Is empty", value: "isNull" as const },
-    { label: "Is not empty", value: "isNotNull" as const },
+    { label: "É", value: "eq" as const },
+    { label: "Não é", value: "notEq" as const },
+    { label: "Está vazio", value: "isNull" as const },
+    { label: "Não está vazio", value: "isNotNull" as const },
   ],
   logicalOperators: [
     {
-      label: "And",
+      label: "E",
       value: "and" as const,
       description: "All conditions must be met",
     },
     {
-      label: "Or",
+      label: "Ou",
       value: "or" as const,
       description: "At least one condition must be met",
     },
   ],
   featureFlags: [
     {
-      label: "Advanced filter",
+      label: "Filtro avançado",
       value: "advancedFilter" as const,
       icon: MixIcon,
-      tooltipTitle: "Toggle advanced filter",
-      tooltipDescription: "A notion like query builder to filter rows.",
+      tooltipTitle: "Alternar filtro avançado",
+      tooltipDescription:
+        "Uma noção como construtor de consultas para filtrar linhas.",
     },
     {
       label: "Floating bar",
       value: "floatingBar" as const,
       icon: SquareIcon,
-      tooltipTitle: "Toggle floating bar",
-      tooltipDescription: "A floating bar that sticks to the top of the table.",
+      tooltipTitle: "Alternar barra flutuante",
+      tooltipDescription: "Uma barra flutuante que gruda no topo da tabela.",
     },
   ],
 };

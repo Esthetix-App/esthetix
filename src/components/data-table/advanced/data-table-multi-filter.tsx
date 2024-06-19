@@ -67,7 +67,7 @@ export function DataTableMultiFilter<TData>({
           className="h-7 truncate rounded-full"
         >
           <TextAlignCenterIcon className="mr-2 size-3" aria-hidden="true" />
-          {options.length} rule
+          {options.length} regra
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-fit p-0 text-xs" align="start">
@@ -89,7 +89,7 @@ export function DataTableMultiFilter<TData>({
         <Separator />
         <div className="p-1">
           <Button
-            aria-label="Delete filter"
+            aria-label="Excluir filtro"
             variant="ghost"
             size="sm"
             className="w-full justify-start"
@@ -99,7 +99,7 @@ export function DataTableMultiFilter<TData>({
               );
             }}
           >
-            Delete filter
+            Excluir filtro
           </Button>
         </div>
       </PopoverContent>
@@ -146,7 +146,7 @@ export function MultiFilterRow<TData>({
 
   const filterVarieties = selectedOption?.options.length
     ? ["is", "is not"]
-    : ["contains", "does not contain", "is", "is not"];
+    : ["contém", "does not contain", "is", "is not"];
 
   const [filterVariety, setFilterVariety] = React.useState(filterVarieties[0]);
 
@@ -221,7 +221,7 @@ export function MultiFilterRow<TData>({
   return (
     <div className="flex items-center space-x-2">
       {i === 0 ? (
-        <div>Where</div>
+        <div>Onde</div>
       ) : i === 1 ? (
         <Select
           value={operator?.value}
@@ -317,7 +317,7 @@ export function MultiFilterRow<TData>({
         )
       ) : (
         <Input
-          placeholder="Type here..."
+          placeholder="Digite aqui..."
           className="h-8"
           value={value}
           onChange={(event) => setValue(event.target.value)}
@@ -339,7 +339,7 @@ export function MultiFilterRow<TData>({
             }}
           >
             <TrashIcon className="mr-2 size-4" aria-hidden="true" />
-            Remove
+            Remover
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
@@ -358,7 +358,7 @@ export function MultiFilterRow<TData>({
             }}
           >
             <CopyIcon className="mr-2 size-4" aria-hidden="true" />
-            Duplicate
+            Duplicar
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
