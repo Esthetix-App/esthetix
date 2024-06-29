@@ -1,7 +1,20 @@
+import { z } from "zod";
+import dayjs from "dayjs";
 import { TRPCError } from "@trpc/server";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+
+import type { Form } from "@prisma/client";
 
 import { formSchema } from "@/validation/form";
-import { createTRPCRouter, professionalProcedure } from "@/server/api/trpc";
+import { getFormSchema } from "@/validation/get-forms";
+import { buildWhereClause } from "@/lib/build-where-clause";
+import {
+  createTRPCRouter,
+  professionalProcedure,
+  adminProcedure,
+} from "@/server/api/trpc";
+
+dayjs.extend(customParseFormat);
 
 export const formRouter = createTRPCRouter({
   create: professionalProcedure
@@ -55,6 +68,96 @@ export const formRouter = createTRPCRouter({
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to create form.",
+          cause: error,
+        });
+      }
+    }),
+  getAll: professionalProcedure
+    .input(getFormSchema)
+    .query(async ({ ctx, input }) => {
+      const { page, per_page, sort, title, operator } = input;
+
+      try {
+        const offset = (page - 1) * per_page;
+        const [column, order] = (sort?.split(".").filter(Boolean) ?? [
+          "createdAt",
+          "desc",
+        ]) as [keyof Form, "asc" | "desc"];
+
+        const orderBy = { [column]: order };
+
+        const where = buildWhereClause(
+          [{ column: "title", value: title ?? "" }],
+          operator,
+        );
+
+        const [forms, count] = await ctx.db.$transaction([
+          ctx.db.form.findMany({
+            include: {
+              updatedByUser: {
+                select: {
+                  id: true,
+                  name: true,
+                  email: true,
+                  image: true,
+                },
+              },
+            },
+            take: per_page,
+            skip: offset,
+            orderBy,
+            where,
+          }),
+          ctx.db.form.count({ where }),
+        ]);
+
+        return {
+          status: 200,
+          forms: forms.map((form) => ({
+            ...form,
+            createdAt: dayjs(form.createdAt).format("DD/MM/YYYY"),
+            updatedAt: dayjs(form.updatedAt).format("DD/MM/YYYY"),
+          })),
+          pageCount: Math.ceil(count / per_page),
+        };
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to get forms.",
+          cause: error,
+        });
+      }
+    }),
+  delete: adminProcedure
+    .input(z.object({ ids: z.array(z.string().min(1)).min(1) }))
+    .mutation(async ({ input, ctx }) => {
+      const { ids } = input;
+
+      try {
+        const forms = await ctx.db.form.findMany({
+          select: { id: true },
+          where: { id: { in: ids } },
+        });
+
+        if (forms.length !== ids.length) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Form not found.",
+          });
+        }
+
+        const deletedForms = await ctx.db.form.deleteMany({
+          where: { id: { in: ids } },
+        });
+
+        return {
+          status: 202,
+          message: `${deletedForms.count} forms deleted with success!`,
+        };
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to delete forms.",
           cause: error,
         });
       }
