@@ -1,24 +1,21 @@
 "use client";
 
-import {
-  AvatarIcon,
-  DotsHorizontalIcon,
-  TrashIcon,
-} from "@radix-ui/react-icons";
-import { useRouter } from "next/navigation";
 import * as React from "react";
-import { formatPhoneNumber } from "react-phone-number-input";
+import { TrashIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { useRouter } from "next/navigation";
+import { Eye, FilePenLine } from "lucide-react";
 
 import type { RouterOutputs } from "@/trpc/react";
 import { type ColumnDef } from "@tanstack/react-table";
 
-import { usePermissions } from "@/hooks/use-permissions";
 import { getInitials } from "@/lib/utils";
+import { usePermissions } from "@/hooks/use-permissions";
+import { env } from "@/env";
 
-import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -61,51 +58,72 @@ export function getColumns(): ColumnDef<FormsGetAllOutput>[] {
     },
     {
       meta: { label: "Nome" },
-      accessorKey: "name",
+      accessorKey: "title",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Nome" />
       ),
       cell: ({ row }) => {
-        const image = row.original.updatedByUser?.image ;
+        const image = row.original.logoUrl;
 
         return (
           <div className="flex items-center gap-4">
             <Avatar>
-              {image && <AvatarImage src={image} />}
+              {image && (
+                <AvatarImage src={`${env.NEXT_PUBLIC_BUCKET_URL}/${image}`} />
+              )}
               <AvatarFallback>
-                {getInitials(row.getValue("name"))}
+                {getInitials(row.getValue("title"))}
               </AvatarFallback>
             </Avatar>
-            <span>{row.getValue("name")}</span>
+            <span className="font-medium">{row.getValue("title")}</span>
           </div>
         );
       },
     },
     {
-      meta: { label: "E-mail" },
-      accessorKey: "user.email",
+      meta: { label: "Descrição" },
+      accessorKey: "description",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="E-mail" />
+        <DataTableColumnHeader column={column} title="Descrição" />
       ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex items-center gap-4">
+            <span className="max-w-xs truncate">
+              {row.getValue("description")}
+            </span>
+          </div>
+        );
+      },
     },
     {
-      meta: { label: "Telefone" },
-      accessorKey: "cellphone",
+      meta: { label: "Editado por" },
+      accessorKey: "updatedBy",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Telefone" />
+        <DataTableColumnHeader column={column} title="Editado por" />
       ),
-      cell: ({ row }) => (
-        <div>{formatPhoneNumber(row.getValue("cellphone"))}</div>
-      ),
+      cell: ({ row }) => {
+        const image = row.original.updatedByUser?.image;
+        const name = row.original.updatedByUser?.name;
+
+        return (
+          <div className="flex items-center gap-4">
+            <Avatar>
+              {image && (
+                <AvatarImage src={`${env.NEXT_PUBLIC_BUCKET_URL}/${image}`} />
+              )}
+              <AvatarFallback>{getInitials(name || "")}</AvatarFallback>
+            </Avatar>
+            <span>{name}</span>
+          </div>
+        );
+      },
     },
     {
-      meta: { label: "Data de nascimento" },
-      accessorKey: "birthdate",
+      meta: { label: "Editado em" },
+      accessorKey: "updatedAt",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Data de nascimento" />
-      ),
-      cell: ({ row }) => (
-        <div className="w-32 text-center">{row.getValue("birthdate")}</div>
+        <DataTableColumnHeader column={column} title="Editado em" />
       ),
     },
     {
@@ -147,11 +165,17 @@ export function getColumns(): ColumnDef<FormsGetAllOutput>[] {
               <DropdownMenuContent align="end" className="w-40">
                 <DropdownMenuItem
                   className="font-medium"
-                  onSelect={() => router.push(`/
-                    s/${row.original.id}`)}
+                  onSelect={() => router.push(`/forms/edit/${row.original.id}`)}
                 >
-                  <AvatarIcon className="mr-2 size-4" aria-hidden="true" />
-                  Detalhes
+                  <FilePenLine className="mr-2 size-4" aria-hidden="true" />
+                  Editar
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="font-medium"
+                  onSelect={() => router.push(`/s/${row.original.id}`)}
+                >
+                  <Eye className="mr-2 size-4" aria-hidden="true" />
+                  Preview
                 </DropdownMenuItem>
                 {hasPermissionToDelete && (
                   <>

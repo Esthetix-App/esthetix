@@ -1,3 +1,4 @@
+import { z } from "zod";
 import dayjs from "dayjs";
 import { TRPCError } from "@trpc/server";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -7,7 +8,11 @@ import type { Form } from "@prisma/client";
 import { formSchema } from "@/validation/form";
 import { getFormSchema } from "@/validation/get-forms";
 import { buildWhereClause } from "@/lib/build-where-clause";
-import { createTRPCRouter, professionalProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  professionalProcedure,
+  adminProcedure,
+} from "@/server/api/trpc";
 
 dayjs.extend(customParseFormat);
 
@@ -118,6 +123,40 @@ export const formRouter = createTRPCRouter({
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to get forms.",
+          cause: error,
+        });
+      }
+    }),
+  delete: adminProcedure
+    .input(z.object({ ids: z.array(z.string().min(1)).min(1) }))
+    .mutation(async ({ input, ctx }) => {
+      const { ids } = input;
+
+      try {
+        const forms = await ctx.db.form.findMany({
+          select: { id: true },
+          where: { id: { in: ids } },
+        });
+
+        if (forms.length !== ids.length) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Form not found.",
+          });
+        }
+
+        const deletedForms = await ctx.db.form.deleteMany({
+          where: { id: { in: ids } },
+        });
+
+        return {
+          status: 202,
+          message: `${deletedForms.count} forms deleted with success!`,
+        };
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to delete forms.",
           cause: error,
         });
       }

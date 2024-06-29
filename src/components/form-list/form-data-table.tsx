@@ -1,24 +1,25 @@
 "use client";
 
-import type { DataTableFilterField } from "@/types/data-table";
-import { useSearchParams } from "next/navigation";
 import * as React from "react";
+import { useSearchParams } from "next/navigation";
+import { api } from "@/trpc/react";
+
+import type { DataTableFilterField } from "@/types/data-table";
+import {
+  getColumns,
+  type FormsGetAllOutput,
+} from "@/components/form-list/form-table-columns";
 
 import { useDataTable } from "@/hooks/use-data-table";
-import { api } from "@/trpc/react";
 import { searchParamsSchema } from "@/validation/get-forms";
 
-import { DataTableAdvancedToolbar } from "@/components/data-table/advanced/data-table-advanced-toolbar";
 import { DataTable } from "@/components/data-table/data-table";
-import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton";
+import { FormListEmpty } from "@/components/form-list/form-list-empty";
 import { DataTableToolbar } from "@/components/data-table/data-table-toolbar";
-import { FormListEmpty } from "./form-list-empty";
-import {
-  FormsGetAllOutput,
-  getColumns
-} from "./form-table-columns";
-import { FormsTableFloatingBar } from "./form-table-floating-bar";
-import { FormTableToolbarActions } from "./form-table-toolbar-actions";
+import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton";
+import { FormsTableFloatingBar } from "@/components/form-list/form-table-floating-bar";
+import { FormTableToolbarActions } from "@/components/form-list/form-table-toolbar-actions";
+import { DataTableAdvancedToolbar } from "@/components/data-table/advanced/data-table-advanced-toolbar";
 
 const ENABLE_ADVANCED_FILTER = false;
 
@@ -67,19 +68,19 @@ export function FormsDataTable() {
         <FormListEmpty />
       ) : (
         <DataTable
-      table={table}
-      floatingBar={<FormsTableFloatingBar table={table} />}
-    >
-      {ENABLE_ADVANCED_FILTER ? (
-        <DataTableAdvancedToolbar table={table} filterFields={filterFields}>
-          <FormTableToolbarActions table={table} />
-        </DataTableAdvancedToolbar>
-      ) : (
-        <DataTableToolbar table={table} filterFields={filterFields}>
-          <FormTableToolbarActions table={table} />
-        </DataTableToolbar>
-      )}
-    </DataTable>
+          table={table}
+          floatingBar={<FormsTableFloatingBar table={table} />}
+        >
+          {ENABLE_ADVANCED_FILTER ? (
+            <DataTableAdvancedToolbar table={table} filterFields={filterFields}>
+              <FormTableToolbarActions table={table} />
+            </DataTableAdvancedToolbar>
+          ) : (
+            <DataTableToolbar table={table} filterFields={filterFields}>
+              <FormTableToolbarActions table={table} />
+            </DataTableToolbar>
+          )}
+        </DataTable>
       )}
     </>
   );

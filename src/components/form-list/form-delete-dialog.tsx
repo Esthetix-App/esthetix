@@ -35,7 +35,7 @@ export function FormsDeleteDialog({
   ...props
 }: DeleteTasksDialogProps) {
   const utils = api.useUtils();
-  const { mutate, isPending } = api.customer.delete.useMutation({
+  const { mutate, isPending } = api.form.delete.useMutation({
     onError() {
       toast.error(
         "Houve um problema ao tentar excluir, tente novamente mais tarde.",
@@ -43,7 +43,7 @@ export function FormsDeleteDialog({
     },
     async onSuccess() {
       toast.success("Itens excluídos");
-      await utils.customer.getAll.invalidate();
+      await utils.form.getAll.invalidate();
     },
     onSettled() {
       props.onOpenChange?.(false);

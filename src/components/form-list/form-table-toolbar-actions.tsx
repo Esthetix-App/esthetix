@@ -9,6 +9,7 @@ import { exportTableToCSV } from "@/lib/export";
 
 import { Button } from "@/components/ui/button";
 import { FormsDeleteDialog } from "./form-delete-dialog";
+import Link from "next/link";
 
 interface FormTableToolbarActionsProps {
   table: Table<FormsGetAllOutput>;
@@ -31,9 +32,11 @@ export function FormTableToolbarActions({
           onSuccess={() => table.toggleAllRowsSelected(false)}
         />
       ) : null}
-      <Button size="sm">
-        <PlusIcon className="mr-2 size-4" aria-hidden="true" />
-        Vincular Formulário
+      <Button asChild size="sm">
+        <Link href="/forms/new">
+          <PlusIcon className="mr-2 size-4" aria-hidden="true" />
+          Novo Formulário
+        </Link>
       </Button>
       <Button
         variant="outline"
