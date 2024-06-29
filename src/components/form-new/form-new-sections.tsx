@@ -31,6 +31,7 @@ export const FormNewSections = () => {
           isRequired: false,
           isProfessionalField: false,
           position: fields.length,
+          size: "SM",
         },
       ],
       position: fields.length,

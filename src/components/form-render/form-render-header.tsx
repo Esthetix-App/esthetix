@@ -14,12 +14,12 @@ export const FormRenderHeader = ({
 }: IFormRenderHeaderProps) => {
   return (
     <>
-      <div className="flex w-full items-center justify-between gap-10 bg-muted/60 p-6">
+      <div className="flex w-full items-center justify-between gap-10 border-t-4 border-primary bg-muted/50 p-6">
         <div className="flex flex-1 items-end gap-6">
           <Image
             alt="Product image"
-            width={200}
-            height={200}
+            width={160}
+            height={160}
             quality={100}
             loading="lazy"
             src={
@@ -48,7 +48,7 @@ export const FormRenderHeader = ({
         </div>
         <div className="flex flex-col items-center gap-1 text-center">
           <span className="text-base font-semibold text-foreground">
-            13/06/2024
+            [DATA DO PREENCHIMENTO]
           </span>
           <span className="w-full border-t pt-1 text-sm font-medium text-muted-foreground">
             Data de Preenchimento
@@ -57,7 +57,7 @@ export const FormRenderHeader = ({
       </div>
       <div className="grid gap-2 p-6 py-8">
         <h2 className="text-xl font-bold">{title}</h2>
-        <p className="text-sm leading-relaxed text-muted-foreground">
+        <p className="text-base leading-relaxed text-muted-foreground">
           {description}
         </p>
       </div>

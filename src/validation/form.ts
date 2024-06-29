@@ -5,7 +5,8 @@ export const fieldOptionsSchema = z.object({
 });
 
 export const formFieldSchema = z.object({
-  name: z.string().min(1, { message: "O campo é obrigatório" }),
+  name: z.string(),
+  description: z.string().optional(),
   isProfessionalField: z.boolean(),
   isRequired: z.boolean(),
   position: z.number(),
@@ -22,6 +23,7 @@ export const formFieldSchema = z.object({
     "DESCRIPTION",
     "SIGNATURE",
   ]),
+  size: z.enum(["SM", "MD", "LG", "XL"]),
   typeOptions: z.object({}).nullable(),
   fieldOptions: z.array(fieldOptionsSchema).nullable(),
 });
@@ -43,4 +45,5 @@ export const formSchema = z.object({
 
 export type IFormSchema = z.infer<typeof formSchema>;
 export type IFormGroupSchema = z.infer<typeof formGroupSchema>;
-export type IFormFieldSchema = z.infer<typeof formGroupSchema>;
+export type IFormFieldSchema = z.infer<typeof formFieldSchema>;
+export type IFormOptionSchema = z.infer<typeof fieldOptionsSchema>;

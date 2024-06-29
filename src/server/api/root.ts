@@ -1,9 +1,11 @@
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 
-import { authRouter } from "@/server/api/routers/auth";
-import { customerRouter } from "@/server/api/routers/customer";
-import { formUploadRouter } from "@/server/api/routers/formUpload";
 import { formRouter } from "@/server/api/routers/form";
+import { userRouter } from "@/server/api/routers/user";
+import { customerRouter } from "@/server/api/routers/customer";
+import { formUploadRouter } from "@/server/api/routers/form-upload";
+import { formHistoryRouter } from "@/server/api/routers/form-history";
+import { professionalRouter } from "@/server/api/routers/professional";
 
 /**
  * This is the primary router for your server.
@@ -11,10 +13,12 @@ import { formRouter } from "@/server/api/routers/form";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  auth: authRouter,
+  form: formRouter,
+  user: userRouter,
   customer: customerRouter,
   formUpload: formUploadRouter,
-  form: formRouter,
+  formHistory: formHistoryRouter,
+  professional: professionalRouter,
 });
 
 // export type definition of API

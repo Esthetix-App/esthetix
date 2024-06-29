@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/popover";
 import { ScrollArea } from "./scroll-area";
 
-interface IComboboxOption {
+export interface IComboboxOption {
   value: string;
   label: string;
   icon?: LucideIcon;
@@ -39,6 +39,7 @@ interface IComboboxProps {
   isLoading?: boolean;
   options: IComboboxOption[];
   onSelect?: (currentValue: string) => void;
+  className?: string;
 }
 
 export function Combobox({
@@ -47,6 +48,7 @@ export function Combobox({
   isLoading,
   placeholder,
   onSelect,
+  className,
   searchPlaceholder = "Pesquisar...",
   emptyLabel = "Nenhum item encontrado.",
 }: IComboboxProps) {
@@ -79,7 +81,7 @@ export function Combobox({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[300px] p-0">
+      <PopoverContent className={cn("w-[300px] p-0", className)}>
         <Command>
           <CommandList>
             <ScrollArea className="h-72">
