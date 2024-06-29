@@ -4,11 +4,13 @@ import { useFormContext } from "react-hook-form";
 import { Reorder, useDragControls } from "framer-motion";
 import { GripVerticalIcon, Trash } from "lucide-react";
 
-import type { FieldTypes } from "@prisma/client";
+import type { FieldSize, FieldTypes } from "@prisma/client";
 import type { IFormFieldSchema } from "@/validation/form";
 import type { NewFormData } from "./hooks/use-new-form";
 
 import { cn } from "@/lib/utils";
+import { fieldTypes } from "@/constants/field-types";
+import { fieldSizes } from "@/constants/field-sizes";
 
 import {
   FormControl,
@@ -21,7 +23,6 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
-import { fieldTypes } from "@/constants/field-types";
 import { ProfessionalFieldTooltip } from "@/components/professional-field-tooltip";
 import { FormNewFieldItemOptions } from "./form-new-field-item-options";
 
@@ -84,6 +85,30 @@ export const FormNewFieldItem = ({
 
           <FormField
             control={control}
+            name={`formGroups.${indexFormGroup}.formFields.${index}.size`}
+            render={({ field }) => (
+              <FormItem className="w-[200px]">
+                <FormLabel>Tamanho</FormLabel>
+                <FormControl>
+                  <Combobox
+                    options={fieldSizes}
+                    value={field.value}
+                    placeholder="?/3"
+                    onSelect={(currentValue) => {
+                      setValue(
+                        `formGroups.${indexFormGroup}.formFields.${index}.size`,
+                        currentValue as FieldSize,
+                      );
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={control}
             name={`formGroups.${indexFormGroup}.formFields.${index}.type`}
             render={({ field }) => (
               <FormItem className="w-[200px]">
@@ -127,6 +152,19 @@ export const FormNewFieldItem = ({
             </Button>
           </div>
         </div>
+        <FormField
+          control={control}
+          name={`formGroups.${indexFormGroup}.formFields.${index}.description`}
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>Descrição do campo</FormLabel>
+              <FormControl>
+                <Input placeholder="Infrome a descrição" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormNewFieldItemOptions
           indexField={index}

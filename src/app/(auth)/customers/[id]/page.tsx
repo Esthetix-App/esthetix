@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronLeft, FileClock, PlusIcon, UserRound } from "lucide-react";
+import { ChevronLeft, FileClock, UserRound } from "lucide-react";
 
 import { api } from "@/trpc/server";
 import { getInitials } from "@/lib/utils";
@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CustomerHistory } from "@/components/customer-history";
+import { CustomerDetails } from "@/components/customer-details";
+import { LinkFormDialog } from "@/components/link-form/link-form-dialog";
 
 interface ICustomersDetailsPageProps {
   params: {
@@ -45,10 +47,7 @@ export default async function CustomersDetailsPage({
           </div>
         </div>
 
-        <Button size="sm">
-          <PlusIcon className="mr-2 size-4" aria-hidden="true" />
-          Novo Agendamento
-        </Button>
+        <LinkFormDialog />
       </div>
       <div className="mt-6 flex w-full flex-1">
         <Tabs defaultValue="customer-data" className="w-full">
@@ -68,7 +67,9 @@ export default async function CustomersDetailsPage({
               </Badge>
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="customer-data">{params.id}</TabsContent>
+          <TabsContent value="customer-data">
+            <CustomerDetails customer={customer} />
+          </TabsContent>
           <TabsContent value="customer-history">
             <CustomerHistory />
           </TabsContent>

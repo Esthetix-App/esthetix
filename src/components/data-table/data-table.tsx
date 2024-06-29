@@ -42,7 +42,12 @@ export function DataTable<TData>({
       {...props}
     >
       {children}
-      <div className="relative overflow-hidden rounded-md border bg-muted/40 shadow-sm">
+      <div
+        className={cn(
+          "relative overflow-hidden rounded-md border bg-muted/40 shadow-sm",
+          !table.getRowModel().rows?.length && "min-h-52",
+        )}
+      >
         {!table.getRowModel().rows?.length && (
           <div className="absolute inset-0 flex h-full items-center justify-center">
             <span className="text-sm font-medium">Sem resultados.</span>

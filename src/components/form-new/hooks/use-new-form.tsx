@@ -31,11 +31,13 @@ export const useNewForm = () => {
             {
               name: "",
               type: "TEXT",
+              description: "",
               position: 0,
               typeOptions: null,
               fieldOptions: null,
               isRequired: false,
               isProfessionalField: false,
+              size: "SM",
             },
           ],
           isProfessionalField: false,

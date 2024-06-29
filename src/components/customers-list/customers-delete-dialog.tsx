@@ -2,10 +2,13 @@
 
 import * as React from "react";
 import { ReloadIcon, TrashIcon } from "@radix-ui/react-icons";
-import { type Row } from "@tanstack/react-table";
 import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button";
+import { type Row } from "@tanstack/react-table";
+import type { CustomerGetAllOutput } from "./customers-table-columns";
+
+import { api } from "@/trpc/react";
+
 import {
   Dialog,
   DialogClose,
@@ -16,21 +19,41 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface DeleteTasksDialogProps
   extends React.ComponentPropsWithoutRef<typeof Dialog> {
-  items: Row<unknown>["original"][];
+  items: Row<CustomerGetAllOutput>["original"][];
   showTrigger?: boolean;
   onSuccess?: () => void;
 }
 
 export function CustomersDeleteDialog({
   items,
-  showTrigger = true,
   onSuccess,
+  showTrigger = true,
   ...props
 }: DeleteTasksDialogProps) {
-  const [isDeletePending, startDeleteTransition] = React.useTransition();
+  const utils = api.useUtils();
+  const { mutate, isPending } = api.customer.delete.useMutation({
+    onError() {
+      toast.error(
+        "Houve um problema ao tentar excluir, tente novamente mais tarde.",
+      );
+    },
+    async onSuccess() {
+      toast.success("Itens excluídos");
+      await utils.customer.getAll.invalidate();
+    },
+    onSettled() {
+      props.onOpenChange?.(false);
+      onSuccess?.();
+    },
+  });
+
+  const handleDelete = () => {
+    mutate({ ids: items.map((item) => item.id) });
+  };
 
   return (
     <Dialog {...props}>
@@ -58,25 +81,10 @@ export function CustomersDeleteDialog({
           <Button
             aria-label="Excluir linhas selecionadas"
             variant="destructive"
-            onClick={() => {
-              startDeleteTransition(async () => {
-                // const { error } = await deleteTasks({
-                //   ids: tasks.map((task) => task.id),
-                // });
-
-                // if (error) {
-                //   toast.error(error);
-                //   return;
-                // }
-
-                props.onOpenChange?.(false);
-                toast.success("Itens excluídos");
-                onSuccess?.();
-              });
-            }}
-            disabled={isDeletePending}
+            onClick={handleDelete}
+            disabled={isPending}
           >
-            {isDeletePending && (
+            {isPending && (
               <ReloadIcon
                 className="mr-2 size-4 animate-spin"
                 aria-hidden="true"

@@ -13,6 +13,8 @@ import type { RouterOutputs } from "@/trpc/react";
 import { type ColumnDef } from "@tanstack/react-table";
 
 import { getInitials } from "@/lib/utils";
+import { usePermissions } from "@/hooks/use-permissions";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -116,9 +118,12 @@ export function getColumns(): ColumnDef<CustomerGetAllOutput>[] {
     {
       id: "actions",
       cell: function Cell({ row }) {
+        const router = useRouter();
         const [showDeleteTaskDialog, setShowDeleteTaskDialog] =
           React.useState(false);
-        const router = useRouter();
+
+        const { hasPermission } = usePermissions();
+        const hasPermissionToDelete = hasPermission("ADMIN");
 
         return (
           <>
@@ -147,14 +152,18 @@ export function getColumns(): ColumnDef<CustomerGetAllOutput>[] {
                   <AvatarIcon className="mr-2 size-4" aria-hidden="true" />
                   Detalhes
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onSelect={() => setShowDeleteTaskDialog(true)}
-                  className="font-medium text-destructive"
-                >
-                  <TrashIcon className="mr-2 size-4" aria-hidden="true" />
-                  Excluir
-                </DropdownMenuItem>
+                {hasPermissionToDelete && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onSelect={() => setShowDeleteTaskDialog(true)}
+                      className="font-medium text-destructive"
+                    >
+                      <TrashIcon className="mr-2 size-4" aria-hidden="true" />
+                      Excluir
+                    </DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </>

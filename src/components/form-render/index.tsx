@@ -9,15 +9,15 @@ interface IFormRenderProps {
 
 export const FormRender = ({ data }: IFormRenderProps) => {
   return (
-    <main>
+    <main className="pb-10">
       <FormRenderHeader
         title={data.title}
         logoUrl={data.logoUrl}
         description={data.description}
       />
-      <div className="grid gap-6 p-6">
+      <div className="grid gap-10 p-6">
         {data.formGroups.map((section) => (
-          <FormRenderSection key={section.name} />
+          <FormRenderSection key={section.name} section={section} />
         ))}
       </div>
     </main>

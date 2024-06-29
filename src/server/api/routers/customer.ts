@@ -11,6 +11,7 @@ import {
   createTRPCRouter,
   publicProcedure,
   professionalProcedure,
+  adminProcedure,
 } from "@/server/api/trpc";
 import { buildWhereClause } from "@/lib/build-where-clause";
 import { customerSignUpSchema } from "@/validation/customer";
@@ -49,7 +50,12 @@ export const customerRouter = createTRPCRouter({
 
         return {
           status: 200,
-          customer,
+          customer: {
+            ...customer,
+            birthdate: dayjs(customer.birthdate).format("DD/MM/YYYY"),
+            createdAt: dayjs(customer.createdAt).format("DD/MM/YYYY"),
+            updatedAt: dayjs(customer.updatedAt).format("DD/MM/YYYY"),
+          },
         };
       } catch (error) {
         throw new TRPCError({
@@ -111,6 +117,60 @@ export const customerRouter = createTRPCRouter({
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to get customers.",
+          cause: error,
+        });
+      }
+    }),
+  delete: adminProcedure
+    .input(z.object({ ids: z.array(z.string().min(1)).min(1) }))
+    .mutation(async ({ input, ctx }) => {
+      const { ids } = input;
+
+      try {
+        const customers = await ctx.db.customer.findMany({
+          where: {
+            id: {
+              in: ids,
+            },
+          },
+        });
+
+        if (customers.length !== ids.length) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Customer not found.",
+          });
+        }
+
+        const usersIds = customers.map((customer) => customer.userId);
+        const addressesIds = customers.map((customer) => customer.addressId);
+
+        const deleteCustomers = ctx.db.customer.deleteMany({
+          where: { id: { in: ids } },
+        });
+
+        const deleteAddresses = ctx.db.address.deleteMany({
+          where: { id: { in: addressesIds } },
+        });
+
+        const deleteUsers = ctx.db.user.deleteMany({
+          where: { id: { in: usersIds } },
+        });
+
+        const [deletedCustomers] = await ctx.db.$transaction([
+          deleteCustomers,
+          deleteAddresses,
+          deleteUsers,
+        ]);
+
+        return {
+          status: 202,
+          message: `${deletedCustomers.count} customers deleted with success!`,
+        };
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to delete customers.",
           cause: error,
         });
       }

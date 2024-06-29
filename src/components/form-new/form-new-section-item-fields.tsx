@@ -35,11 +35,13 @@ export const FormNewSectionItemFields = ({
     append({
       name: "",
       type: "TEXT",
+      description: "",
       typeOptions: null,
       fieldOptions: null,
       isRequired: false,
       isProfessionalField: false,
       position: fields.length,
+      size: "SM",
     });
   };
 

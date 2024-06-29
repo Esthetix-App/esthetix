@@ -85,8 +85,8 @@ model Customer {
     userId    String   @map("user_id")
     addressId String   @map("address_id")
 
-    user          User          @relation(fields: [userId], references: [id])
-    address       Address       @relation(fields: [addressId], references: [id])
+    user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+    address       Address       @relation(fields: [addressId], references: [id], onDelete: Cascade)
     formHistories FormHistory[] @relation("customer")
 
     @@map("customers")
@@ -150,11 +150,20 @@ enum FieldTypes {
     SIGNATURE
 }
 
+enum FieldSize {
+    SM
+    MD
+    LG
+    XL
+}
+
 model FormField {
     id                  String     @id @default(cuid())
     name                String?
+    description         String?
     position            Int
     type                FieldTypes
+    size                FieldSize?
     typeOptions         Json?      @map("type_options")
     formGroupId         String     @map("form_group_id")
     isProfessionalField Boolean?   @map("is_professional_field")
@@ -177,17 +186,17 @@ model FieldOptions {
 }
 
 model FormHistory {
-    id             String   @id @default(cuid())
+    id             String    @id @default(cuid())
     title          String
     description    String?
-    logoUrl        String?  @map("logo_url")
+    logoUrl        String?   @map("logo_url")
     enable         Boolean
-    isNamedForm    Boolean  @map("is_named_form")
-    filledAt       DateTime @map("filled_at")
-    createdAt      DateTime @default(now()) @map("created_at")
-    createdBy      String?  @map("created_by")
-    customerId     String?  @map("customer_id")
-    professionalId String?  @map("professional_id")
+    isNamedForm    Boolean   @map("is_named_form")
+    filledAt       DateTime? @map("filled_at")
+    createdAt      DateTime  @default(now()) @map("created_at")
+    createdBy      String?   @map("created_by")
+    customerId     String?   @map("customer_id")
+    professionalId String?   @map("professional_id")
 
     customer          Customer?          @relation(fields: [customerId], references: [id], onDelete: SetNull, name: "customer")
     professional      User?              @relation(fields: [professionalId], references: [id], onDelete: SetNull, name: "professional")
@@ -204,8 +213,8 @@ model FormGroupHistory {
     isProfessionalField Boolean? @map("is_professional_field")
     formId              String   @map("form_id")
 
-    form       FormHistory        @relation(fields: [formId], references: [id], onDelete: Cascade)
-    formFields FormFieldHistory[]
+    formHistory       FormHistory        @relation(fields: [formId], references: [id], onDelete: Cascade)
+    formFieldsHistory FormFieldHistory[]
 
     @@map("form_groups_history")
 }
@@ -213,15 +222,17 @@ model FormGroupHistory {
 model FormFieldHistory {
     id                  String     @id @default(cuid())
     name                String?
+    description         String?
     position            Int
     type                FieldTypes
+    size                FieldSize?
     typeOptions         Json?      @map("type_options")
     formGroupId         String     @map("form_group_id")
     isProfessionalField Boolean?   @map("is_professional_field")
     isRequired          Boolean?   @map("is_required")
 
-    formGroup    FormGroupHistory      @relation(fields: [formGroupId], references: [id], onDelete: Cascade)
-    fieldOptions FieldOptionsHistory[]
+    formGroupHistory    FormGroupHistory      @relation(fields: [formGroupId], references: [id], onDelete: Cascade)
+    fieldOptionsHistory FieldOptionsHistory[]
 
     @@map("form_fields_history")
 }
@@ -231,7 +242,7 @@ model FieldOptionsHistory {
     name        String
     formFieldId String @map("form_field_id")
 
-    formField FormFieldHistory @relation(fields: [formFieldId], references: [id], onDelete: Cascade)
+    formFieldHistory FormFieldHistory @relation(fields: [formFieldId], references: [id], onDelete: Cascade)
 
     @@map("field_options_history")
 }
