@@ -1,6 +1,13 @@
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import { TRPCError } from "@trpc/server";
 import { formHistorySchema } from "@/validation/form-history";
 import { createTRPCRouter, professionalProcedure } from "@/server/api/trpc";
+import { buildWhereClause } from "@/lib/build-where-clause";
+import { getCustomerHistorySchema } from "@/validation/get-customer-history";
+import type { FormHistory } from "@prisma/client";
+
+dayjs.extend(customParseFormat);
 
 export const formHistoryRouter = createTRPCRouter({
   create: professionalProcedure
@@ -90,6 +97,62 @@ export const formHistoryRouter = createTRPCRouter({
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to create form.",
+          cause: error,
+        });
+      }
+    }),
+  getByCustomer: professionalProcedure
+    .input(getCustomerHistorySchema)
+    .query(async ({ ctx, input }) => {
+      const { page, per_page, sort, title, operator, customerId } = input;
+
+      try {
+        const offset = (page - 1) * per_page;
+        const [column, order] = (sort?.split(".").filter(Boolean) ?? [
+          "createdAt",
+          "desc",
+        ]) as [keyof FormHistory, "asc" | "desc"];
+
+        const orderBy = { [column]: order };
+
+        const where = buildWhereClause(
+          [
+            { column: "title", value: title ?? "" },
+            { column: "customerId", value: customerId },
+          ],
+          operator,
+        );
+
+        const [forms, count] = await ctx.db.$transaction([
+          ctx.db.formHistory.findMany({
+            include: {
+              professional: {
+                select: { name: true },
+              },
+            },
+            take: per_page,
+            skip: offset,
+            orderBy,
+            where,
+          }),
+          ctx.db.formHistory.count({ where }),
+        ]);
+
+        return {
+          status: 200,
+          forms: forms.map((form) => ({
+            ...form,
+            createdAt: dayjs(form.createdAt).format("DD/MM/YYYY"),
+            filledAt: form.filledAt
+              ? dayjs(form.filledAt).format("DD/MM/YYYY hh:mm")
+              : null,
+          })),
+          pageCount: Math.ceil(count / per_page),
+        };
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to get forms.",
           cause: error,
         });
       }
