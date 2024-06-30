@@ -13,3 +13,5 @@ export const fieldsWithPlaceholder: Partial<FieldTypes>[] = [
   "SELECT",
   "MULTI_SELECT",
 ];
+
+export const fieldsWithUpload: Partial<FieldTypes>[] = ["IMAGE"];

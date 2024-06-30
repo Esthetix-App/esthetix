@@ -16,7 +16,6 @@ export const formFieldSchema = z.object({
     "CHECKBOX",
     "RADIO",
     "DATE",
-    "DATETIME",
     "SELECT",
     "MULTI_SELECT",
     "IMAGE",

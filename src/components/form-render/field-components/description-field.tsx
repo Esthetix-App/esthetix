@@ -5,7 +5,6 @@ import { useFormContext } from "react-hook-form";
 
 import {
   FormItem,
-  FormLabel,
   FormField,
   FormControl,
   FormMessage,
@@ -27,11 +26,10 @@ export const DescriptionField = ({
     <FormField
       name={id}
       control={control}
-      render={({ field }) => (
+      render={() => (
         <FormItem>
-          <FormLabel>{label}</FormLabel>
           <FormControl>
-            <p>{field.value}</p>
+            <p>{label}</p>
           </FormControl>
           <FormDescription>{description}</FormDescription>
           <FormMessage />

@@ -8,8 +8,10 @@ import { cn } from "@/lib/utils";
 import {
   fieldsWithOptions,
   fieldsWithPlaceholder,
+  fieldsWithUpload,
 } from "@/constants/field-configs";
 import { FieldOptionsList } from "@/components/form-new/field-options/field-options-list";
+import { FieldOptionsUpload } from "@/components/form-new/field-options/field-options-upload";
 import { FieldOptionsPlaceholder } from "@/components/form-new/field-options/field-options-placeholder";
 
 interface IFormNewFieldItemOptionsProps {
@@ -29,8 +31,9 @@ export const FormNewFieldItemOptions = ({
 
   const showOptionsList = fieldsWithOptions.includes(fieldType);
   const showPlaceholderOption = fieldsWithPlaceholder.includes(fieldType);
+  const showUploadOption = fieldsWithUpload.includes(fieldType);
 
-  if (!showOptionsList && !showPlaceholderOption) {
+  if (!showOptionsList && !showPlaceholderOption && !showUploadOption) {
     return null;
   }
 
@@ -48,6 +51,12 @@ export const FormNewFieldItemOptions = ({
       )}
       {showOptionsList && (
         <FieldOptionsList
+          indexField={indexField}
+          indexFormGroup={indexFormGroup}
+        />
+      )}
+      {showUploadOption && (
+        <FieldOptionsUpload
           indexField={indexField}
           indexFormGroup={indexFormGroup}
         />
