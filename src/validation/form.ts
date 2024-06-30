@@ -16,7 +16,6 @@ export const formFieldSchema = z.object({
     "CHECKBOX",
     "RADIO",
     "DATE",
-    "DATETIME",
     "SELECT",
     "MULTI_SELECT",
     "IMAGE",
@@ -24,7 +23,7 @@ export const formFieldSchema = z.object({
     "SIGNATURE",
   ]),
   size: z.enum(["SM", "MD", "LG", "XL"]),
-  typeOptions: z.object({}).nullable(),
+  typeOptions: z.record(z.string(), z.string()).nullable(),
   fieldOptions: z.array(fieldOptionsSchema).nullable(),
 });
 

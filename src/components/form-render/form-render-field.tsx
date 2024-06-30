@@ -15,6 +15,8 @@ export const FormRenderField = ({ field }: IFormRenderField) => {
     return null;
   }
 
+  console.log(field);
+
   return (
     <div
       className={cn(

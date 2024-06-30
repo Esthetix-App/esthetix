@@ -9,9 +9,13 @@ import { Button } from "@/components/ui/button";
 import { FormPreview } from "../form-preview";
 
 export const FormNewHeader = () => {
-  const { watch } = useFormContext<NewFormData>();
+  const { watch, reset } = useFormContext<NewFormData>();
 
   const isEnabled = watch("enable");
+
+  const handleResetForm = () => {
+    reset();
+  };
 
   return (
     <div className="flex items-center gap-4">
@@ -33,7 +37,12 @@ export const FormNewHeader = () => {
 
       <div className="hidden items-center gap-2 md:ml-auto md:flex">
         <FormPreview />
-        <Button type="button" variant="outline" size="sm">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={handleResetForm}
+        >
           Descartar
         </Button>
         <Button size="sm" type="submit">

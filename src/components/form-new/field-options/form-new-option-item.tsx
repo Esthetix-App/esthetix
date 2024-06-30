@@ -5,7 +5,7 @@ import { Reorder, useDragControls } from "framer-motion";
 import { GripVerticalIcon, Trash } from "lucide-react";
 
 import type { IFormOptionSchema } from "@/validation/form";
-import type { NewFormData } from "./hooks/use-new-form";
+import type { NewFormData } from "../hooks/use-new-form";
 
 import { cn } from "@/lib/utils";
 

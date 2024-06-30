@@ -1,6 +1,5 @@
 import {
   Calendar,
-  CalendarClock,
   CircleCheck,
   Image,
   ListChecks,
@@ -36,11 +35,6 @@ export const fieldTypes: IFieldTypes[] = [
     value: "DATE",
     label: "Data",
     icon: Calendar,
-  },
-  {
-    value: "DATETIME",
-    label: "Data e hora",
-    icon: CalendarClock,
   },
   {
     value: "DESCRIPTION",

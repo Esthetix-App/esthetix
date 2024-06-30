@@ -1,16 +1,18 @@
 "use client";
 
-import { useState } from "react";
-import { Reorder } from "framer-motion";
-import { useFieldArray, useFormContext } from "react-hook-form";
-import { PlusCircle } from "lucide-react";
+import { useFormContext } from "react-hook-form";
 
 import type { NewFormData } from "./hooks/use-new-form";
 
 import { cn } from "@/lib/utils";
-
-import { Button } from "@/components/ui/button";
-import { FormNewOptionItem } from "@/components/form-new/form-new-option-item";
+import {
+  fieldsWithOptions,
+  fieldsWithPlaceholder,
+  fieldsWithUpload,
+} from "@/constants/field-configs";
+import { FieldOptionsList } from "@/components/form-new/field-options/field-options-list";
+import { FieldOptionsUpload } from "@/components/form-new/field-options/field-options-upload";
+import { FieldOptionsPlaceholder } from "@/components/form-new/field-options/field-options-placeholder";
 
 interface IFormNewFieldItemOptionsProps {
   indexField: number;
@@ -21,88 +23,44 @@ export const FormNewFieldItemOptions = ({
   indexField,
   indexFormGroup,
 }: IFormNewFieldItemOptionsProps) => {
-  const { control, watch } = useFormContext<NewFormData>();
+  const { watch } = useFormContext<NewFormData>();
 
   const fieldType = watch(
     `formGroups.${indexFormGroup}.formFields.${indexField}.type`,
   );
 
-  const [draggingIndex, setDraggingIndex] = useState<null | number>(null);
-  const { fields, append, move, remove } = useFieldArray({
-    name: `formGroups.${indexFormGroup}.formFields.${indexField}.fieldOptions`,
-    keyName: "key",
-    control,
-  });
+  const showOptionsList = fieldsWithOptions.includes(fieldType);
+  const showPlaceholderOption = fieldsWithPlaceholder.includes(fieldType);
+  const showUploadOption = fieldsWithUpload.includes(fieldType);
 
-  const handleAddNewField = () => {
-    append({ name: "" });
-  };
-
-  const handleDragStart = (index: number) => {
-    setDraggingIndex(index);
-  };
-
-  const handleDragEnd = () => {
-    setDraggingIndex(null);
-  };
-
-  const handleReorder = (newOrder: typeof fields) => {
-    if (draggingIndex === null) {
-      return;
-    }
-
-    const draggingLink = fields[draggingIndex];
-
-    newOrder.forEach((link, index) => {
-      if (link === draggingLink) {
-        move(draggingIndex, index);
-        setDraggingIndex(index);
-      }
-    });
-  };
+  if (!showOptionsList && !showPlaceholderOption && !showUploadOption) {
+    return null;
+  }
 
   return (
     <div
       className={cn(
-        "flex flex-col items-start justify-start gap-6 border-y py-6 transition-all ease-linear",
+        "flex w-full flex-1 flex-col items-start justify-start gap-6 border-y py-6 transition-all ease-linear",
       )}
     >
-      <span className="text-sm font-semibold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-        Opções do campo
-      </span>
-
-      <Reorder.Group
-        axis="y"
-        values={fields}
-        onReorder={handleReorder}
-        className="w-full px-6"
-      >
-        {fields.map((field, index) => (
-          <FormNewOptionItem
-            key={field.key}
-            index={index}
-            indexField={indexField}
-            optionField={field}
-            indexFormGroup={indexFormGroup}
-            onDragEnd={handleDragEnd}
-            onDragStart={() => handleDragStart(index)}
-            onRemove={() => remove(index)}
-            isDraggingActive={
-              draggingIndex === null ? null : draggingIndex === index
-            }
-          />
-        ))}
-      </Reorder.Group>
-      <Button
-        type="button"
-        size="sm"
-        variant="default"
-        onClick={handleAddNewField}
-        className="ml-8 flex gap-1"
-      >
-        <PlusCircle className="h-3.5 w-3.5" />
-        Adicionar Opção
-      </Button>
+      {showPlaceholderOption && (
+        <FieldOptionsPlaceholder
+          indexField={indexField}
+          indexFormGroup={indexFormGroup}
+        />
+      )}
+      {showOptionsList && (
+        <FieldOptionsList
+          indexField={indexField}
+          indexFormGroup={indexFormGroup}
+        />
+      )}
+      {showUploadOption && (
+        <FieldOptionsUpload
+          indexField={indexField}
+          indexFormGroup={indexFormGroup}
+        />
+      )}
     </div>
   );
 };

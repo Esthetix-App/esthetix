@@ -39,6 +39,7 @@ export const formRouter = createTRPCRouter({
                       name: field.name,
                       position: field.position,
                       type: field.type,
+                      size: field.size,
                       typeOptions: field.typeOptions ?? undefined,
                       isProfessionalField: field.isProfessionalField,
                       isRequired: field.isRequired,

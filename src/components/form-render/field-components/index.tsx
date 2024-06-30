@@ -3,7 +3,6 @@ import type { IFormFieldSchema } from "@/validation/form";
 import { TextField } from "@/components/form-render/field-components/text-field";
 import { CheckboxField } from "@/components/form-render/field-components/checkbox-field";
 import { DateField } from "@/components/form-render/field-components/date-field";
-import { DateTimeField } from "@/components/form-render/field-components/datetime-field";
 import { DescriptionField } from "@/components/form-render/field-components/description-field";
 import { ImageField } from "@/components/form-render/field-components/image-field";
 import { RadioField } from "@/components/form-render/field-components/radio-field";
@@ -31,7 +30,6 @@ export const fieldComponents: FieldComponentMap = {
   TEXT: TextField,
   CHECKBOX: CheckboxField,
   DATE: DateField,
-  DATETIME: DateTimeField,
   DESCRIPTION: DescriptionField,
   IMAGE: ImageField,
   MULTI_SELECT: MultiSelectField,
