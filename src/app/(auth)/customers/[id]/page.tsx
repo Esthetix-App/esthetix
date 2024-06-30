@@ -1,16 +1,16 @@
-import Link from "next/link";
 import { ChevronLeft, FileClock, UserRound } from "lucide-react";
+import Link from "next/link";
 
-import { api } from "@/trpc/server";
 import { getInitials } from "@/lib/utils";
+import { api } from "@/trpc/server";
 
+import { CustomerDetails } from "@/components/customer-details";
+import { HistoryDataTable } from "@/components/customer-history-list/history-data-table";
+import { LinkFormDialog } from "@/components/link-form/link-form-dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { CustomerHistory } from "@/components/customer-history";
-import { CustomerDetails } from "@/components/customer-details";
-import { LinkFormDialog } from "@/components/link-form/link-form-dialog";
 
 interface ICustomersDetailsPageProps {
   params: {
@@ -71,7 +71,7 @@ export default async function CustomersDetailsPage({
             <CustomerDetails customer={customer} />
           </TabsContent>
           <TabsContent value="customer-history">
-            <CustomerHistory />
+            <HistoryDataTable customer={customer} />
           </TabsContent>
         </Tabs>
       </div>
