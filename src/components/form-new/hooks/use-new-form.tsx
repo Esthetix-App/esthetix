@@ -60,7 +60,6 @@ export const useNewForm = () => {
   });
 
   async function onSubmit(values: NewFormData) {
-    debugger;
     mutate(values);
   }
 

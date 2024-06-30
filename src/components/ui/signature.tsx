@@ -26,7 +26,7 @@ function Signature({ disabled, ...props }: ISignatureProps) {
         {...props}
         readonly={disabled}
         options={{
-          size: 4,
+          size: 2,
           ...props.options,
         }}
       />
