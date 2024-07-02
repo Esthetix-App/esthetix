@@ -1,15 +1,21 @@
 import Link from "next/link";
-import { useFormContext } from "react-hook-form";
 import { ChevronLeft } from "lucide-react";
-
-import type { NewFormData } from "./hooks/use-new-form";
+import { useFormContext } from "react-hook-form";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { FormPreview } from "../form-preview";
+import { FormPreview } from "@/components/form-preview";
 
-export const FormNewHeader = () => {
-  const { watch, reset } = useFormContext<NewFormData>();
+interface IFormHeaderProps {
+  label: string;
+  showResetButton?: boolean;
+}
+
+export const FormHeader = ({
+  label,
+  showResetButton = true,
+}: IFormHeaderProps) => {
+  const { watch, reset } = useFormContext();
 
   const isEnabled = watch("enable");
 
@@ -26,7 +32,7 @@ export const FormNewHeader = () => {
         </Link>
       </Button>
       <h1 className="flex-1 shrink-0 whitespace-nowrap text-lg font-semibold tracking-tight sm:grow-0 md:text-2xl">
-        Novo Formulário
+        {label}
       </h1>
       <Badge
         variant={isEnabled ? "default" : "outline"}
@@ -37,14 +43,16 @@ export const FormNewHeader = () => {
 
       <div className="hidden items-center gap-2 md:ml-auto md:flex">
         <FormPreview />
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={handleResetForm}
-        >
-          Descartar
-        </Button>
+        {showResetButton && (
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleResetForm}
+          >
+            Descartar
+          </Button>
+        )}
         <Button size="sm" type="submit">
           Salvar Formulário
         </Button>

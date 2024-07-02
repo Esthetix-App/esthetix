@@ -5,14 +5,12 @@ import { Reorder } from "framer-motion";
 import { Group, PlusCircle } from "lucide-react";
 import { useFormContext, useFieldArray } from "react-hook-form";
 
-import type { NewFormData } from "./hooks/use-new-form";
-
-import { FormNewSectionItem } from "./form-new-section-item";
 import { Button } from "@/components/ui/button";
+import { FormSectionItem } from "@/components/form-components/form-section-item";
 
-export const FormNewSections = () => {
+export const FormSections = () => {
   const [draggingIndex, setDraggingIndex] = useState<null | number>(null);
-  const { control } = useFormContext<NewFormData>();
+  const { control } = useFormContext();
   const { fields, append, move, remove } = useFieldArray({
     control,
     keyName: "key",
@@ -78,7 +76,7 @@ export const FormNewSections = () => {
         onReorder={handleReorder}
       >
         {fields.map((section, index) => (
-          <FormNewSectionItem
+          <FormSectionItem
             key={section.key}
             index={index}
             section={section}

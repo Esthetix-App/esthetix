@@ -33,9 +33,8 @@ export const FieldOptionsPlaceholder = ({
           <FormLabel>Placeholder</FormLabel>
           <FormControl>
             <Input
-              placeholder="Informe o placeholder do campo"
               {...field}
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+              placeholder="Informe o placeholder do campo"
               value={field.value ?? ""}
             />
           </FormControl>

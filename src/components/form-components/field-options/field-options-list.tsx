@@ -2,15 +2,13 @@
 
 import { useState } from "react";
 import { Reorder } from "framer-motion";
-import { useFieldArray, useFormContext } from "react-hook-form";
 import { PlusCircle } from "lucide-react";
-
-import type { NewFormData } from "../hooks/use-new-form";
+import { useFieldArray, useFormContext } from "react-hook-form";
 
 import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
-import { FormNewOptionItem } from "@/components/form-new/field-options/form-new-option-item";
+import { FormOptionItem } from "@/components/form-components/field-options/form-option-item";
 
 interface IFormNewFieldItemOptionsProps {
   indexField: number;
@@ -21,7 +19,7 @@ export const FieldOptionsList = ({
   indexField,
   indexFormGroup,
 }: IFormNewFieldItemOptionsProps) => {
-  const { control } = useFormContext<NewFormData>();
+  const { control } = useFormContext();
 
   const [draggingIndex, setDraggingIndex] = useState<null | number>(null);
   const { fields, append, move, remove } = useFieldArray({
@@ -74,7 +72,7 @@ export const FieldOptionsList = ({
         className="w-full px-6"
       >
         {fields.map((field, index) => (
-          <FormNewOptionItem
+          <FormOptionItem
             key={field.key}
             index={index}
             indexField={indexField}

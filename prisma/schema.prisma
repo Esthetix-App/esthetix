@@ -158,15 +158,15 @@ enum FieldSize {
 
 model FormField {
     id                  String     @id @default(cuid())
-    name                String?
+    name                String
     description         String?
     position            Int
     type                FieldTypes
-    size                FieldSize?
+    size                FieldSize
     typeOptions         Json?      @map("type_options")
     formGroupId         String     @map("form_group_id")
     isProfessionalField Boolean?   @map("is_professional_field")
-    isRequired          Boolean?   @map("is_required")
+    isRequired          Boolean    @map("is_required")
 
     formGroup    FormGroup      @relation(fields: [formGroupId], references: [id], onDelete: Cascade)
     fieldOptions FieldOptions[]
@@ -220,15 +220,15 @@ model FormGroupHistory {
 
 model FormFieldHistory {
     id                  String     @id @default(cuid())
-    name                String?
+    name                String
     description         String?
     position            Int
     type                FieldTypes
-    size                FieldSize?
+    size                FieldSize
     typeOptions         Json?      @map("type_options")
     formGroupId         String     @map("form_group_id")
     isProfessionalField Boolean?   @map("is_professional_field")
-    isRequired          Boolean?   @map("is_required")
+    isRequired          Boolean    @map("is_required")
 
     formGroupHistory    FormGroupHistory      @relation(fields: [formGroupId], references: [id], onDelete: Cascade)
     fieldOptionsHistory FieldOptionsHistory[]

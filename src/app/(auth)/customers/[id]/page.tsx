@@ -21,7 +21,9 @@ interface ICustomersDetailsPageProps {
 export default async function CustomersDetailsPage({
   params,
 }: ICustomersDetailsPageProps) {
-  const { customer } = await api.customer.getById({ id: params.id });
+  const { customer, formHistoryCount } = await api.customer.getById({
+    id: params.id,
+  });
 
   return (
     <main className="flex h-full flex-1 flex-col justify-between gap-4 overflow-auto p-4 lg:gap-6 lg:p-10">
@@ -47,7 +49,7 @@ export default async function CustomersDetailsPage({
           </div>
         </div>
 
-        <LinkFormDialog />
+        <LinkFormDialog simplifiedForm />
       </div>
       <div className="mt-6 flex w-full flex-1">
         <Tabs defaultValue="customer-data" className="w-full">
@@ -59,12 +61,14 @@ export default async function CustomersDetailsPage({
             <TabsTrigger value="customer-history">
               <FileClock className="mr-2 size-4" />
               Histórico de Formulários{" "}
-              <Badge
-                variant="default"
-                className="ml-2 rounded-sm px-1 font-normal"
-              >
-                2
-              </Badge>
+              {!!formHistoryCount && (
+                <Badge
+                  variant="default"
+                  className="ml-2 rounded-sm px-1 font-normal"
+                >
+                  {formHistoryCount}
+                </Badge>
+              )}
             </TabsTrigger>
           </TabsList>
           <TabsContent value="customer-data">

@@ -7,7 +7,13 @@ export const professionalRouter = createTRPCRouter({
     try {
       const professionals = await ctx.db.user.findMany({
         where: {
-          role: "PROFESSIONAL",
+          role: {
+            in: ["ADMIN", "PROFESSIONAL"],
+          },
+        },
+        select: {
+          id: true,
+          name: true,
         },
       });
 

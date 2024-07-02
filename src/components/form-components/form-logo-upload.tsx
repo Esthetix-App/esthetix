@@ -1,15 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
 import { ImageIcon, Trash } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 
-import type { NewFormData } from "./hooks/use-new-form";
-import { FileUploader, type FileUpload } from "@/components/ui/file-uploader";
-
-import { uploadService } from "@/services/upload-service";
+import { env } from "@/env";
 import { api } from "@/trpc/react";
+import { uploadService } from "@/services/upload-service";
 
 import {
   Card,
@@ -25,16 +22,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { env } from "@/env";
+import { FileUploader, type FileUpload } from "@/components/ui/file-uploader";
 
-export const FormNewLogoUpload = () => {
-  const { control, setValue } = useFormContext<NewFormData>();
-  const [fileKey, setFileKey] = useState<string | null>(null);
+export const FormLogoUpload = () => {
+  const { control, setValue, watch } = useFormContext();
 
   const getPresignedUrl = api.formUpload.getUploadPresignedUrl.useMutation();
   const deleteUploadedFile = api.formUpload.deleteUploadedFile.useMutation();
 
-  const isDisabled = !!fileKey;
+  const logoUrl = watch("logoUrl") as string | null;
+  const isDisabled = !!logoUrl;
 
   const handleUpload = async (files: FileUpload[]) => {
     try {
@@ -48,10 +45,8 @@ export const FormNewLogoUpload = () => {
       });
       await uploadService.uploadFile({ file, signedUrl: response.signedUrl });
 
-      setFileKey(response.fileKey);
       setValue("logoUrl", response.fileKey);
     } catch (error) {
-      setFileKey(null);
       setValue("logoUrl", "");
 
       throw new Error("Error on upload!");
@@ -59,12 +54,11 @@ export const FormNewLogoUpload = () => {
   };
 
   const handleDeleteFile = () => {
-    if (!fileKey) {
+    if (!logoUrl) {
       return;
     }
 
-    deleteUploadedFile.mutate({ fileKey });
-    setFileKey(null);
+    deleteUploadedFile.mutate({ fileKey: logoUrl });
     setValue("logoUrl", "");
   };
 
@@ -88,13 +82,13 @@ export const FormNewLogoUpload = () => {
               height={250}
               loading="lazy"
               src={
-                fileKey
-                  ? `${env.NEXT_PUBLIC_BUCKET_URL}/${fileKey}`
+                logoUrl
+                  ? `${env.NEXT_PUBLIC_BUCKET_URL}/${logoUrl}`
                   : "/images/placeholder.svg"
               }
               className="aspect-square w-full shrink-0 rounded-md object-cover"
             />
-            {!!fileKey && (
+            {!!logoUrl && (
               <Button
                 type="button"
                 variant="outline"

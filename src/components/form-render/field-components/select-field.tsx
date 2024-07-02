@@ -42,7 +42,6 @@ export const SelectField = ({
     <FormField
       name={id}
       control={control}
-      defaultValue={[]}
       render={({ field }) => (
         <FormItem>
           <FormLabel>{label}</FormLabel>

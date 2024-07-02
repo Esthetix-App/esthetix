@@ -3,8 +3,6 @@
 import { Info } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 
-import type { NewFormData } from "./hooks/use-new-form";
-
 import {
   Card,
   CardContent,
@@ -22,11 +20,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-export const FormNewDetails = () => {
-  const { control } = useFormContext<NewFormData>();
+export const FormDetails = () => {
+  const { control } = useFormContext();
 
   return (
-    <Card className="pb-6 border-b-4 border-b-primary">
+    <Card className="border-b-4 border-b-primary pb-6">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Info className="size-4 text-primary" />

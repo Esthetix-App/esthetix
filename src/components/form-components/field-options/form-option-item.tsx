@@ -5,8 +5,6 @@ import { Reorder, useDragControls } from "framer-motion";
 import { GripVerticalIcon, Trash } from "lucide-react";
 
 import type { IFormOptionSchema } from "@/validation/form";
-import type { NewFormData } from "../hooks/use-new-form";
-
 import { cn } from "@/lib/utils";
 
 import {
@@ -19,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-interface IFormNewFieldItemProps {
+interface IFormOptionItemProps {
   index: number;
   indexField: number;
   indexFormGroup: number;
@@ -30,7 +28,7 @@ interface IFormNewFieldItemProps {
   optionField: IFormOptionSchema;
 }
 
-export const FormNewOptionItem = ({
+export const FormOptionItem = ({
   index,
   indexField,
   indexFormGroup,
@@ -39,9 +37,9 @@ export const FormNewOptionItem = ({
   onDragEnd,
   onDragStart,
   isDraggingActive,
-}: IFormNewFieldItemProps) => {
+}: IFormOptionItemProps) => {
   const controls = useDragControls();
-  const { control } = useFormContext<NewFormData>();
+  const { control } = useFormContext();
 
   return (
     <Reorder.Item

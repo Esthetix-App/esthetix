@@ -71,6 +71,7 @@ export const formHistoryRouter = createTRPCRouter({
                   create: group.formFields.map((field) => ({
                     name: field.name,
                     type: field.type,
+                    size: field.size,
                     position: field.position,
                     isRequired: field.isRequired,
                     typeOptions: field.typeOptions ?? undefined,

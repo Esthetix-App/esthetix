@@ -1,8 +1,7 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-
-import type { NewFormData } from "./hooks/use-new-form";
+import type { FieldTypes } from "@prisma/client";
 
 import { cn } from "@/lib/utils";
 import {
@@ -10,28 +9,28 @@ import {
   fieldsWithPlaceholder,
   fieldsWithUpload,
 } from "@/constants/field-configs";
-import { FieldOptionsList } from "@/components/form-new/field-options/field-options-list";
-import { FieldOptionsUpload } from "@/components/form-new/field-options/field-options-upload";
-import { FieldOptionsPlaceholder } from "@/components/form-new/field-options/field-options-placeholder";
+import { FieldOptionsList } from "@/components/form-components/field-options/field-options-list";
+import { FieldOptionsUpload } from "@/components/form-components/field-options/field-options-upload";
+import { FieldOptionsPlaceholder } from "@/components/form-components/field-options/field-options-placeholder";
 
-interface IFormNewFieldItemOptionsProps {
+interface IFormFieldItemOptionsProps {
   indexField: number;
   indexFormGroup: number;
 }
 
-export const FormNewFieldItemOptions = ({
+export const FormFieldItemOptions = ({
   indexField,
   indexFormGroup,
-}: IFormNewFieldItemOptionsProps) => {
-  const { watch } = useFormContext<NewFormData>();
+}: IFormFieldItemOptionsProps) => {
+  const { watch } = useFormContext();
 
   const fieldType = watch(
     `formGroups.${indexFormGroup}.formFields.${indexField}.type`,
-  );
+  ) as FieldTypes;
 
   const showOptionsList = fieldsWithOptions.includes(fieldType);
-  const showPlaceholderOption = fieldsWithPlaceholder.includes(fieldType);
   const showUploadOption = fieldsWithUpload.includes(fieldType);
+  const showPlaceholderOption = fieldsWithPlaceholder.includes(fieldType);
 
   if (!showOptionsList && !showPlaceholderOption && !showUploadOption) {
     return null;

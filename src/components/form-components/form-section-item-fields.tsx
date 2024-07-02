@@ -5,25 +5,23 @@ import { Reorder } from "framer-motion";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { ChevronDown, ChevronUp, Cuboid, PlusCircle } from "lucide-react";
 
-import { CardDescription, CardTitle } from "@/components/ui/card";
-
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "../ui/collapsible";
-import { Button } from "../ui/button";
-import { FormNewFieldItem } from "./form-new-field-item";
-import type { NewFormData } from "./hooks/use-new-form";
+} from "@/components/ui/collapsible";
+import { Button } from "@/components/ui/button";
+import { CardDescription, CardTitle } from "@/components/ui/card";
+import { FormFieldItem } from "@/components/form-components/form-field-item";
 
-interface IFormNewSectionItemFieldsProps {
+interface IFormSectionItemFieldsProps {
   indexFormGroup: number;
 }
 
-export const FormNewSectionItemFields = ({
+export const FormSectionItemFields = ({
   indexFormGroup,
-}: IFormNewSectionItemFieldsProps) => {
-  const { control } = useFormContext<NewFormData>();
+}: IFormSectionItemFieldsProps) => {
+  const { control } = useFormContext();
   const [draggingIndex, setDraggingIndex] = useState<null | number>(null);
   const { fields, append, move, remove } = useFieldArray({
     name: `formGroups.${indexFormGroup}.formFields`,
@@ -99,7 +97,7 @@ export const FormNewSectionItemFields = ({
             onReorder={handleReorder}
           >
             {fields.map((field, index) => (
-              <FormNewFieldItem
+              <FormFieldItem
                 key={field.key}
                 index={index}
                 field={field}
