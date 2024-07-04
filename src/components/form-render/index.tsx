@@ -4,7 +4,10 @@ import { FormRenderSection } from "./form-render-section";
 import { FormRenderProvider } from "@/contexts/form-render-context";
 import { FormRenderFooter } from "@/components/form-render/form-render-footer";
 
-type FormDataType = Omit<RouterOutputs["formHistory"]["getById"], "status">;
+export type FormDataType = Omit<
+  RouterOutputs["formHistory"]["getById"],
+  "status"
+>;
 interface IFormRenderProps {
   data: FormDataType;
   isPreview?: boolean;

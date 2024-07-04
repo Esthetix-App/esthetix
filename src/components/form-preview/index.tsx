@@ -2,7 +2,7 @@ import * as React from "react";
 import { Eye } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { FormRender } from "@/components/form-render";
+import { FormRender, type FormDataType } from "@/components/form-render";
 import {
   Drawer,
   DrawerContent,
@@ -13,11 +13,50 @@ import {
 } from "@/components/ui/drawer";
 import { useFormContext } from "react-hook-form";
 import type { NewFormData } from "../form-new/hooks/use-new-form";
+import { createId } from "@paralleldrive/cuid2";
 
 export function FormPreview() {
   const { watch } = useFormContext<NewFormData>();
 
   const formRenderData = watch();
+
+  const formDataMemo = React.useMemo((): FormDataType => {
+    const formId = createId();
+
+    return {
+      isProfessionalUser: true,
+      form: {
+        formId,
+        ...formRenderData,
+        formGroups:
+          formRenderData.formGroups?.map((formGroup) => {
+            const formGroupId = createId();
+
+            return {
+              formId,
+              id: formGroupId,
+              ...formGroup,
+              formFields:
+                formGroup.formFields.map((formField) => {
+                  const formFieldId = createId();
+
+                  return {
+                    id: formFieldId,
+                    formGroupId,
+                    ...formField,
+                    fieldOptions:
+                      formField.fieldOptions?.map((fieldOption) => ({
+                        formFieldId,
+                        id: createId(),
+                        ...fieldOption,
+                      })) ?? [],
+                  };
+                }) ?? [],
+            };
+          }) ?? [],
+      },
+    };
+  }, [formRenderData]);
 
   return (
     <Drawer>
@@ -40,7 +79,7 @@ export function FormPreview() {
                 antes de finalizá-lo.
               </DrawerDescription>
             </DrawerHeader>
-            <FormRender data={formRenderData} />
+            <FormRender data={formDataMemo} />
           </div>
         </div>
       </DrawerContent>
