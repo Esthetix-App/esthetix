@@ -6,23 +6,26 @@ import { Form } from "@/components/ui/form";
 import { FormRender } from "@/components/form-render";
 import { FormInvalid } from "@/components/form-fill/form-invalid";
 import { FormFillSkeleton } from "@/components/form-fill/form-fill-skeleton";
-import { useFormFill } from "@/components/form-fill/hooks/use-form-fill";
 import { DuplicateFormHeader } from "@/components/duplicate-form/duplicate-form-header";
+import { useDuplicateForm } from "@/components/duplicate-form/hooks/use-duplicate-form";
 
 interface IDuplicateFormContentProps {
   formId: string;
+  onDuplicate?: () => void;
 }
 
 export const DuplicateFormContent = ({
   formId,
+  onDuplicate,
 }: IDuplicateFormContentProps) => {
   const { data, isLoading, isError } = api.formHistory.getById.useQuery({
     id: formId,
   });
 
-  const { form, onSubmit } = useFormFill({
-    formValues: data?.form,
+  const { form, onSubmit } = useDuplicateForm({
     defaultValues: data?.defaultValues,
+    onDuplicate,
+    formId,
   });
 
   if (isError) {

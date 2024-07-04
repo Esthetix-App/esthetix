@@ -35,7 +35,7 @@ export function HistoryDeleteDialog({
   ...props
 }: DeleteTasksDialogProps) {
   const utils = api.useUtils();
-  const { mutate, isPending } = api.form.delete.useMutation({
+  const { mutate, isPending } = api.formHistory.delete.useMutation({
     onError() {
       toast.error(
         "Houve um problema ao tentar excluir, tente novamente mais tarde.",
@@ -43,7 +43,7 @@ export function HistoryDeleteDialog({
     },
     async onSuccess() {
       toast.success("Itens excluídos");
-      await utils.form.getAll.invalidate();
+      await utils.formHistory.getById.invalidate();
     },
     onSettled() {
       props.onOpenChange?.(false);

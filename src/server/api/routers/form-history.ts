@@ -1,16 +1,21 @@
+import { z } from "zod";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { createId } from "@paralleldrive/cuid2";
 import { TRPCError } from "@trpc/server";
-import { formHistorySchema } from "@/validation/form-history";
+
+import type { FormHistory } from "@prisma/client";
+
 import {
   createTRPCRouter,
   professionalProcedure,
   protectedProcedure,
+  adminProcedure,
 } from "@/server/api/trpc";
 import { buildWhereClause } from "@/lib/build-where-clause";
 import { getCustomerHistorySchema } from "@/validation/get-customer-history";
-import type { FormHistory } from "@prisma/client";
-import { z } from "zod";
+import { duplicateFormSchema } from "@/validation/submit-form";
+import { formHistorySchema } from "@/validation/form-history";
 
 dayjs.extend(customParseFormat);
 
@@ -151,7 +156,7 @@ export const formHistoryRouter = createTRPCRouter({
             ...form,
             createdAt: dayjs(form.createdAt).format("DD/MM/YYYY"),
             filledAt: form.filledAt
-              ? dayjs(form.filledAt).format("DD/MM/YYYY hh:mm")
+              ? dayjs(form.filledAt).format("DD/MM/YYYY HH:mm")
               : null,
           })),
           pageCount: Math.ceil(count / per_page),
@@ -273,6 +278,131 @@ export const formHistoryRouter = createTRPCRouter({
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to get form.",
+          cause: error,
+        });
+      }
+    }),
+  duplicate: professionalProcedure
+    .input(duplicateFormSchema)
+    .mutation(async ({ ctx, input }) => {
+      const { formId, responses } = input;
+
+      try {
+        const form = await ctx.db.formHistory.findUnique({
+          where: { id: formId },
+          include: {
+            formGroupsHistory: {
+              include: {
+                formFieldsHistory: {
+                  include: {
+                    fieldOptionsHistory: true,
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        if (!form) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Form not found.",
+          });
+        }
+
+        const newFormId = createId();
+
+        const formHistory = await ctx.db.formHistory.create({
+          data: {
+            id: newFormId,
+            enable: form.enable,
+            isNamedForm: form.isNamedForm,
+            title: form.title,
+            logoUrl: form.logoUrl,
+            description: form.description,
+            createdBy: ctx.session.user.id,
+            professionalId: form.professionalId,
+            customerId: form.customerId,
+            formGroupsHistory: {
+              create: form.formGroupsHistory?.map((group) => ({
+                title: group.title,
+                position: group.position,
+                isProfessionalField: group.isProfessionalField,
+                formFieldsHistory: {
+                  create: group.formFieldsHistory.map((field) => ({
+                    name: field.name,
+                    description: field.description,
+                    position: field.position,
+                    type: field.type,
+                    size: field.size,
+                    typeOptions: field.typeOptions ?? undefined,
+                    isRequired: field.isRequired,
+                    isProfessionalField: field.isProfessionalField,
+                    formHistoryResponses: responses[field.id]
+                      ? {
+                          create: {
+                            formId: newFormId,
+                            response: responses[field.id],
+                            createdBy: ctx.session.user.id,
+                          },
+                        }
+                      : undefined,
+                    fieldOptionsHistory: field.fieldOptionsHistory
+                      ? {
+                          create: field.fieldOptionsHistory.map((option) => ({
+                            name: option.name,
+                          })),
+                        }
+                      : undefined,
+                  })),
+                },
+              })),
+            },
+          },
+        });
+
+        return {
+          status: 201,
+          id: formHistory.id,
+        };
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to create form.",
+          cause: error,
+        });
+      }
+    }),
+  delete: adminProcedure
+    .input(z.object({ ids: z.array(z.string().min(1)).min(1) }))
+    .mutation(async ({ input, ctx }) => {
+      const { ids } = input;
+
+      try {
+        const forms = await ctx.db.formHistory.findMany({
+          select: { id: true },
+          where: { id: { in: ids } },
+        });
+
+        if (forms.length !== ids.length) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Form not found.",
+          });
+        }
+
+        const deletedForms = await ctx.db.formHistory.deleteMany({
+          where: { id: { in: ids } },
+        });
+
+        return {
+          status: 202,
+          message: `${deletedForms.count} forms deleted with success!`,
+        };
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to delete forms.",
           cause: error,
         });
       }

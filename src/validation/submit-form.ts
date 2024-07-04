@@ -17,3 +17,5 @@ export const submitFormSchema = z.object({
   formId: z.string(),
   responses: z.record(z.string(), jsonSchema),
 });
+
+export const duplicateFormSchema = submitFormSchema;

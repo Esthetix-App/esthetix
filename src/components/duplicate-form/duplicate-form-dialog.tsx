@@ -34,7 +34,10 @@ export function DuplicateFormDialog({
       ) : null}
 
       <DialogContent className="h-full max-h-[90vh] max-w-5xl overflow-hidden p-0">
-        <DuplicateFormContent formId={formId} />
+        <DuplicateFormContent
+          formId={formId}
+          onDuplicate={() => props.onOpenChange?.(false)}
+        />
       </DialogContent>
     </Dialog>
   );
