@@ -1,19 +1,19 @@
 import { env } from "@/env";
 import Image from "next/image";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import { useFormRenderContext } from "@/contexts/form-render-context";
 
-interface IFormRenderHeaderProps {
-  title: string;
-  description: string;
-  logoUrl?: string;
-}
+dayjs.extend(customParseFormat);
 
-export const FormRenderHeader = ({
-  description,
-  title,
-  logoUrl,
-}: IFormRenderHeaderProps) => {
+export const FormRenderHeader = () => {
+  const { isPreview, form } = useFormRenderContext();
+
+  const customer = form?.customer ?? null;
+  const professional = form?.professional ?? null;
+
   return (
-    <>
+    <header>
       <div className="flex w-full items-center justify-between gap-10 border-t-4 border-primary bg-muted/50 p-6">
         <div className="flex flex-1 items-end gap-6">
           <Image
@@ -23,8 +23,8 @@ export const FormRenderHeader = ({
             quality={100}
             loading="lazy"
             src={
-              logoUrl
-                ? `${env.NEXT_PUBLIC_BUCKET_URL}/${logoUrl}`
+              form?.logoUrl
+                ? `${env.NEXT_PUBLIC_BUCKET_URL}/${form.logoUrl}`
                 : "/images/placeholder.svg"
             }
             className="aspect-square shrink-0 rounded-md object-contain"
@@ -32,7 +32,7 @@ export const FormRenderHeader = ({
         </div>
         <div className="flex flex-col items-center gap-1 text-center">
           <span className="text-base font-semibold text-foreground">
-            [NOME DO CLIENTE]
+            {isPreview ? "[NOME DO CLIENTE]" : customer?.name}
           </span>
           <span className="w-full border-t pt-1 text-sm font-medium text-muted-foreground">
             Cliente
@@ -40,7 +40,7 @@ export const FormRenderHeader = ({
         </div>
         <div className="flex flex-col items-center gap-1 text-center">
           <span className="text-base font-semibold text-foreground">
-            [NOME DO PROFISSIONAL]
+            {isPreview ? "[NOME DO PROFISSIONAL]" : professional?.name}
           </span>
           <span className="w-full border-t pt-1 text-sm font-medium text-muted-foreground">
             Profissional Responsável
@@ -48,7 +48,9 @@ export const FormRenderHeader = ({
         </div>
         <div className="flex flex-col items-center gap-1 text-center">
           <span className="text-base font-semibold text-foreground">
-            [DATA DO PREENCHIMENTO]
+            {isPreview
+              ? "[DATA DO PREENCHIMENTO]"
+              : dayjs(form?.filledAt ?? new Date()).format("DD/MM/YYYY")}
           </span>
           <span className="w-full border-t pt-1 text-sm font-medium text-muted-foreground">
             Data de Preenchimento
@@ -56,11 +58,11 @@ export const FormRenderHeader = ({
         </div>
       </div>
       <div className="grid gap-2 p-6 py-8">
-        <h2 className="text-xl font-bold">{title}</h2>
+        <h2 className="text-xl font-bold">{form?.title}</h2>
         <p className="text-base leading-relaxed text-muted-foreground">
-          {description}
+          {form?.description}
         </p>
       </div>
-    </>
+    </header>
   );
 };

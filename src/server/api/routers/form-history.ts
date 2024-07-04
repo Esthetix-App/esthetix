@@ -2,10 +2,15 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { TRPCError } from "@trpc/server";
 import { formHistorySchema } from "@/validation/form-history";
-import { createTRPCRouter, professionalProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  professionalProcedure,
+  protectedProcedure,
+} from "@/server/api/trpc";
 import { buildWhereClause } from "@/lib/build-where-clause";
 import { getCustomerHistorySchema } from "@/validation/get-customer-history";
 import type { FormHistory } from "@prisma/client";
+import { z } from "zod";
 
 dayjs.extend(customParseFormat);
 
@@ -70,11 +75,12 @@ export const formHistoryRouter = createTRPCRouter({
                 formFieldsHistory: {
                   create: group.formFields.map((field) => ({
                     name: field.name,
+                    description: field.description,
+                    position: field.position,
                     type: field.type,
                     size: field.size,
-                    position: field.position,
-                    isRequired: field.isRequired,
                     typeOptions: field.typeOptions ?? undefined,
+                    isRequired: field.isRequired,
                     isProfessionalField: field.isProfessionalField,
                     fieldOptionsHistory: field.fieldOptions
                       ? {
@@ -154,6 +160,119 @@ export const formHistoryRouter = createTRPCRouter({
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to get forms.",
+          cause: error,
+        });
+      }
+    }),
+  getById: protectedProcedure
+    .input(z.object({ id: z.string().min(1) }))
+    .query(async ({ input, ctx }) => {
+      const { id } = input;
+
+      try {
+        const formHistory = await ctx.db.formHistory.findUnique({
+          where: { id, enable: true },
+          include: {
+            formGroupsHistory: {
+              include: {
+                formFieldsHistory: {
+                  include: {
+                    fieldOptionsHistory: true,
+                  },
+                },
+              },
+            },
+            professional: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            },
+            customer: {
+              select: {
+                birthdate: true,
+                cellphone: true,
+                cpf: true,
+                howMet: true,
+                name: true,
+                rg: true,
+                id: true,
+                address: true,
+                userId: true,
+              },
+            },
+          },
+        });
+
+        if (!formHistory) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Form not found or private.",
+          });
+        }
+
+        if (
+          formHistory.isNamedForm &&
+          formHistory.customerId !== ctx.session.user.id &&
+          formHistory.professionalId !== ctx.session.user.id
+        ) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Form not found or private.",
+          });
+        }
+
+        const formResponses = await ctx.db.formHistoryResponse.findMany({
+          where: { formId: formHistory.id },
+          select: {
+            fieldId: true,
+            response: true,
+          },
+        });
+
+        const defaultValues: {
+          [key: string]: any;
+        } = {};
+
+        formResponses.forEach(({ fieldId, response }) => {
+          if (response !== null) {
+            defaultValues[fieldId] = response;
+          }
+        });
+
+        const { formGroupsHistory, ...data } = formHistory;
+
+        const form = {
+          ...data,
+          formGroups: formGroupsHistory.map(
+            ({ formFieldsHistory, ...formGroups }) => ({
+              ...formGroups,
+              formFields: formFieldsHistory.map(
+                ({ fieldOptionsHistory, ...formFields }) => ({
+                  ...formFields,
+                  fieldOptions: fieldOptionsHistory.map((fieldOptions) => ({
+                    ...fieldOptions,
+                  })),
+                }),
+              ),
+            }),
+          ),
+        };
+
+        const isProfessionalUser =
+          formHistory.professionalId === ctx.session.user.id;
+
+        return {
+          status: 200,
+          form,
+          isProfessionalUser,
+          defaultValues,
+        };
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to get form.",
           cause: error,
         });
       }

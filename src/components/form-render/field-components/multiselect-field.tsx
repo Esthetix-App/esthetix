@@ -35,6 +35,23 @@ export const MultiSelectField = ({
     );
   }, [fieldOptions]);
 
+  const handleFormatValues = (values: string[]): Option[] => {
+    if (!values) return [];
+
+    if (typeof values === "string") {
+      return [{ label: values, value: values }];
+    }
+
+    return values?.map((value) => ({
+      label: value,
+      value,
+    }));
+  };
+
+  const handleConvertToStringArray = (values: Option[]): string[] => {
+    return values.map(({ value }) => value);
+  };
+
   return (
     <FormField
       name={id}
@@ -46,9 +63,11 @@ export const MultiSelectField = ({
           <FormControl>
             <MultipleSelector
               {...props}
-              value={field.value as Option[]}
-              onChange={field.onChange}
               defaultOptions={options}
+              value={handleFormatValues(field.value as string[])}
+              onChange={(values) =>
+                field.onChange(handleConvertToStringArray(values))
+              }
             />
           </FormControl>
           <FormDescription>{description}</FormDescription>

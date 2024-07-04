@@ -25,7 +25,7 @@ export const useLinkForm = ({ simplifiedForm }: IUseLinkFormProps) => {
   const { mutate, isPending } = api.formHistory.create.useMutation({
     onSuccess(response) {
       setIsFormSent(true);
-      setformUrl(`${env.NEXT_PUBLIC_APP_URL}/${response.id}`);
+      setformUrl(`${env.NEXT_PUBLIC_APP_URL}/form/${response.id}`);
     },
     onError() {
       toast.error(

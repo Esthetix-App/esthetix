@@ -46,6 +46,7 @@ export const SignatureField = ({
   const handlePointsToString = React.useCallback(
     (points: number[][]): string => {
       try {
+        console.log(JSON.stringify(points));
         const pointsString = JSON.stringify(points);
         return pointsString;
       } catch (error) {
@@ -59,6 +60,7 @@ export const SignatureField = ({
     <FormField
       name={id}
       control={control}
+      defaultValue=""
       render={({ field }) => (
         <FormItem>
           <FormControl>

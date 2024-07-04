@@ -1,7 +1,7 @@
 "use client";
 
 import { DotsHorizontalIcon, TrashIcon } from "@radix-ui/react-icons";
-import { Eye, FilePenLine } from "lucide-react";
+import { ClipboardIcon, Eye } from "lucide-react";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 
@@ -10,7 +10,7 @@ import { type ColumnDef } from "@tanstack/react-table";
 
 import { env } from "@/env";
 import { usePermissions } from "@/hooks/use-permissions";
-import { getInitials } from "@/lib/utils";
+import { copyTextToClipboard, getInitials } from "@/lib/utils";
 
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -24,6 +24,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { HistoryDeleteDialog } from "./history-delete-dialog";
+import { toast } from "sonner";
 
 export type HistoryGetAllOutput =
   RouterOutputs["formHistory"]["getByCustomer"]["forms"][number];
@@ -100,7 +101,10 @@ export function getColumns(): ColumnDef<HistoryGetAllOutput>[] {
       meta: { label: "Profissional Responsável" },
       accessorKey: "professional.name",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Profissional Responsável" />
+        <DataTableColumnHeader
+          column={column}
+          title="Profissional Responsável"
+        />
       ),
     },
     {
@@ -110,7 +114,7 @@ export function getColumns(): ColumnDef<HistoryGetAllOutput>[] {
         <DataTableColumnHeader column={column} title="Data de preenchimento" />
       ),
     },
-        {
+    {
       meta: { label: "Criado em" },
       accessorKey: "createdAt",
       header: ({ column }) => (
@@ -126,6 +130,13 @@ export function getColumns(): ColumnDef<HistoryGetAllOutput>[] {
 
         const { hasPermission } = usePermissions();
         const hasPermissionToDelete = hasPermission("ADMIN");
+
+        const handleCopy = async () => {
+          const url = `${env.NEXT_PUBLIC_APP_URL}/form/${row.original.id}`;
+
+          await copyTextToClipboard(url);
+          toast.success("Link copiado para área de transferência!");
+        };
 
         return (
           <>
@@ -147,19 +158,16 @@ export function getColumns(): ColumnDef<HistoryGetAllOutput>[] {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-40">
-                <DropdownMenuItem
-                  className="font-medium"
-                  onSelect={() => router.push(`/forms/edit/${row.original.id}`)}
-                >
-                  <FilePenLine className="mr-2 size-4" aria-hidden="true" />
-                  Editar
+                <DropdownMenuItem className="font-medium" onSelect={handleCopy}>
+                  <ClipboardIcon className="mr-2 size-4" aria-hidden="true" />
+                  Copiar link
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="font-medium"
                   onSelect={() => router.push(`/s/${row.original.id}`)}
                 >
                   <Eye className="mr-2 size-4" aria-hidden="true" />
-                  Preview
+                  Visualizar
                 </DropdownMenuItem>
                 {hasPermissionToDelete && (
                   <>

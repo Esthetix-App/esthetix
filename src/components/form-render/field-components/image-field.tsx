@@ -1,60 +1,41 @@
 "use client";
 
 import * as React from "react";
-import { useFormContext } from "react-hook-form";
-
-import {
-  FormItem,
-  FormLabel,
-  FormField,
-  FormControl,
-  FormMessage,
-  FormDescription,
-} from "@/components/ui/form";
-import type { FieldComponentType } from "@/components/form-render/field-components";
 import Image from "next/image";
+
 import { env } from "@/env";
+import type { FieldComponentType } from "@/components/form-render/field-components";
+
+import { FormLabel, FormDescription } from "@/components/ui/form";
 
 type IImageFieldProps = FieldComponentType & {
   image?: string;
 };
 
 export const ImageField = ({
-  id,
   label,
   description,
   image,
   fieldOptions: _fieldOptions,
 }: IImageFieldProps) => {
-  const { control } = useFormContext();
-
   return (
-    <FormField
-      name={id}
-      control={control}
-      render={() => (
-        <FormItem className="grid justify-center space-y-6">
-          <FormLabel>{label}</FormLabel>
-          <FormControl>
-            <div className="relative min-h-80 w-full">
-              <Image
-                fill
-                loading="lazy"
-                src={
-                  image
-                    ? `${env.NEXT_PUBLIC_BUCKET_URL}/${image}`
-                    : "/images/placeholder.svg"
-                }
-                alt="Uploaded image"
-                className="aspect-square shrink-0 object-contain"
-              />
-            </div>
-          </FormControl>
-          <FormDescription>{description}</FormDescription>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
+    <div className="flex w-full flex-col items-center justify-center space-y-6">
+      <FormLabel>{label}</FormLabel>
+      <div className="relative min-h-80 w-full min-w-full">
+        <Image
+          fill
+          loading="lazy"
+          src={
+            image
+              ? `${env.NEXT_PUBLIC_BUCKET_URL}/${image}`
+              : "/images/placeholder.svg"
+          }
+          alt="Uploaded image"
+          className="h-full w-full object-contain"
+        />
+      </div>
+      <FormDescription>{description}</FormDescription>
+    </div>
   );
 };
 

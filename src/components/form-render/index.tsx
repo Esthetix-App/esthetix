@@ -1,25 +1,28 @@
-import { type IFormSchema } from "@/validation/form";
-
+import type { RouterOutputs } from "@/trpc/react";
 import { FormRenderHeader } from "./form-render-header";
 import { FormRenderSection } from "./form-render-section";
+import { FormRenderProvider } from "@/contexts/form-render-context";
+import { FormRenderFooter } from "@/components/form-render/form-render-footer";
 
+type FormDataType = Omit<RouterOutputs["formHistory"]["getById"], "status">;
 interface IFormRenderProps {
-  data: IFormSchema;
+  data: FormDataType;
+  isPreview?: boolean;
 }
 
-export const FormRender = ({ data }: IFormRenderProps) => {
+export const FormRender = ({ data, isPreview }: IFormRenderProps) => {
   return (
-    <main className="pb-10">
-      <FormRenderHeader
-        title={data.title}
-        logoUrl={data.logoUrl}
-        description={data.description}
-      />
-      <div className="grid gap-10 p-6">
-        {data.formGroups.map((section) => (
-          <FormRenderSection key={section.name} section={section} />
-        ))}
-      </div>
-    </main>
+    <FormRenderProvider values={{ ...data, isPreview }}>
+      <main className="pb-10">
+        <FormRenderHeader />
+
+        <div className="grid gap-10 p-6">
+          {data.form.formGroups.map((section) => (
+            <FormRenderSection key={section.id} section={section} />
+          ))}
+        </div>
+        <FormRenderFooter />
+      </main>
+    </FormRenderProvider>
   );
 };
