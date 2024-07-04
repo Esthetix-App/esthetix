@@ -12,15 +12,8 @@ import {
 } from "@/components/ui/card";
 import { NavBarItems } from "@/components/navbar/navbar-items";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { HeaderUserMenu } from "@/components/header/header-user-menu";
+import { HeaderBreadcrumb } from "@/components/header/header-breadcrumb";
 
 export const Header = () => {
   return (
@@ -64,21 +57,7 @@ export const Header = () => {
           </div>
         </SheetContent>
       </Sheet>
-      <div className="w-full flex-1">
-        <Breadcrumb className="hidden md:flex">
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link href="/forms">Formulários</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Novo Formulário</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
+      <HeaderBreadcrumb />
       <HeaderUserMenu />
     </header>
   );
