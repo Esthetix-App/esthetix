@@ -41,7 +41,7 @@ export const useLinkForm = ({ simplifiedForm }: IUseLinkFormProps) => {
       formId: "",
       professionalId: "",
       enable: true,
-      isNamedForm: false,
+      isNamedForm: true,
     },
   });
 
@@ -52,7 +52,6 @@ export const useLinkForm = ({ simplifiedForm }: IUseLinkFormProps) => {
   }, [simplifiedForm, form, id]);
 
   async function onSubmit(values: IFormHistorySchema) {
-    console.log(values);
     mutate(values);
   }
 

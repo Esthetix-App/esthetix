@@ -3,7 +3,7 @@
 import * as React from "react";
 import { TrashIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
-import { Eye, FilePenLine } from "lucide-react";
+import { FilePenLine } from "lucide-react";
 
 import type { RouterOutputs } from "@/trpc/react";
 import { type ColumnDef } from "@tanstack/react-table";
@@ -169,13 +169,6 @@ export function getColumns(): ColumnDef<FormsGetAllOutput>[] {
                 >
                   <FilePenLine className="mr-2 size-4" aria-hidden="true" />
                   Editar
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="font-medium"
-                  onSelect={() => router.push(`/s/${row.original.id}`)}
-                >
-                  <Eye className="mr-2 size-4" aria-hidden="true" />
-                  Preview
                 </DropdownMenuItem>
                 {hasPermissionToDelete && (
                   <>

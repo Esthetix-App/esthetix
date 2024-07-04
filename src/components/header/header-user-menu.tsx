@@ -12,8 +12,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 export const HeaderUserMenu = () => {
+  const user = useCurrentUser();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -27,9 +30,11 @@ export const HeaderUserMenu = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-40">
-        <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
+        <DropdownMenuLabel className="py-0 pt-1">Minha conta</DropdownMenuLabel>
+        <DropdownMenuLabel className="py-0.5 text-xs font-normal text-muted-foreground">
+          {user?.email}
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Configurações</DropdownMenuItem>
         <DropdownMenuItem>Suporte</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut()}>Sair</DropdownMenuItem>

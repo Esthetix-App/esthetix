@@ -46,7 +46,6 @@ export const SignatureField = ({
   const handlePointsToString = React.useCallback(
     (points: number[][]): string => {
       try {
-        console.log(JSON.stringify(points));
         const pointsString = JSON.stringify(points);
         return pointsString;
       } catch (error) {

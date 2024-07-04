@@ -1,6 +1,6 @@
 "use client";
 
-import { DownloadIcon, PlusIcon } from "@radix-ui/react-icons";
+import { DownloadIcon } from "@radix-ui/react-icons";
 import { type Table } from "@tanstack/react-table";
 import type { CustomerGetAllOutput } from "./customers-table-columns";
 
@@ -31,10 +31,6 @@ export function CustomersTableToolbarActions({
           onSuccess={() => table.toggleAllRowsSelected(false)}
         />
       ) : null}
-      <Button size="sm">
-        <PlusIcon className="mr-2 size-4" aria-hidden="true" />
-        Vincular Formulário
-      </Button>
       <Button
         variant="outline"
         size="sm"
