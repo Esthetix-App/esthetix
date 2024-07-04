@@ -79,7 +79,7 @@ export function FormPreview() {
                 antes de finalizá-lo.
               </DrawerDescription>
             </DrawerHeader>
-            <FormRender data={formDataMemo} />
+            <FormRender data={formDataMemo} isPreview showActions={false} />
           </div>
         </div>
       </DrawerContent>
