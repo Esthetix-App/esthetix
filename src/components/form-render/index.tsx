@@ -8,9 +8,14 @@ type FormDataType = Omit<RouterOutputs["formHistory"]["getById"], "status">;
 interface IFormRenderProps {
   data: FormDataType;
   isPreview?: boolean;
+  showActions?: boolean;
 }
 
-export const FormRender = ({ data, isPreview }: IFormRenderProps) => {
+export const FormRender = ({
+  data,
+  isPreview,
+  showActions = true,
+}: IFormRenderProps) => {
   return (
     <FormRenderProvider values={{ ...data, isPreview }}>
       <main className="pb-10">
@@ -21,7 +26,8 @@ export const FormRender = ({ data, isPreview }: IFormRenderProps) => {
             <FormRenderSection key={section.id} section={section} />
           ))}
         </div>
-        <FormRenderFooter />
+
+        {showActions && <FormRenderFooter />}
       </main>
     </FormRenderProvider>
   );

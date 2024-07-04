@@ -5,10 +5,10 @@ import React from "react";
 import { toast } from "sonner";
 
 import { type Row } from "@tanstack/react-table";
+import { type HistoryGetAllOutput } from "./history-table-columns";
 
 import { api } from "@/trpc/react";
 
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -19,7 +19,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { HistoryGetAllOutput } from "./history-table-columns";
+import { Button } from "@/components/ui/button";
 
 interface DeleteTasksDialogProps
   extends React.ComponentPropsWithoutRef<typeof Dialog> {

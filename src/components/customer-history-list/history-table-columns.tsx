@@ -1,7 +1,7 @@
 "use client";
 
 import { DotsHorizontalIcon, TrashIcon } from "@radix-ui/react-icons";
-import { ClipboardIcon, Eye } from "lucide-react";
+import { ClipboardIcon, Copy, Eye } from "lucide-react";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 
@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { HistoryDeleteDialog } from "./history-delete-dialog";
 import { toast } from "sonner";
+import { DuplicateFormDialog } from "@/components/duplicate-form/duplicate-form-dialog";
 
 export type HistoryGetAllOutput =
   RouterOutputs["formHistory"]["getByCustomer"]["forms"][number];
@@ -127,6 +128,8 @@ export function getColumns(): ColumnDef<HistoryGetAllOutput>[] {
         const router = useRouter();
         const [showDeleteTaskDialog, setShowDeleteTaskDialog] =
           React.useState(false);
+        const [showDeleteDuplicateDialog, setShowDeleteDuplicateDialog] =
+          React.useState(false);
 
         const { hasPermission } = usePermissions();
         const hasPermissionToDelete = hasPermission("ADMIN");
@@ -147,6 +150,12 @@ export function getColumns(): ColumnDef<HistoryGetAllOutput>[] {
               showTrigger={false}
               onSuccess={() => row.toggleSelected(false)}
             />
+            <DuplicateFormDialog
+              showTrigger={false}
+              formId={row.original.id}
+              open={showDeleteDuplicateDialog}
+              onOpenChange={setShowDeleteDuplicateDialog}
+            />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -161,6 +170,13 @@ export function getColumns(): ColumnDef<HistoryGetAllOutput>[] {
                 <DropdownMenuItem className="font-medium" onSelect={handleCopy}>
                   <ClipboardIcon className="mr-2 size-4" aria-hidden="true" />
                   Copiar link
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="font-medium"
+                  onSelect={() => setShowDeleteDuplicateDialog(true)}
+                >
+                  <Copy className="mr-2 size-4" aria-hidden="true" />
+                  Duplicar
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="font-medium"

@@ -17,11 +17,6 @@ export const FormRenderField = ({
 
   const Component = fieldComponents[field.type];
 
-  console.log({
-    isProfessionalUser,
-    isProfessionalField: !!field.isProfessionalField,
-  });
-
   if (!Component) {
     console.warn(`No component found for field type: ${field.type}`);
     return null;
