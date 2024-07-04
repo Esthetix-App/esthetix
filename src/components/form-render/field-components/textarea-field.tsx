@@ -30,6 +30,7 @@ export const TextAreaField = ({
     <FormField
       name={id}
       control={control}
+      defaultValue=""
       render={({ field }) => (
         <FormItem>
           <FormLabel>{label}</FormLabel>

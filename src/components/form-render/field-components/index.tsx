@@ -17,7 +17,7 @@ type FieldOptions = IFormFieldSchema["fieldOptions"];
 export type FieldComponentType = {
   id: string;
   label?: string;
-  description?: string;
+  description?: string | null;
   disabled?: boolean;
   fieldOptions?: FieldOptions;
 };

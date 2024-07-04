@@ -5,7 +5,6 @@ import { Reorder, useDragControls } from "framer-motion";
 import { GripVerticalIcon, Trash } from "lucide-react";
 
 import type { IFormGroupSchema } from "@/validation/form";
-import type { NewFormData } from "./hooks/use-new-form";
 
 import { cn } from "@/lib/utils";
 
@@ -28,9 +27,9 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { ProfessionalFieldTooltip } from "@/components/professional-field-tooltip";
-import { FormNewSectionItemFields } from "./form-new-section-item-fields";
+import { FormSectionItemFields } from "@/components/form-components/form-section-item-fields";
 
-interface IFormNewSectionItemProps {
+interface IFormSectionItemProps {
   index: number;
   isDraggingActive: null | boolean;
   onDragStart: () => void;
@@ -39,16 +38,16 @@ interface IFormNewSectionItemProps {
   section: IFormGroupSchema;
 }
 
-export const FormNewSectionItem = ({
+export const FormSectionItem = ({
   index,
   section,
   onRemove,
   onDragEnd,
   onDragStart,
   isDraggingActive,
-}: IFormNewSectionItemProps) => {
+}: IFormSectionItemProps) => {
   const controls = useDragControls();
-  const { control } = useFormContext<NewFormData>();
+  const { control } = useFormContext();
 
   return (
     <Reorder.Item
@@ -99,7 +98,7 @@ export const FormNewSectionItem = ({
           <div className="grid gap-6">
             <FormField
               control={control}
-              name={`formGroups.${index}.name`}
+              name={`formGroups.${index}.title`}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nome</FormLabel>
@@ -134,7 +133,7 @@ export const FormNewSectionItem = ({
           </div>
         </CardContent>
         <CardFooter className="flex-col items-start border-t bg-muted/40 p-6">
-          <FormNewSectionItemFields indexFormGroup={index} />
+          <FormSectionItemFields indexFormGroup={index} />
         </CardFooter>
       </Card>
     </Reorder.Item>

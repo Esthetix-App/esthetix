@@ -1,8 +1,6 @@
 import { BarChart } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 
-import type { NewFormData } from "./hooks/use-new-form";
-
 import {
   FormControl,
   FormField,
@@ -13,8 +11,8 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export const FormNewStatusCard = () => {
-  const { control, watch } = useFormContext<NewFormData>();
+export const FormStatusCard = () => {
+  const { control, watch } = useFormContext();
 
   const isEnabled = watch("enable");
 

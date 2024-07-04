@@ -24,6 +24,7 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_BUCKET_URL: z.string().url(),
+    NEXT_PUBLIC_APP_URL: z.string().url(),
   },
 
   /**
@@ -39,6 +40,7 @@ export const env = createEnv({
     SECRET_ACCESS_KEY: process.env.SECRET_ACCESS_KEY,
     BUCKET_NAME: process.env.BUCKET_NAME,
     NEXT_PUBLIC_BUCKET_URL: process.env.NEXT_PUBLIC_BUCKET_URL,
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

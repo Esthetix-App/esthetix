@@ -19,7 +19,7 @@ export const CustomerDetails = ({ customer }: ICustomerDetailsProps) => {
           Informações básicas
         </span>
 
-        <div className="mt-6 flex flex-wrap items-center gap-8">
+        <div className="mt-6 grid max-w-4xl grid-cols-5 flex-wrap items-center gap-8">
           <div className="grid gap-1">
             <span className="text-sm font-medium text-muted-foreground/70">
               Nome completo
@@ -52,8 +52,6 @@ export const CustomerDetails = ({ customer }: ICustomerDetailsProps) => {
               {formatPhoneNumber(customer.cellphone)}
             </span>
           </div>
-        </div>
-        <div className="mt-8 flex flex-wrap items-center gap-8">
           <div className="grid gap-1">
             <span className="text-sm font-medium text-muted-foreground/70">
               Como nos conheceu

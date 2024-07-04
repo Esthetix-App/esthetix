@@ -1,16 +1,16 @@
-import Link from "next/link";
 import { ChevronLeft, FileClock, UserRound } from "lucide-react";
+import Link from "next/link";
 
-import { api } from "@/trpc/server";
 import { getInitials } from "@/lib/utils";
+import { api } from "@/trpc/server";
 
+import { CustomerDetails } from "@/components/customer-details";
+import { HistoryDataTable } from "@/components/customer-history-list/history-data-table";
+import { LinkFormDialog } from "@/components/link-form/link-form-dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { CustomerHistory } from "@/components/customer-history";
-import { CustomerDetails } from "@/components/customer-details";
-import { LinkFormDialog } from "@/components/link-form/link-form-dialog";
 
 interface ICustomersDetailsPageProps {
   params: {
@@ -21,7 +21,9 @@ interface ICustomersDetailsPageProps {
 export default async function CustomersDetailsPage({
   params,
 }: ICustomersDetailsPageProps) {
-  const { customer } = await api.customer.getById({ id: params.id });
+  const { customer, formHistoryCount } = await api.customer.getById({
+    id: params.id,
+  });
 
   return (
     <main className="flex h-full flex-1 flex-col justify-between gap-4 overflow-auto p-4 lg:gap-6 lg:p-10">
@@ -47,7 +49,7 @@ export default async function CustomersDetailsPage({
           </div>
         </div>
 
-        <LinkFormDialog />
+        <LinkFormDialog simplifiedForm />
       </div>
       <div className="mt-6 flex w-full flex-1">
         <Tabs defaultValue="customer-data" className="w-full">
@@ -59,19 +61,21 @@ export default async function CustomersDetailsPage({
             <TabsTrigger value="customer-history">
               <FileClock className="mr-2 size-4" />
               Histórico de Formulários{" "}
-              <Badge
-                variant="default"
-                className="ml-2 rounded-sm px-1 font-normal"
-              >
-                2
-              </Badge>
+              {!!formHistoryCount && (
+                <Badge
+                  variant="default"
+                  className="ml-2 rounded-sm px-1 font-normal"
+                >
+                  {formHistoryCount}
+                </Badge>
+              )}
             </TabsTrigger>
           </TabsList>
           <TabsContent value="customer-data">
             <CustomerDetails customer={customer} />
           </TabsContent>
           <TabsContent value="customer-history">
-            <CustomerHistory />
+            <HistoryDataTable customer={customer} />
           </TabsContent>
         </Tabs>
       </div>

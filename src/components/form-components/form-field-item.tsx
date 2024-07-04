@@ -6,7 +6,6 @@ import { GripVerticalIcon, Trash } from "lucide-react";
 
 import type { FieldSize, FieldTypes } from "@prisma/client";
 import type { IFormFieldSchema } from "@/validation/form";
-import type { NewFormData } from "./hooks/use-new-form";
 
 import { cn } from "@/lib/utils";
 import { fieldTypes } from "@/constants/field-types";
@@ -24,9 +23,9 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
 import { ProfessionalFieldTooltip } from "@/components/professional-field-tooltip";
-import { FormNewFieldItemOptions } from "./form-new-field-item-options";
+import { FormFieldItemOptions } from "@/components/form-components/form-field-item-options";
 
-interface IFormNewFieldItemProps {
+interface IFormFieldItemProps {
   index: number;
   indexFormGroup: number;
   isDraggingActive: null | boolean;
@@ -36,7 +35,7 @@ interface IFormNewFieldItemProps {
   field: IFormFieldSchema;
 }
 
-export const FormNewFieldItem = ({
+export const FormFieldItem = ({
   index,
   field,
   onRemove,
@@ -44,9 +43,9 @@ export const FormNewFieldItem = ({
   onDragStart,
   indexFormGroup,
   isDraggingActive,
-}: IFormNewFieldItemProps) => {
+}: IFormFieldItemProps) => {
   const controls = useDragControls();
-  const { control, setValue, watch } = useFormContext<NewFormData>();
+  const { control, setValue, watch } = useFormContext();
 
   const isProfessionalSection = watch(
     `formGroups.${indexFormGroup}.isProfessionalField`,
@@ -166,7 +165,7 @@ export const FormNewFieldItem = ({
           )}
         />
 
-        <FormNewFieldItemOptions
+        <FormFieldItemOptions
           indexField={index}
           indexFormGroup={indexFormGroup}
         />

@@ -1,12 +1,12 @@
 import type { FieldTypes } from "@prisma/client";
 
-export const fieldsWithOptions: Partial<FieldTypes>[] = [
+export const fieldsWithOptions: FieldTypes[] = [
   "RADIO",
   "SELECT",
   "MULTI_SELECT",
 ];
 
-export const fieldsWithPlaceholder: Partial<FieldTypes>[] = [
+export const fieldsWithPlaceholder: FieldTypes[] = [
   "TEXT",
   "TEXT_AREA",
   "DATE",
@@ -14,4 +14,15 @@ export const fieldsWithPlaceholder: Partial<FieldTypes>[] = [
   "MULTI_SELECT",
 ];
 
-export const fieldsWithUpload: Partial<FieldTypes>[] = ["IMAGE"];
+export const fieldsWithUpload: FieldTypes[] = ["IMAGE"];
+
+export const dateFields: FieldTypes[] = ["DATE"];
+export const arrayFields: FieldTypes[] = ["MULTI_SELECT"];
+export const stringFields: FieldTypes[] = [
+  "RADIO",
+  "SELECT",
+  "SIGNATURE",
+  "TEXT",
+  "TEXT_AREA",
+];
+export const booleanFields: FieldTypes[] = ["CHECKBOX"];

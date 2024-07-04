@@ -42,7 +42,7 @@ export const SelectField = ({
     <FormField
       name={id}
       control={control}
-      defaultValue={[]}
+      defaultValue=""
       render={({ field }) => (
         <FormItem>
           <FormLabel>{label}</FormLabel>

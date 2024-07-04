@@ -13,6 +13,7 @@ import {
   professionalProcedure,
   adminProcedure,
 } from "@/server/api/trpc";
+import { editFormSchema } from "@/validation/form-edit";
 
 dayjs.extend(customParseFormat);
 
@@ -31,12 +32,13 @@ export const formRouter = createTRPCRouter({
               description: input.description,
               formGroups: {
                 create: input.formGroups.map((group) => ({
-                  title: group.name,
+                  title: group.title,
                   position: group.position,
                   isProfessionalField: group.isProfessionalField,
                   formFields: {
                     create: group.formFields.map((field) => ({
                       name: field.name,
+                      description: field.description,
                       position: field.position,
                       type: field.type,
                       size: field.size,
@@ -68,6 +70,64 @@ export const formRouter = createTRPCRouter({
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to create form.",
+          cause: error,
+        });
+      }
+    }),
+  update: professionalProcedure
+    .input(editFormSchema)
+    .mutation(async ({ ctx, input }) => {
+      try {
+        await ctx.db.$transaction(async (prisma) => {
+          const form = await prisma.form.update({
+            where: { id: input.id },
+            data: {
+              title: input.title,
+              enable: input.enable,
+              logoUrl: input.logoUrl,
+              updatedBy: ctx.session.user.id,
+              description: input.description,
+              formGroups: {
+                deleteMany: {},
+                create: input.formGroups.map((group) => ({
+                  title: group.title,
+                  position: group.position,
+                  isProfessionalField: group.isProfessionalField,
+                  formFields: {
+                    create: group.formFields.map((field) => ({
+                      name: field.name,
+                      description: field.description,
+                      position: field.position,
+                      type: field.type,
+                      size: field.size,
+                      typeOptions: field.typeOptions ?? undefined,
+                      isProfessionalField: field.isProfessionalField,
+                      isRequired: field.isRequired,
+                      fieldOptions: field.fieldOptions
+                        ? {
+                            create: field.fieldOptions.map((option) => ({
+                              name: option.name,
+                            })),
+                          }
+                        : undefined,
+                    })),
+                  },
+                })),
+              },
+            },
+          });
+
+          return { form };
+        });
+
+        return {
+          status: 201,
+          message: "Form updated successfully!",
+        };
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to update form.",
           cause: error,
         });
       }
@@ -162,4 +222,71 @@ export const formRouter = createTRPCRouter({
         });
       }
     }),
+  getById: professionalProcedure
+    .input(z.object({ id: z.string().min(1) }))
+    .query(async ({ input, ctx }) => {
+      const { id } = input;
+
+      try {
+        const form = await ctx.db.form.findUnique({
+          where: { id },
+          include: {
+            formGroups: {
+              include: {
+                formFields: {
+                  include: {
+                    fieldOptions: true,
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        if (!form) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Form not found.",
+          });
+        }
+
+        return {
+          status: 200,
+          form,
+        };
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to get customer.",
+          cause: error,
+        });
+      }
+    }),
+  getAllOptions: professionalProcedure.query(async ({ ctx }) => {
+    try {
+      const forms = await ctx.db.form.findMany({
+        where: {
+          enable: true,
+        },
+        select: {
+          id: true,
+          title: true,
+        },
+      });
+
+      return {
+        status: 200,
+        options: forms.map((form) => ({
+          label: form.title ?? "",
+          value: form.id,
+        })),
+      };
+    } catch (error) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Failed to get form options.",
+        cause: error,
+      });
+    }
+  }),
 });

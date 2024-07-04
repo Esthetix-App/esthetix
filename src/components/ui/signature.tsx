@@ -19,7 +19,7 @@ function Signature({ disabled, ...props }: ISignatureProps) {
   };
 
   return (
-    <div>
+    <div className="relative">
       <ReactSignature
         ref={signatureRef}
         className="border-b border-foreground/60"
@@ -31,9 +31,14 @@ function Signature({ disabled, ...props }: ISignatureProps) {
         }}
       />
       {!disabled && (
-        <Button size="sm" type="button" className="mt-4" onClick={handleClear}>
-          <Eraser className="mr-2 size-4" />
-          Limpar
+        <Button
+          size="icon"
+          type="button"
+          className="absolute right-2 top-2"
+          onClick={handleClear}
+          variant="secondary"
+        >
+          <Eraser className="size-4" />
         </Button>
       )}
     </div>

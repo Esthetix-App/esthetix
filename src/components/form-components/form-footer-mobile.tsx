@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 
-export const FormNewFooterMobile = () => {
+export const FormFooterMobile = () => {
   return (
     <div className="flex items-center justify-center gap-2 md:hidden">
       <Button variant="outline" size="sm">

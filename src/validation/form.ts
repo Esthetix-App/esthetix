@@ -1,13 +1,26 @@
-import z from "zod";
+import z, { type ZodTypeAny } from "zod";
 
 export const fieldOptionsSchema = z.object({
   name: z.string().min(1, { message: "O campo é obrigatório" }),
 });
 
+const jsonSchema: ZodTypeAny = z
+  .lazy(() =>
+    z.union([
+      z.string(),
+      z.number(),
+      z.boolean(),
+      z.null(),
+      z.array(jsonSchema),
+      z.record(jsonSchema),
+    ]),
+  )
+  .nullish();
+
 export const formFieldSchema = z.object({
-  name: z.string(),
-  description: z.string().optional(),
-  isProfessionalField: z.boolean(),
+  name: z.string().min(1, { message: "O campo é obrigatório" }),
+  description: z.string().nullish(),
+  isProfessionalField: z.boolean().nullish(),
   isRequired: z.boolean(),
   position: z.number(),
   type: z.enum([
@@ -23,21 +36,21 @@ export const formFieldSchema = z.object({
     "SIGNATURE",
   ]),
   size: z.enum(["SM", "MD", "LG", "XL"]),
-  typeOptions: z.record(z.string(), z.string()).nullable(),
-  fieldOptions: z.array(fieldOptionsSchema).nullable(),
+  typeOptions: jsonSchema,
+  fieldOptions: z.array(fieldOptionsSchema).nullish(),
 });
 
 export const formGroupSchema = z.object({
-  name: z.string().min(1, { message: "O campo é obrigatório" }),
-  isProfessionalField: z.boolean(),
+  title: z.string().nullish(),
+  isProfessionalField: z.boolean().nullish(),
   position: z.number(),
   formFields: z.array(formFieldSchema),
 });
 
 export const formSchema = z.object({
   title: z.string().min(1, { message: "O campo é obrigatório" }),
-  description: z.string().min(1, { message: "O campo é obrigatório" }),
-  logoUrl: z.string().optional(),
+  description: z.string().nullish(),
+  logoUrl: z.string().nullish(),
   enable: z.boolean(),
   formGroups: z.array(formGroupSchema),
 });

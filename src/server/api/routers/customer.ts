@@ -27,19 +27,22 @@ export const customerRouter = createTRPCRouter({
       const { id } = input;
 
       try {
-        const customer = await ctx.db.customer.findUnique({
-          where: { id },
-          include: {
-            address: true,
-            user: {
-              select: {
-                role: true,
-                email: true,
-                image: true,
+        const [customer, formHistoryCount] = await ctx.db.$transaction([
+          ctx.db.customer.findUnique({
+            where: { id },
+            include: {
+              address: true,
+              user: {
+                select: {
+                  role: true,
+                  email: true,
+                  image: true,
+                },
               },
             },
-          },
-        });
+          }),
+          ctx.db.formHistory.count({ where: { customerId: id } }),
+        ]);
 
         if (!customer) {
           throw new TRPCError({
@@ -50,6 +53,7 @@ export const customerRouter = createTRPCRouter({
 
         return {
           status: 200,
+          formHistoryCount,
           customer: {
             ...customer,
             birthdate: dayjs(customer.birthdate).format("DD/MM/YYYY"),

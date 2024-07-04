@@ -43,3 +43,26 @@ export function getInitials(name: string): string {
 
   return firstInitial + lastInitial;
 }
+
+export async function copyTextToClipboard(text: string) {
+  if ("clipboard" in navigator) {
+    return await navigator.clipboard.writeText(text);
+  } else {
+    return document.execCommand("copy", true, text);
+  }
+}
+
+export function formatCPF(cpf: string): string {
+  const cpfClean = cpf.replace(/[^\d]/g, "");
+
+  return cpfClean.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+}
+
+export function formatCNPJ(cnpj: string): string {
+  const cnpjClean = cnpj.replace(/[^\d]/g, "");
+
+  return cnpjClean.replace(
+    /^(\d{2})(\d{3})?(\d{3})?(\d{4})?(\d{2})?/,
+    "$1.$2.$3/$4-$5",
+  );
+}
