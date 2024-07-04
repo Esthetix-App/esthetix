@@ -7,6 +7,7 @@ import { formUploadRouter } from "@/server/api/routers/form-upload";
 import { formHistoryRouter } from "@/server/api/routers/form-history";
 import { professionalRouter } from "@/server/api/routers/professional";
 import { submitFormRouter } from "@/server/api/routers/submit-form";
+import { dashboardRouter } from "@/server/api/routers/dashboard";
 
 /**
  * This is the primary router for your server.
@@ -21,6 +22,7 @@ export const appRouter = createTRPCRouter({
   formHistory: formHistoryRouter,
   professional: professionalRouter,
   submitForm: submitFormRouter,
+  dashboard: dashboardRouter,
 });
 
 // export type definition of API

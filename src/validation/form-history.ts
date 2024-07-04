@@ -8,7 +8,7 @@ export const formHistorySchema = z
     isNamedForm: z.boolean(),
     enable: z.boolean(),
   })
-  .refine((data) => (data.isNamedForm ? !data.customerId : true), {
+  .refine((data) => (data.isNamedForm ? data.customerId : true), {
     path: ["customerId"],
     message: "O campo é obrigatório",
   });
