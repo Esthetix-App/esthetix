@@ -87,7 +87,7 @@ export function DataTable<TData>({
                 </TableRow>
               ))
             ) : (
-              <TableRow className="border-b-0 bg-muted/40">
+              <TableRow className="border-b-0 !bg-muted/40">
                 <TableCell
                   colSpan={table.getAllColumns().length}
                   className="h-24 text-center font-medium"
