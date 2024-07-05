@@ -75,7 +75,9 @@ export function getColumns(): ColumnDef<FormsGetAllOutput>[] {
                 {getInitials(row.getValue("title"))}
               </AvatarFallback>
             </Avatar>
-            <span className="font-medium">{row.getValue("title")}</span>
+            <span className="max-w-xs truncate font-medium">
+              {row.getValue("title")}
+            </span>
           </div>
         );
       },

@@ -89,6 +89,7 @@ model Customer {
     address       Address       @relation(fields: [addressId], references: [id], onDelete: Cascade)
     formHistories FormHistory[] @relation("customer")
 
+    @@index([userId])
     @@map("customers")
 }
 

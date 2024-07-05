@@ -9,9 +9,9 @@ dayjs.extend(customParseFormat);
 export const dashboardRouter = createTRPCRouter({
   getFormsToFill: protectedProcedure.query(async ({ ctx }) => {
     try {
-      const customer = await ctx.db.formHistory.findUnique({
+      const customer = await ctx.db.customer.findFirst({
+        where: { userId: ctx.session.user.id },
         select: { id: true },
-        where: { id: ctx.session.user.id },
       });
 
       const forms = await ctx.db.formHistory.findMany({
