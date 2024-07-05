@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import type { IFormGroupSchema } from "@/components/form-render/form-render-section";
 import { fieldComponents } from "@/components/form-render/field-components";
 import { useFormRenderContext } from "@/contexts/form-render-context";
+import { usePermissions } from "@/hooks/use-permissions";
 
 interface IFormRenderField {
   field: IFormGroupSchema["formFields"][number];
@@ -14,15 +15,18 @@ export const FormRenderField = ({
   isProfessionalSection,
 }: IFormRenderField) => {
   const { isProfessionalUser, form } = useFormRenderContext();
+  const { hasPermission } = usePermissions();
+
+  const hasPermissionToFill = hasPermission("PROFESSIONAL");
 
   const Component = fieldComponents[field.type];
 
-  const isFilled = !!form.filledAt;
+  const canFillForm = !form.filledAt || hasPermissionToFill;
 
   const disableField =
     !!field.isProfessionalField || isProfessionalSection
       ? !isProfessionalUser
-      : isFilled;
+      : !canFillForm;
 
   if (!Component) {
     console.warn(`No component found for field type: ${field.type}`);
