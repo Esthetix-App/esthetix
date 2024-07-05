@@ -26,6 +26,7 @@ import {
 import { HistoryDeleteDialog } from "./history-delete-dialog";
 import { toast } from "sonner";
 import { DuplicateFormDialog } from "@/components/duplicate-form/duplicate-form-dialog";
+import { FormViewDialog } from "@/components/form-view/form-view-dialog";
 
 export type HistoryGetAllOutput =
   RouterOutputs["formHistory"]["getByCustomer"]["forms"][number];
@@ -130,7 +131,9 @@ export function getColumns(): ColumnDef<HistoryGetAllOutput>[] {
         const router = useRouter();
         const [showDeleteTaskDialog, setShowDeleteTaskDialog] =
           React.useState(false);
-        const [showDeleteDuplicateDialog, setShowDeleteDuplicateDialog] =
+        const [showDuplicateDialog, setShowDuplicateDialog] =
+          React.useState(false);
+        const [showViewFormDialog, setShowViewFormDialog] =
           React.useState(false);
 
         const { hasPermission } = usePermissions();
@@ -155,8 +158,14 @@ export function getColumns(): ColumnDef<HistoryGetAllOutput>[] {
             <DuplicateFormDialog
               showTrigger={false}
               formId={row.original.id}
-              open={showDeleteDuplicateDialog}
-              onOpenChange={setShowDeleteDuplicateDialog}
+              open={showDuplicateDialog}
+              onOpenChange={setShowDuplicateDialog}
+            />
+            <FormViewDialog
+              showTrigger={false}
+              formId={row.original.id}
+              open={showViewFormDialog}
+              onOpenChange={setShowViewFormDialog}
             />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -175,14 +184,14 @@ export function getColumns(): ColumnDef<HistoryGetAllOutput>[] {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="font-medium"
-                  onSelect={() => setShowDeleteDuplicateDialog(true)}
+                  onSelect={() => setShowDuplicateDialog(true)}
                 >
                   <Copy className="mr-2 size-4" aria-hidden="true" />
                   Duplicar
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="font-medium"
-                  onSelect={() => router.push(`/s/${row.original.id}`)}
+                  onSelect={() => setShowViewFormDialog(true)}
                 >
                   <Eye className="mr-2 size-4" aria-hidden="true" />
                   Visualizar

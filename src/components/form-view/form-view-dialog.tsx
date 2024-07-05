@@ -3,21 +3,21 @@
 import * as React from "react";
 
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
-import { DuplicateFormContent } from "@/components/duplicate-form/duplicate-form-content";
+import { FormViewContent } from "@/components/form-view/form-view-content";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Copy } from "lucide-react";
 
-interface DuplicateFormDialogProps
+interface FormViewDialogProps
   extends React.ComponentPropsWithoutRef<typeof Dialog> {
   showTrigger?: boolean;
   formId: string;
 }
 
-export function DuplicateFormDialog({
+export function FormViewDialog({
   formId,
   showTrigger,
   ...props
-}: DuplicateFormDialogProps) {
+}: FormViewDialogProps) {
   return (
     <Dialog {...props}>
       {showTrigger ? (
@@ -30,10 +30,7 @@ export function DuplicateFormDialog({
       ) : null}
 
       <DialogContent className="h-full max-h-[90vh] max-w-5xl overflow-hidden p-0">
-        <DuplicateFormContent
-          formId={formId}
-          onDuplicate={() => props.onOpenChange?.(false)}
-        />
+        <FormViewContent formId={formId} />
       </DialogContent>
     </Dialog>
   );

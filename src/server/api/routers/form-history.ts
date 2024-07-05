@@ -125,7 +125,19 @@ export const formHistoryRouter = createTRPCRouter({
           "desc",
         ]) as [keyof FormHistory, "asc" | "desc"];
 
-        const orderBy = { [column]: order };
+        let orderBy;
+
+        if (column.includes("_")) {
+          const [nestedTable, nestedField] = column.split("_");
+
+          if (nestedTable && nestedField) {
+            orderBy = { [nestedTable]: { [nestedField]: order } };
+          } else {
+            throw new Error("Invalid nested table or field for ordering.");
+          }
+        } else {
+          orderBy = { [column]: order };
+        }
 
         const where = buildWhereClause(
           [
@@ -218,9 +230,9 @@ export const formHistoryRouter = createTRPCRouter({
         }
 
         if (
+          ctx.session.user.role === "CUSTOMER" &&
           formHistory.isNamedForm &&
-          formHistory.customer?.userId !== ctx.session.user.id &&
-          formHistory.professionalId !== ctx.session.user.id
+          formHistory.customer?.userId !== ctx.session.user.id
         ) {
           throw new TRPCError({
             code: "NOT_FOUND",
@@ -266,7 +278,8 @@ export const formHistoryRouter = createTRPCRouter({
         };
 
         const isProfessionalUser =
-          formHistory.professionalId === ctx.session.user.id;
+          ctx.session.user.role === "ADMIN" ||
+          ctx.session.user.role === "PROFESSIONAL";
 
         return {
           status: 200,

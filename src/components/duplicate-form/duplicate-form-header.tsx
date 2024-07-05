@@ -14,7 +14,7 @@ export const DuplicateFormHeader = () => {
         Duplicar Formulário
       </DialogTitle>
       <DialogDescription>
-        Enviar formulário para o preenchimento do cliente e profissional
+        Duplicar formulário para o preenchimento do cliente e profissional
         responsavél.
       </DialogDescription>
     </DialogHeader>
