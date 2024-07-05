@@ -46,7 +46,7 @@ export function DataTable<TData>({
       {children}
       <div
         className={cn(
-          "relative flex overflow-x-auto rounded-md border bg-muted/40 shadow-sm",
+          "relative flex h-full overflow-x-auto rounded-md border bg-muted/40 shadow-sm",
           !table.getRowModel().rows?.length && "min-h-52",
         )}
       >

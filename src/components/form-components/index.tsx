@@ -35,8 +35,8 @@ export function FormComponents<T extends FieldValues>({
           showResetButton={!isEditing}
           label={isEditing ? "Editar Formulário" : "Novo Formulário"}
         />
-        <div className="mt-6 grid gap-4 pb-16 md:grid-cols-[1fr_250px] lg:grid-cols-4 lg:gap-8">
-          <div className="grid auto-rows-max items-start gap-4 lg:col-span-3 lg:gap-8">
+        <div className="mt-6 grid gap-4 pb-16 lg:grid-cols-[1fr_250px] lg:gap-8 xl:grid-cols-4">
+          <div className="grid auto-rows-max items-start gap-4 lg:gap-8 xl:col-span-3">
             <FormDetails />
             <FormSections />
           </div>

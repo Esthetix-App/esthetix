@@ -41,6 +41,7 @@ export function UsersTableToolbarActions({
       <Button
         variant="outline"
         size="sm"
+        className="hidden md:flex"
         onClick={() =>
           exportTableToCSV(table, {
             filename: "clientes",

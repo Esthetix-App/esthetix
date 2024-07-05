@@ -67,68 +67,70 @@ export const FormFieldItem = ({
           isDraggingActive && "shadow-xl",
         )}
       >
-        <div className="flex items-baseline gap-4">
-          <FormField
-            control={control}
-            name={`formGroups.${indexFormGroup}.formFields.${index}.name`}
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Nome</FormLabel>
-                <FormControl>
-                  <Input placeholder="Infrome o nome do campo" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <div className="flex items-baseline justify-between gap-4">
+          <div className="flex flex-1 flex-col-reverse gap-4 md:flex-row">
+            <FormField
+              control={control}
+              name={`formGroups.${indexFormGroup}.formFields.${index}.name`}
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Nome</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Infrome o nome do campo" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={control}
-            name={`formGroups.${indexFormGroup}.formFields.${index}.size`}
-            render={({ field }) => (
-              <FormItem className="w-[200px]">
-                <FormLabel>Tamanho</FormLabel>
-                <FormControl>
-                  <Combobox
-                    options={fieldSizes}
-                    value={field.value}
-                    placeholder="?/3"
-                    onSelect={(currentValue) => {
-                      setValue(
-                        `formGroups.${indexFormGroup}.formFields.${index}.size`,
-                        currentValue as FieldSize,
-                      );
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={control}
+              name={`formGroups.${indexFormGroup}.formFields.${index}.size`}
+              render={({ field }) => (
+                <FormItem className="w-full md:w-[200px]">
+                  <FormLabel>Tamanho</FormLabel>
+                  <FormControl>
+                    <Combobox
+                      options={fieldSizes}
+                      value={field.value}
+                      placeholder="?/3"
+                      onSelect={(currentValue) => {
+                        setValue(
+                          `formGroups.${indexFormGroup}.formFields.${index}.size`,
+                          currentValue as FieldSize,
+                        );
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={control}
-            name={`formGroups.${indexFormGroup}.formFields.${index}.type`}
-            render={({ field }) => (
-              <FormItem className="w-[200px]">
-                <FormLabel>Tipo do campo</FormLabel>
-                <FormControl>
-                  <Combobox
-                    options={fieldTypes}
-                    value={field.value}
-                    placeholder="Selecione o tipo"
-                    onSelect={(currentValue) => {
-                      setValue(
-                        `formGroups.${indexFormGroup}.formFields.${index}.type`,
-                        currentValue as FieldTypes,
-                      );
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={control}
+              name={`formGroups.${indexFormGroup}.formFields.${index}.type`}
+              render={({ field }) => (
+                <FormItem className="w-full md:w-[200px]">
+                  <FormLabel>Tipo do campo</FormLabel>
+                  <FormControl>
+                    <Combobox
+                      options={fieldTypes}
+                      value={field.value}
+                      placeholder="Selecione o tipo"
+                      onSelect={(currentValue) => {
+                        setValue(
+                          `formGroups.${indexFormGroup}.formFields.${index}.type`,
+                          currentValue as FieldTypes,
+                        );
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
           <div className="mt-9 flex items-center self-start">
             <Button
@@ -170,7 +172,7 @@ export const FormFieldItem = ({
           indexFormGroup={indexFormGroup}
         />
 
-        <div className="flex gap-4">
+        <div className="flex flex-col gap-4 md:flex-row">
           <FormField
             control={control}
             name={`formGroups.${indexFormGroup}.formFields.${index}.isRequired`}

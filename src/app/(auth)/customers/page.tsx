@@ -9,7 +9,7 @@ export default function CustomersPage() {
           Listagem de clientes ativos na plataforma.
         </p>
       </div>
-      <div className="mt-4 flex flex-1 items-center justify-center overflow-hidden">
+      <div className="mt-4 flex flex-1 items-center justify-center">
         <CustomersDataTable />
       </div>
     </main>

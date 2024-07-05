@@ -19,7 +19,7 @@ export const DashboardFillForms = () => {
 
   return (
     <div className="mt-6 grid gap-10">
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
         {data.forms.map((form) => (
           <DashboardFillFormItem key={form.id} form={form} />
         ))}

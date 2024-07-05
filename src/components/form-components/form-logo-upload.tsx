@@ -63,9 +63,9 @@ export const FormLogoUpload = () => {
   };
 
   return (
-    <Card className="overflow-hidden border-b-4 border-b-primary">
+    <Card className="min-w-[250px] overflow-hidden border-b-4 border-b-primary">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2 whitespace-nowrap">
           <ImageIcon className="size-4 text-primary" />
           Logo do Formulário
         </CardTitle>

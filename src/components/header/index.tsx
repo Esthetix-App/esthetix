@@ -39,22 +39,6 @@ export const Header = () => {
             <span className="">Esthetix</span>
           </Link>
           <NavBarItems className="grid gap-2 text-lg font-medium" />
-          <div className="mt-auto">
-            <Card>
-              <CardHeader>
-                <CardTitle>Atualizar para Pro</CardTitle>
-                <CardDescription>
-                  Desbloqueie todos os recursos e tenha acesso ilimitado à nossa
-                  equipe de suporte.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button size="sm" className="w-full">
-                  Upgrade
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
         </SheetContent>
       </Sheet>
       <HeaderBreadcrumb />
