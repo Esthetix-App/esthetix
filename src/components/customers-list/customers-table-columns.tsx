@@ -76,7 +76,7 @@ export function getColumns(): ColumnDef<CustomerGetAllOutput>[] {
                 {getInitials(row.getValue("name"))}
               </AvatarFallback>
             </Avatar>
-            <span>{row.getValue("name")}</span>
+            <span className="truncate">{row.getValue("name")}</span>
           </div>
         );
       },
@@ -95,7 +95,9 @@ export function getColumns(): ColumnDef<CustomerGetAllOutput>[] {
         <DataTableColumnHeader column={column} title="Telefone" />
       ),
       cell: ({ row }) => (
-        <div>{formatPhoneNumber(row.getValue("cellphone"))}</div>
+        <div className="truncate">
+          {formatPhoneNumber(row.getValue("cellphone"))}
+        </div>
       ),
     },
     {
