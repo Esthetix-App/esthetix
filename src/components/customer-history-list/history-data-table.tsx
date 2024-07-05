@@ -1,6 +1,6 @@
 "use client";
 
-import { RouterOutputs, api } from "@/trpc/react";
+import { type RouterOutputs, api } from "@/trpc/react";
 import { useSearchParams } from "next/navigation";
 import * as React from "react";
 
@@ -13,7 +13,6 @@ import type { DataTableFilterField } from "@/types/data-table";
 import { useDataTable } from "@/hooks/use-data-table";
 import { searchParamsSchema } from "@/validation/get-customer-history";
 
-import { DataTableAdvancedToolbar } from "@/components/data-table/advanced/data-table-advanced-toolbar";
 import { DataTable } from "@/components/data-table/data-table";
 import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton";
 import { DataTableToolbar } from "@/components/data-table/data-table-toolbar";
@@ -33,7 +32,10 @@ export function HistoryDataTable({ customer }: IHistoryDataTableProps) {
   const searchObject = Object.fromEntries(searchParams.entries());
   const search = searchParamsSchema.parse(searchObject);
 
-  const { data, isPending } = api.formHistory.getByCustomer.useQuery({...search, customerId: customer.id});
+  const { data, isPending } = api.formHistory.getByCustomer.useQuery({
+    ...search,
+    customerId: customer.id,
+  });
 
   const forms = data?.forms ?? [];
   const columns = React.useMemo(() => getColumns(), []);
@@ -68,19 +70,13 @@ export function HistoryDataTable({ customer }: IHistoryDataTableProps) {
   }
 
   return (
-        <DataTable
-          table={table}
-          floatingBar={<HistoryTableFloatingBar table={table} />}
-        >
-          {ENABLE_ADVANCED_FILTER ? (
-            <DataTableAdvancedToolbar table={table} filterFields={filterFields}>
-              <HistoryTableToolbarActions table={table} />
-            </DataTableAdvancedToolbar>
-          ) : (
-            <DataTableToolbar table={table} filterFields={filterFields}>
-              <HistoryTableToolbarActions table={table} />
-            </DataTableToolbar>
-          )}
-        </DataTable>
+    <DataTable
+      table={table}
+      floatingBar={<HistoryTableFloatingBar table={table} />}
+    >
+      <DataTableToolbar table={table} filterFields={filterFields}>
+        <HistoryTableToolbarActions table={table} />
+      </DataTableToolbar>
+    </DataTable>
   );
 }

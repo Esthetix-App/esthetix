@@ -11,7 +11,6 @@ import { searchParamsSchema } from "@/validation/get-customers";
 import { DataTable } from "@/components/data-table/data-table";
 import { DataTableToolbar } from "@/components/data-table/data-table-toolbar";
 import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton";
-import { DataTableAdvancedToolbar } from "@/components/data-table/advanced/data-table-advanced-toolbar";
 import {
   getColumns,
   type CustomerGetAllOutput,
@@ -65,15 +64,9 @@ export function CustomersDataTable() {
       table={table}
       floatingBar={<CustomersTableFloatingBar table={table} />}
     >
-      {ENABLE_ADVANCED_FILTER ? (
-        <DataTableAdvancedToolbar table={table} filterFields={filterFields}>
-          <CustomersTableToolbarActions table={table} />
-        </DataTableAdvancedToolbar>
-      ) : (
-        <DataTableToolbar table={table} filterFields={filterFields}>
-          <CustomersTableToolbarActions table={table} />
-        </DataTableToolbar>
-      )}
+      <DataTableToolbar table={table} filterFields={filterFields}>
+        <CustomersTableToolbarActions table={table} />
+      </DataTableToolbar>
     </DataTable>
   );
 }

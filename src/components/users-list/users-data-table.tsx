@@ -11,7 +11,6 @@ import { searchParamsSchema } from "@/validation/get-customers";
 import { DataTable } from "@/components/data-table/data-table";
 import { DataTableToolbar } from "@/components/data-table/data-table-toolbar";
 import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton";
-import { DataTableAdvancedToolbar } from "@/components/data-table/advanced/data-table-advanced-toolbar";
 import { getColumns } from "./users-table-columns";
 import { UsersTableFloatingBar } from "./users-table-floating-bar";
 import { UsersTableToolbarActions } from "./users-table-toolbar-actions";
@@ -70,15 +69,9 @@ export function UsersDataTable() {
           table={table}
           floatingBar={<UsersTableFloatingBar table={table} />}
         >
-          {ENABLE_ADVANCED_FILTER ? (
-            <DataTableAdvancedToolbar table={table} filterFields={filterFields}>
-              <UsersTableToolbarActions table={table} />
-            </DataTableAdvancedToolbar>
-          ) : (
-            <DataTableToolbar table={table} filterFields={filterFields}>
-              <UsersTableToolbarActions table={table} />
-            </DataTableToolbar>
-          )}
+          <DataTableToolbar table={table} filterFields={filterFields}>
+            <UsersTableToolbarActions table={table} />
+          </DataTableToolbar>
         </DataTable>
       )}
     </>

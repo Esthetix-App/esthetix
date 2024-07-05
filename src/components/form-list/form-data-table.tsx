@@ -19,7 +19,6 @@ import { DataTableToolbar } from "@/components/data-table/data-table-toolbar";
 import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton";
 import { FormsTableFloatingBar } from "@/components/form-list/form-table-floating-bar";
 import { FormTableToolbarActions } from "@/components/form-list/form-table-toolbar-actions";
-import { DataTableAdvancedToolbar } from "@/components/data-table/advanced/data-table-advanced-toolbar";
 
 const ENABLE_ADVANCED_FILTER = false;
 
@@ -71,15 +70,9 @@ export function FormsDataTable() {
           table={table}
           floatingBar={<FormsTableFloatingBar table={table} />}
         >
-          {ENABLE_ADVANCED_FILTER ? (
-            <DataTableAdvancedToolbar table={table} filterFields={filterFields}>
-              <FormTableToolbarActions table={table} />
-            </DataTableAdvancedToolbar>
-          ) : (
-            <DataTableToolbar table={table} filterFields={filterFields}>
-              <FormTableToolbarActions table={table} />
-            </DataTableToolbar>
-          )}
+          <DataTableToolbar table={table} filterFields={filterFields}>
+            <FormTableToolbarActions table={table} />
+          </DataTableToolbar>
         </DataTable>
       )}
     </>
