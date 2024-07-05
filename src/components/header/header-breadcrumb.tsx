@@ -27,17 +27,15 @@ export const HeaderBreadcrumb = () => {
         <BreadcrumbList>
           {breadcrumbItems?.map((item, index) => (
             <Fragment key={item.name}>
-              <BreadcrumbItem>
-                {item.isCurrentPage ? (
-                  <BreadcrumbItem>
-                    <BreadcrumbPage>{item.name}</BreadcrumbPage>
-                  </BreadcrumbItem>
-                ) : (
-                  <BreadcrumbLink asChild>
-                    <Link href={item.href ?? ""}>{item.name}</Link>
-                  </BreadcrumbLink>
-                )}
-              </BreadcrumbItem>
+              {item.isCurrentPage ? (
+                <BreadcrumbItem>
+                  <BreadcrumbPage>{item.name}</BreadcrumbPage>
+                </BreadcrumbItem>
+              ) : (
+                <BreadcrumbLink asChild>
+                  <Link href={item.href ?? ""}>{item.name}</Link>
+                </BreadcrumbLink>
+              )}
               {index !== breadcrumbItems.length - 1 && <BreadcrumbSeparator />}
             </Fragment>
           ))}

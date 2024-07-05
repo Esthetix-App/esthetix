@@ -29,13 +29,15 @@ export const HeaderUserMenu = () => {
           <span className="sr-only">Toggle user menu</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-40">
+      <DropdownMenuContent align="end" className="w-full min-w-40">
         <DropdownMenuLabel className="py-0 pt-1">Minha conta</DropdownMenuLabel>
         <DropdownMenuLabel className="py-0.5 text-xs font-normal text-muted-foreground">
           {user?.email}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Suporte</DropdownMenuItem>
+        <DropdownMenuItem>
+          <a href="mailto:suporte.esthetix@gmail.com">Suporte</a>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut()}>Sair</DropdownMenuItem>
       </DropdownMenuContent>
