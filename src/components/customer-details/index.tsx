@@ -1,7 +1,7 @@
 "use client";
 
-import { Home, Info } from "lucide-react";
 import type { RouterOutputs } from "@/trpc/react";
+import { Home, Info } from "lucide-react";
 import { formatPhoneNumber } from "react-phone-number-input";
 
 type CustomerGetById = RouterOutputs["customer"]["getById"]["customer"];
@@ -19,9 +19,9 @@ export const CustomerDetails = ({ customer }: ICustomerDetailsProps) => {
           Informações básicas
         </span>
 
-        <div className="mt-6 grid max-w-4xl grid-cols-5 flex-wrap items-center gap-8">
-          <div className="grid gap-1">
-            <span className="text-sm font-medium text-muted-foreground/70">
+        <div className="mt-6 grid max-w-4xl grid-cols-1 flex-wrap items-center gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          <div className="col-span-2 grid gap-1">
+            <span className="text-sm font-medium text-muted-foreground/70 ">
               Nome completo
             </span>
             <span className="text-sm font-medium">{customer.name}</span>
@@ -78,7 +78,7 @@ export const CustomerDetails = ({ customer }: ICustomerDetailsProps) => {
           Endereço
         </span>
 
-        <div className="mt-6 flex flex-wrap items-center gap-8">
+        <div className="mt-6 grid max-w-4xl grid-cols-1 flex-wrap items-center gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           <div className="grid gap-1">
             <span className="text-sm font-medium text-muted-foreground/70">
               Estado
@@ -101,7 +101,7 @@ export const CustomerDetails = ({ customer }: ICustomerDetailsProps) => {
               {customer.address.zipcode}
             </span>
           </div>
-          <div className="grid gap-1">
+          <div className="col-span-2 grid gap-1">
             <span className="text-sm font-medium text-muted-foreground/70">
               Rua
             </span>
