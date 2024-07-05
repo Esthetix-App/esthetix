@@ -219,7 +219,7 @@ export const formHistoryRouter = createTRPCRouter({
 
         if (
           formHistory.isNamedForm &&
-          formHistory.customerId !== ctx.session.user.id &&
+          formHistory.customer?.userId !== ctx.session.user.id &&
           formHistory.professionalId !== ctx.session.user.id
         ) {
           throw new TRPCError({

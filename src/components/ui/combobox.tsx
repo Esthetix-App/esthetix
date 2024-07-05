@@ -64,10 +64,10 @@ export function Combobox({
           role="combobox"
           variant="outline"
           aria-expanded={open}
-          className="w-full justify-between font-normal"
+          className={cn("w-full justify-between font-normal", className)}
         >
           {value ? (
-            <div className="flex items-center gap-2">
+            <div className="flex max-w-full items-center gap-2 truncate">
               {SelectedIcon && <SelectedIcon className="h-4 w-4" />}
               {selectedValue?.label}
             </div>

@@ -21,7 +21,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Switch } from "@/components/ui/switch";
 import { LinkFormSent } from "@/components/link-form/link-form-sent";
 
 interface ILinkFormContentProps {
@@ -43,7 +42,7 @@ export const LinkFormContent = ({ simplifiedForm }: ILinkFormContentProps) => {
       ) : (
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="grid">
-            <DialogHeader className="w-full space-y-3 p-6">
+            <DialogHeader className="w-full space-y-3 p-6 text-start">
               <DialogTitle className="flex items-center">
                 <FileSpreadsheet
                   className="mr-2 size-4 text-primary"
@@ -55,12 +54,12 @@ export const LinkFormContent = ({ simplifiedForm }: ILinkFormContentProps) => {
                 Enviar formulário para o preenchimento do cliente e profissional
                 responsavél.
               </DialogDescription>
-              <div className="!mt-10 grid gap-4">
+              <div className="!mt-10 grid justify-start gap-4">
                 <FormField
                   name="formId"
                   control={form.control}
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="grid">
                       <FormLabel>Formulário</FormLabel>
                       <FormControl>
                         <Combobox
@@ -96,7 +95,7 @@ export const LinkFormContent = ({ simplifiedForm }: ILinkFormContentProps) => {
                     </FormItem>
                   )}
                 />
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="enable"
                   render={({ field }) => (
@@ -117,7 +116,7 @@ export const LinkFormContent = ({ simplifiedForm }: ILinkFormContentProps) => {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
               </div>
             </DialogHeader>
             <DialogFooter className="gap-2 border-t bg-muted p-4 py-3 sm:space-x-0">
