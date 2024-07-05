@@ -13,14 +13,25 @@ export const DashboardFillForms = () => {
     return <DashboardSkeleton />;
   }
 
-  if (isError || !data?.forms.length) {
+  if (isError || (!data?.formsToFill.length && !data?.filledForms.length)) {
     return <DashboardEmpty />;
   }
 
   return (
     <div className="mt-6 grid gap-10">
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
-        {data.forms.map((form) => (
+        {data.formsToFill.map((form) => (
+          <DashboardFillFormItem key={form.id} form={form} />
+        ))}
+      </div>
+
+      <div className="flex items-center">
+        <h1 className="text-lg font-semibold md:text-2xl">
+          Formulários preenchidos
+        </h1>
+      </div>
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+        {data.filledForms.map((form) => (
           <DashboardFillFormItem key={form.id} form={form} />
         ))}
       </div>

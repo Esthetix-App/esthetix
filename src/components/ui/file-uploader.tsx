@@ -16,6 +16,7 @@ import { useControllableState } from "@/hooks/use-controllable-state";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { env } from "@/env";
 
 export type FileUpload = File & {
   preview: string;
@@ -277,16 +278,22 @@ export function FileUploader(props: FileUploaderProps) {
 }
 
 interface FileCardProps {
-  file: File;
+  file?: File;
   onRemove: () => void;
   progress?: number;
+  imageKey?: string | null;
 }
 
-export function FileCard({ file, progress, onRemove }: FileCardProps) {
+export function FileCard({
+  file,
+  progress,
+  onRemove,
+  imageKey,
+}: FileCardProps) {
   return (
-    <div className="relative flex items-center space-x-4">
-      <div className="flex flex-1 space-x-4">
-        {isFileWithPreview(file) ? (
+    <div className="relative flex w-full items-center space-x-4 overflow-hidden">
+      <div className="flex w-full flex-1 items-center space-x-4 overflow-hidden">
+        {file && isFileWithPreview(file) ? (
           <Image
             src={file.preview}
             alt={file.name}
@@ -296,14 +303,26 @@ export function FileCard({ file, progress, onRemove }: FileCardProps) {
             className="aspect-square shrink-0 rounded-md object-cover"
           />
         ) : null}
-        <div className="flex w-full flex-col gap-2">
-          <div className="space-y-px">
-            <p className="line-clamp-1 text-sm font-medium text-foreground/80">
-              {file.name}
+        {imageKey && !file ? (
+          <Image
+            alt={imageKey}
+            src={`${env.NEXT_PUBLIC_BUCKET_URL}/${imageKey}`}
+            width={48}
+            height={48}
+            loading="lazy"
+            className="aspect-square shrink-0 rounded-md object-cover"
+          />
+        ) : null}
+        <div className="flex w-full flex-col gap-2 overflow-hidden">
+          <div className="flex w-full flex-1 flex-col gap-1 overflow-hidden">
+            <p className="line-clamp-1 truncate text-sm font-medium text-foreground/80">
+              {file?.name ?? "Imagem do campo."}
             </p>
-            <p className="text-xs text-muted-foreground">
-              {formatBytes(file.size)}
-            </p>
+            {file?.size && (
+              <p className="text-xs text-muted-foreground">
+                {formatBytes(file.size)}
+              </p>
+            )}
           </div>
           {progress ? <Progress value={progress} /> : null}
         </div>

@@ -27,20 +27,22 @@ export default async function CustomersDetailsPage({
 
   return (
     <main className="flex h-full flex-1 flex-col justify-between gap-4 overflow-auto p-4 lg:gap-6 lg:p-10">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col items-start justify-start gap-6 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-4">
-          <Button asChild variant="outline" size="icon" className="h-7 w-7">
-            <Link href="/customers">
-              <ChevronLeft className="h-4 w-4" />
-              <span className="sr-only">Voltar</span>
-            </Link>
-          </Button>
-          <Avatar className="h-16 w-16">
-            {customer.user.image && <AvatarImage src={customer.user.image} />}
-            <AvatarFallback className="border text-base">
-              {getInitials(customer.name)}
-            </AvatarFallback>
-          </Avatar>
+          <div className="flex items-center gap-4">
+            <Button asChild variant="outline" size="icon" className="h-7 w-7">
+              <Link href="/customers">
+                <ChevronLeft className="h-4 w-4" />
+                <span className="sr-only">Voltar</span>
+              </Link>
+            </Button>
+            <Avatar className="h-16 w-16">
+              {customer.user.image && <AvatarImage src={customer.user.image} />}
+              <AvatarFallback className="border text-base">
+                {getInitials(customer.name)}
+              </AvatarFallback>
+            </Avatar>
+          </div>
           <div>
             <h1 className="text-base font-semibold md:text-2xl">
               {customer.name}
@@ -53,7 +55,7 @@ export default async function CustomersDetailsPage({
       </div>
       <div className="mt-6 flex w-full flex-1">
         <Tabs defaultValue="customer-data" className="w-full">
-          <TabsList className="w-full px-6">
+          <TabsList className="w-full overflow-auto px-6">
             <TabsTrigger value="customer-data">
               <UserRound className="mr-2 size-4" />
               Informações do Cliente

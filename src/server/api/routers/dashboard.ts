@@ -6,6 +6,18 @@ import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
 dayjs.extend(customParseFormat);
 
+interface IForm {
+  createdAt: string;
+  filledAt: string | null;
+  description: string | null;
+  id: string;
+  title: string;
+  logoUrl: string | null;
+  professional: {
+    name: string | null;
+  } | null;
+}
+
 export const dashboardRouter = createTRPCRouter({
   getFormsToFill: protectedProcedure.query(async ({ ctx }) => {
     try {
@@ -16,9 +28,13 @@ export const dashboardRouter = createTRPCRouter({
 
       const forms = await ctx.db.formHistory.findMany({
         where: {
-          OR: [
-            { professionalId: ctx.session.user.id },
-            { customerId: customer?.id },
+          AND: [
+            {
+              OR: [
+                { professionalId: ctx.session.user.id },
+                { customerId: customer?.id },
+              ],
+            },
           ],
         },
         select: {
@@ -36,15 +52,29 @@ export const dashboardRouter = createTRPCRouter({
         },
       });
 
-      return {
-        status: 200,
-        forms: forms.map((form) => ({
+      const filledForms: IForm[] = [];
+      const formsToFill: IForm[] = [];
+
+      forms.forEach((form) => {
+        const formattedForm = {
           ...form,
           createdAt: dayjs(form.createdAt).format("DD/MM/YYYY"),
           filledAt: form.filledAt
             ? dayjs(form.filledAt).format("DD/MM/YYYY HH:mm")
             : null,
-        })),
+        };
+
+        if (formattedForm.filledAt) {
+          filledForms.push(formattedForm);
+        } else {
+          formsToFill.push(formattedForm);
+        }
+      });
+
+      return {
+        status: 200,
+        filledForms,
+        formsToFill,
       };
     } catch (error) {
       throw new TRPCError({

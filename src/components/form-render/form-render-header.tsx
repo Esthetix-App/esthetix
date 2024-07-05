@@ -14,7 +14,7 @@ export const FormRenderHeader = () => {
 
   return (
     <header>
-      <div className="flex w-full items-center justify-between gap-10 border-t-4 border-primary bg-muted/50 p-6">
+      <div className="flex w-full flex-col items-center gap-6 border-t-4 border-primary bg-muted/50 p-6 md:flex-row md:items-center md:justify-between md:gap-10">
         <div className="flex flex-1 items-end gap-6">
           <Image
             alt="Product image"
@@ -30,31 +30,33 @@ export const FormRenderHeader = () => {
             className="aspect-square shrink-0 rounded-md object-contain"
           />
         </div>
-        <div className="flex flex-col items-center gap-1 text-center">
-          <span className="text-base font-semibold text-foreground">
-            {isPreview ? "[NOME DO CLIENTE]" : customer?.name}
-          </span>
-          <span className="w-full border-t pt-1 text-sm font-medium text-muted-foreground">
-            Cliente
-          </span>
-        </div>
-        <div className="flex flex-col items-center gap-1 text-center">
-          <span className="text-base font-semibold text-foreground">
-            {isPreview ? "[NOME DO PROFISSIONAL]" : professional?.name}
-          </span>
-          <span className="w-full border-t pt-1 text-sm font-medium text-muted-foreground">
-            Profissional Responsável
-          </span>
-        </div>
-        <div className="flex flex-col items-center gap-1 text-center">
-          <span className="text-base font-semibold text-foreground">
-            {isPreview
-              ? "[DATA DO PREENCHIMENTO]"
-              : dayjs(form?.filledAt ?? new Date()).format("DD/MM/YYYY")}
-          </span>
-          <span className="w-full border-t pt-1 text-sm font-medium text-muted-foreground">
-            Data de Preenchimento
-          </span>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="flex flex-col items-center gap-1 text-center">
+            <span className="whitespace-nowrap text-base font-semibold text-foreground">
+              {isPreview ? "[NOME DO CLIENTE]" : customer?.name}
+            </span>
+            <span className="w-full border-t pt-1 text-sm font-medium text-muted-foreground">
+              Cliente
+            </span>
+          </div>
+          <div className="flex flex-col items-center gap-1 text-center">
+            <span className="whitespace-nowrap text-base font-semibold text-foreground">
+              {isPreview ? "[NOME DO PROFISSIONAL]" : professional?.name}
+            </span>
+            <span className="w-full border-t pt-1 text-sm font-medium text-muted-foreground">
+              Profissional Responsável
+            </span>
+          </div>
+          <div className="flex flex-col items-center gap-1 text-center">
+            <span className="text-base font-semibold text-foreground">
+              {isPreview
+                ? "[DATA DO PREENCHIMENTO]"
+                : dayjs(form?.filledAt ?? new Date()).format("DD/MM/YYYY")}
+            </span>
+            <span className="w-full border-t pt-1 text-sm font-medium text-muted-foreground">
+              Data de Preenchimento
+            </span>
+          </div>
         </div>
       </div>
       <div className="grid gap-2 p-6 py-8">

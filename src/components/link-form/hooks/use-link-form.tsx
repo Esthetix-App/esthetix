@@ -22,10 +22,13 @@ export const useLinkForm = ({ simplifiedForm }: IUseLinkFormProps) => {
   const [formUrl, setformUrl] = useState<string>("");
   const { id } = useParams<{ id: string }>();
 
+  const utils = api.useUtils();
+
   const { mutate, isPending } = api.formHistory.create.useMutation({
-    onSuccess(response) {
+    async onSuccess(response) {
       setIsFormSent(true);
       setformUrl(`${env.NEXT_PUBLIC_APP_URL}/form/${response.id}`);
+      await utils.formHistory.getByCustomer.invalidate();
     },
     onError() {
       toast.error(

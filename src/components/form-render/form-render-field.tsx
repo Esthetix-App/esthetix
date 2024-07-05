@@ -13,9 +13,16 @@ export const FormRenderField = ({
   field,
   isProfessionalSection,
 }: IFormRenderField) => {
-  const { isProfessionalUser } = useFormRenderContext();
+  const { isProfessionalUser, form } = useFormRenderContext();
 
   const Component = fieldComponents[field.type];
+
+  const isFilled = !!form.filledAt;
+
+  const disableField =
+    !!field.isProfessionalField || isProfessionalSection
+      ? !isProfessionalUser
+      : isFilled;
 
   if (!Component) {
     console.warn(`No component found for field type: ${field.type}`);
@@ -34,13 +41,9 @@ export const FormRenderField = ({
       <Component
         id={field.id}
         label={field.name}
+        disabled={disableField}
         description={field.description}
         fieldOptions={field.fieldOptions}
-        disabled={
-          !!field.isProfessionalField || isProfessionalSection
-            ? !isProfessionalUser
-            : false
-        }
         {...(field.typeOptions as object)}
       />
     </div>

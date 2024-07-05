@@ -39,8 +39,9 @@ export function FormTableToolbarActions({
         </Link>
       </Button>
       <Button
-        variant="outline"
         size="sm"
+        variant="outline"
+        className="hidden md:flex"
         onClick={() =>
           exportTableToCSV(table, {
             filename: "clientes",

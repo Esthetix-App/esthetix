@@ -4,7 +4,8 @@ import { getInitials } from "@/lib/utils";
 import type { RouterOutputs } from "@/trpc/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-type FormItem = RouterOutputs["dashboard"]["getFormsToFill"]["forms"][number];
+type FormItem =
+  RouterOutputs["dashboard"]["getFormsToFill"]["filledForms"][number];
 
 interface IDashboardFillFormItemProps {
   form: FormItem;
@@ -45,9 +46,18 @@ export const DashboardFillFormItem = ({
               {form.professional?.name}
             </span>
           )}
-          <span className="justify-end text-xs font-medium text-muted-foreground/70">
-            Criado em: {form.createdAt}
-          </span>
+          <div className="flex flex-col items-end gap-2">
+            {form.createdAt && (
+              <span className="justify-end text-xs font-medium text-muted-foreground/70">
+                Criado em: {form.createdAt}
+              </span>
+            )}
+            {form.filledAt && (
+              <span className="justify-end text-xs font-medium text-muted-foreground/70">
+                Preenchido em: {form.filledAt}
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </Link>

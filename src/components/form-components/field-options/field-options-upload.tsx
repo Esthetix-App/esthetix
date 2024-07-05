@@ -28,15 +28,16 @@ export const FieldOptionsUpload = ({
   indexField,
   indexFormGroup,
 }: IFieldOptionsUpload) => {
-  const { control, setValue } = useFormContext();
-  const [fileKey, setFileKey] = React.useState<string | null>(null);
+  const { control, setValue, watch } = useFormContext();
+  // const [fileKey, setFileKey] = React.useState<string | null>(null);
   const [fileDone, setFileDone] = React.useState<FileUpload | null>(null);
 
   const getPresignedUrl = api.formUpload.getUploadPresignedUrl.useMutation();
   const deleteUploadedFile = api.formUpload.deleteUploadedFile.useMutation();
 
-  const isDisabled = !!fileKey;
   const fieldName = `formGroups.${indexFormGroup}.formFields.${indexField}.typeOptions.image`;
+  const imageKey = watch(fieldName) as string | null;
+  const isDisabled = !!imageKey;
 
   const handleUpload = async (files: FileUpload[]) => {
     try {
@@ -51,11 +52,9 @@ export const FieldOptionsUpload = ({
       await uploadService.uploadFile({ file, signedUrl: response.signedUrl });
 
       setFileDone(file);
-      setFileKey(response.fileKey);
       setValue(fieldName, response.fileKey);
     } catch (error) {
       setFileDone(null);
-      setFileKey(null);
       setValue(fieldName, "");
 
       throw new Error("Error on upload!");
@@ -63,12 +62,11 @@ export const FieldOptionsUpload = ({
   };
 
   const handleDeleteFile = () => {
-    if (!fileKey) {
+    if (!imageKey) {
       return;
     }
 
-    deleteUploadedFile.mutate({ fileKey });
-    setFileKey(null);
+    deleteUploadedFile.mutate({ fileKey: imageKey });
     setFileDone(null);
     setValue(fieldName, "");
   };
@@ -79,7 +77,7 @@ export const FieldOptionsUpload = ({
       control={control}
       defaultValue=""
       render={() => (
-        <FormItem className="w-full">
+        <FormItem className="w-full overflow-hidden">
           <FormLabel>Upload</FormLabel>
           <FormControl>
             <>
@@ -92,8 +90,12 @@ export const FieldOptionsUpload = ({
                   showFilesList={false}
                 />
               )}
-              {fileDone && (
-                <FileCard onRemove={handleDeleteFile} file={fileDone as File} />
+              {(fileDone || imageKey) && (
+                <FileCard
+                  imageKey={imageKey}
+                  onRemove={handleDeleteFile}
+                  file={fileDone as File}
+                />
               )}
             </>
           </FormControl>

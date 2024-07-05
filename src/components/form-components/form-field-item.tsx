@@ -68,7 +68,7 @@ export const FormFieldItem = ({
         )}
       >
         <div className="flex items-baseline justify-between gap-4">
-          <div className="flex flex-1 flex-col-reverse gap-4 md:flex-row">
+          <div className="flex flex-1 flex-col-reverse flex-wrap gap-4 md:flex-row">
             <FormField
               control={control}
               name={`formGroups.${indexFormGroup}.formFields.${index}.name`}

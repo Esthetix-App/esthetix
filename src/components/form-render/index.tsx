@@ -21,7 +21,7 @@ export const FormRender = ({
 }: IFormRenderProps) => {
   return (
     <FormRenderProvider values={{ ...data, isPreview }}>
-      <main className="pb-10">
+      <main className="md:pb-10">
         <FormRenderHeader />
 
         <div className="grid gap-10 p-6">

@@ -29,7 +29,7 @@ export function FormComponents<T extends FieldValues>({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="container grid h-full flex-1 auto-rows-max gap-4"
+        className="container grid h-full flex-1 auto-rows-max gap-4 px-3 py-6 md:px-8"
       >
         <FormHeader
           showResetButton={!isEditing}
@@ -45,7 +45,7 @@ export function FormComponents<T extends FieldValues>({
             <FormLogoUpload />
           </div>
         </div>
-        <FormFooterMobile />
+        <FormFooterMobile showResetButton={!isEditing} />
       </form>
     </Form>
   );
