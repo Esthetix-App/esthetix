@@ -1,8 +1,8 @@
 "use client";
 
-import { toast } from "sonner";
-import { useForm } from "react-hook-form";
 import { api, type RouterOutputs } from "@/trpc/react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 type DefaultValuesType =
   RouterOutputs["formHistory"]["getById"]["defaultValues"];
@@ -18,9 +18,12 @@ export const useDuplicateForm = ({
   defaultValues,
   onDuplicate,
 }: IUseDuplicateFormProps) => {
+  const utils = api.useUtils();
+
   const { mutate, isPending } = api.formHistory.duplicate.useMutation({
-    onSuccess() {
+    async onSuccess() {
       toast.success("Formulário duplicado com sucesso!");
+      await utils.formHistory.getByCustomer.invalidate();
       onDuplicate?.();
     },
     onError() {
