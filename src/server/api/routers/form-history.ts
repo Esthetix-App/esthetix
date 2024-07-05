@@ -278,7 +278,8 @@ export const formHistoryRouter = createTRPCRouter({
         };
 
         const isProfessionalUser =
-          formHistory.professionalId === ctx.session.user.id;
+          ctx.session.user.role === "ADMIN" ||
+          ctx.session.user.role === "PROFESSIONAL";
 
         return {
           status: 200,

@@ -33,10 +33,7 @@ export default async function RootLayout({
         lang="pt-BR"
         className={cn("bg-background font-sans antialiased", fontSans.variable)}
       >
-        <body
-          suppressHydrationWarning={true}
-          className="min-h-screen w-full overflow-hidden"
-        >
+        <body suppressHydrationWarning={true} className="min-h-screen w-full">
           <TRPCReactProvider>
             <TooltipProvider>{children}</TooltipProvider>
           </TRPCReactProvider>
