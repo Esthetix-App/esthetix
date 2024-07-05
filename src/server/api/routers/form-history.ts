@@ -125,7 +125,19 @@ export const formHistoryRouter = createTRPCRouter({
           "desc",
         ]) as [keyof FormHistory, "asc" | "desc"];
 
-        const orderBy = { [column]: order };
+        let orderBy;
+
+        if (column.includes("_")) {
+          const [nestedTable, nestedField] = column.split("_");
+
+          if (nestedTable && nestedField) {
+            orderBy = { [nestedTable]: { [nestedField]: order } };
+          } else {
+            throw new Error("Invalid nested table or field for ordering.");
+          }
+        } else {
+          orderBy = { [column]: order };
+        }
 
         const where = buildWhereClause(
           [

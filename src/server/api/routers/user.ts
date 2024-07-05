@@ -24,7 +24,19 @@ export const userRouter = createTRPCRouter({
         "desc",
       ]) as [keyof User, "asc" | "desc"];
 
-      const orderBy = { [column]: order };
+      let orderBy;
+
+      if (column.includes("_")) {
+        const [nestedTable, nestedField] = column.split("_");
+
+        if (nestedTable && nestedField) {
+          orderBy = { [nestedTable]: { [nestedField]: order } };
+        } else {
+          throw new Error("Invalid nested table or field for ordering.");
+        }
+      } else {
+        orderBy = { [column]: order };
+      }
 
       const [users, count] = await ctx.db.$transaction([
         ctx.db.user.findMany({
