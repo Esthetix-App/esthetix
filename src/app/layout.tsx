@@ -31,12 +31,12 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <html
         lang="pt-BR"
-        className={cn(
-          "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable,
-        )}
+        className={cn("bg-background font-sans antialiased", fontSans.variable)}
       >
-        <body suppressHydrationWarning={true}>
+        <body
+          suppressHydrationWarning={true}
+          className="min-h-screen w-full overflow-hidden"
+        >
           <TRPCReactProvider>
             <TooltipProvider>{children}</TooltipProvider>
           </TRPCReactProvider>
