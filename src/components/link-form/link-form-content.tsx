@@ -36,7 +36,7 @@ export const LinkFormContent = ({ simplifiedForm }: ILinkFormContentProps) => {
   const professionalOptions = api.professional.getAllOptions.useQuery();
 
   return (
-    <DialogContent className="max-w-xl overflow-hidden p-0">
+    <DialogContent className="max-w-2xl overflow-hidden p-0">
       {isFormSent ? (
         <LinkFormSent formUrl={formUrl} />
       ) : (

@@ -11,6 +11,7 @@ import { api } from "@/trpc/react";
 
 export const useUserNewForm = () => {
   const router = useRouter();
+  const utils = api.useUtils();
 
   const form = useForm<z.infer<typeof createUserSchema>>({
     resolver: zodResolver(createUserSchema),
@@ -28,11 +29,12 @@ export const useUserNewForm = () => {
     onError() {
       toast.error("Houve um erro ao tentar criar usuário!");
     },
-    onSuccess() {
+    async onSuccess() {
       toast.success("Usuário criado com sucesso!", {
         position: "top-center",
       });
       router.push("/users");
+      await utils.user.getAll.invalidate();
     },
   });
 

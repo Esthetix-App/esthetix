@@ -20,11 +20,13 @@ type DefaultValuesType =
 interface IUseFormFillProps {
   formValues?: FormDataType;
   defaultValues?: DefaultValuesType;
+  isProfessionalUser?: boolean;
 }
 
 export const useFormFill = ({
   formValues,
   defaultValues,
+  isProfessionalUser,
 }: IUseFormFillProps) => {
   const router = useRouter();
   const utils = api.useUtils();
@@ -41,8 +43,14 @@ export const useFormFill = ({
       if (groupItem) {
         for (let k = 0; k < groupItem.formFields?.length; k++) {
           const fieldItem = formValues?.formGroups?.[i]?.formFields[k];
+          const isProfessionalField =
+            fieldItem?.isProfessionalField || groupItem.isProfessionalField;
 
-          if (fieldItem) {
+          if (
+            fieldItem &&
+            (!isProfessionalField ||
+              (isProfessionalField && isProfessionalUser))
+          ) {
             formFields.push({
               id: fieldItem.id,
               type: fieldItem.type,
@@ -54,7 +62,7 @@ export const useFormFill = ({
     }
 
     return createValidationSchema(formFields);
-  }, [formValues]);
+  }, [formValues, isProfessionalUser]);
 
   const { mutate } = api.submitForm.submit.useMutation({
     async onSuccess() {

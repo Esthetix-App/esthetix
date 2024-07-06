@@ -40,7 +40,7 @@ export const LinkFormSent = ({ formUrl }: ILinkFormSentProps) => {
           profissional responsavél.
         </DialogDescription>
         {formUrl && (
-          <div className="!mt-8 flex w-full items-center gap-2">
+          <div className="!mt-8 flex w-full flex-col items-center gap-2 md:flex-row">
             <div className="flex flex-1 items-center rounded-md border bg-muted p-3 shadow-sm">
               <span className="truncate text-sm text-muted-foreground">
                 {formUrl}
