@@ -13,6 +13,7 @@ export type EditFormData = RouterOutputs["form"]["getById"]["form"];
 export const useEditForm = () => {
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
+  const utils = api.useUtils();
 
   const { data, isFetching, isError } = api.form.getById.useQuery(
     { id },
@@ -30,12 +31,13 @@ export const useEditForm = () => {
     onError() {
       toast.error("Houve um erro ao tentar editar o formulário!");
     },
-    onSuccess() {
+    async onSuccess() {
       toast.success("Formulário editado com sucesso!", {
         position: "top-center",
       });
 
       router.push("/forms");
+      await utils.form.getAll.invalidate();
     },
   });
 

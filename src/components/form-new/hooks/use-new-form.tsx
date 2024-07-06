@@ -13,6 +13,7 @@ export type NewFormData = z.infer<typeof formSchema>;
 
 export const useNewForm = () => {
   const router = useRouter();
+  const utils = api.useUtils();
 
   const form = useForm<NewFormData>({
     mode: "onChange",
@@ -25,7 +26,7 @@ export const useNewForm = () => {
       enable: true,
       formGroups: [
         {
-          name: "",
+          title: "",
           position: 0,
           formFields: [
             {
@@ -50,12 +51,13 @@ export const useNewForm = () => {
     onError() {
       toast.error("Houve um erro ao tentar criar o formulário!");
     },
-    onSuccess() {
+    async onSuccess() {
       toast.success("Formulário criado com sucesso!", {
         position: "top-center",
       });
 
       router.push("/forms");
+      await utils.form.getAll.invalidate();
     },
   });
 

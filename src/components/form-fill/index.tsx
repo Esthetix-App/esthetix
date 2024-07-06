@@ -22,6 +22,7 @@ export const FormFill = () => {
   const { form, onSubmit } = useFormFill({
     formValues: data?.form,
     defaultValues: data?.defaultValues,
+    isProfessionalUser: data?.isProfessionalUser,
   });
 
   if (isLoading) {
