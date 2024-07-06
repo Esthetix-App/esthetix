@@ -25,7 +25,9 @@ export function CustomersDataTable() {
   const searchObject = Object.fromEntries(searchParams.entries());
   const search = searchParamsSchema.parse(searchObject);
 
-  const { data, isPending } = api.customer.getAll.useQuery(search);
+  const { data, isPending } = api.customer.getAll.useQuery(search, {
+    staleTime: 1000 * 60 * 60 * 5,
+  });
 
   const customers = data?.customers ?? [];
   const columns = React.useMemo(() => getColumns(), []);

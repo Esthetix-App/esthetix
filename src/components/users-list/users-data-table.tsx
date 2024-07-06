@@ -26,7 +26,9 @@ export function UsersDataTable() {
   const searchObject = Object.fromEntries(searchParams.entries());
   const search = searchParamsSchema.parse(searchObject);
 
-  const { data, isPending } = api.user.getAll.useQuery(search);
+  const { data, isPending } = api.user.getAll.useQuery(search, {
+    staleTime: 1000 * 60 * 60 * 5,
+  });
 
   const users = data?.users ?? [];
   const columns = React.useMemo(() => getColumns(), []);

@@ -12,9 +12,12 @@ import { FormInvalid } from "@/components/form-fill/form-invalid";
 
 export const FormFill = () => {
   const { id } = useParams<{ id: string }>();
-  const { data, isLoading, isError } = api.formHistory.getById.useQuery({
-    id,
-  });
+  const { data, isLoading, isError } = api.formHistory.getById.useQuery(
+    {
+      id,
+    },
+    { staleTime: 1000 * 60 * 60 * 5 },
+  );
 
   const { form, onSubmit } = useFormFill({
     formValues: data?.form,

@@ -27,6 +27,7 @@ export const useFormFill = ({
   defaultValues,
 }: IUseFormFillProps) => {
   const router = useRouter();
+  const utils = api.useUtils();
 
   const schemaMemo = useMemo(() => {
     const formFields: IValidationFormField[] = [];
@@ -56,9 +57,10 @@ export const useFormFill = ({
   }, [formValues]);
 
   const { mutate } = api.submitForm.submit.useMutation({
-    onSuccess() {
+    async onSuccess() {
       toast.success("Frmulário enviado com sucesso.");
       router.push("/dashboard");
+      await utils.formHistory.getById.invalidate();
     },
     onError() {
       toast.error("Houve um erro ao enviar formulário.");
