@@ -14,9 +14,12 @@ interface IFormViewContentProps {
 }
 
 export const FormViewContent = ({ formId }: IFormViewContentProps) => {
-  const { data, isLoading, isError } = api.formHistory.getById.useQuery({
-    id: formId,
-  });
+  const { data, isLoading, isError } = api.formHistory.getById.useQuery(
+    {
+      id: formId,
+    },
+    { staleTime: 1000 * 60 * 60 * 5 },
+  );
 
   const { form, onSubmit } = useFormView({
     defaultValues: data?.defaultValues,

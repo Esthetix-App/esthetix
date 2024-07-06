@@ -32,10 +32,13 @@ export function HistoryDataTable({ customer }: IHistoryDataTableProps) {
   const searchObject = Object.fromEntries(searchParams.entries());
   const search = searchParamsSchema.parse(searchObject);
 
-  const { data, isPending } = api.formHistory.getByCustomer.useQuery({
-    ...search,
-    customerId: customer.id,
-  });
+  const { data, isPending } = api.formHistory.getByCustomer.useQuery(
+    {
+      ...search,
+      customerId: customer.id,
+    },
+    { staleTime: 1000 * 60 * 60 * 5 },
+  );
 
   const forms = data?.forms ?? [];
   const columns = React.useMemo(() => getColumns(), []);

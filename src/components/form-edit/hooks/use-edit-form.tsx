@@ -14,7 +14,10 @@ export const useEditForm = () => {
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
 
-  const { data, isFetching, isError } = api.form.getById.useQuery({ id });
+  const { data, isFetching, isError } = api.form.getById.useQuery(
+    { id },
+    { staleTime: 1000 * 60 * 60 * 5 },
+  );
 
   const form = useForm<EditFormData>({
     mode: "onChange",
