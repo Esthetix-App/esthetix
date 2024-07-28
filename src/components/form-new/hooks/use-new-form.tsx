@@ -56,8 +56,8 @@ export const useNewForm = () => {
         position: "top-center",
       });
 
-      router.push("/forms");
       await utils.form.getAll.invalidate();
+      router.push("/forms");
     },
   });
 

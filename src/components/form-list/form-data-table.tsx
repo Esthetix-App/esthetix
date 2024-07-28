@@ -28,7 +28,8 @@ export function FormsDataTable() {
   const search = searchParamsSchema.parse(searchObject);
 
   const { data, isPending } = api.form.getAll.useQuery(search, {
-    staleTime: 1000 * 60 * 60 * 5,
+    staleTime: 0,
+    gcTime: 0,
   });
 
   const forms = data?.forms ?? [];
