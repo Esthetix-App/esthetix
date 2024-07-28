@@ -36,8 +36,10 @@ export const useEditForm = () => {
         position: "top-center",
       });
 
-      router.push("/forms");
       await utils.form.getAll.invalidate();
+      await utils.form.getById.invalidate();
+
+      router.push("/forms");
     },
   });
 

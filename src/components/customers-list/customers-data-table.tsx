@@ -26,7 +26,8 @@ export function CustomersDataTable() {
   const search = searchParamsSchema.parse(searchObject);
 
   const { data, isPending } = api.customer.getAll.useQuery(search, {
-    staleTime: 1000 * 60 * 60 * 5,
+    staleTime: 0,
+    gcTime: 0,
   });
 
   const customers = data?.customers ?? [];
